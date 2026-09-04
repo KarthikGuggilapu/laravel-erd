@@ -2,33 +2,36 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="csrf-token"
+        content="{{ csrf_token() }}"
+    >
 
     <title>{{ config('app.name') }} ERD</title>
 
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
     <link
         rel="icon"
-        type="image/svg+xml"
-        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23121d32'/%3E%3Crect x='12' y='12' width='16' height='16' rx='3' fill='%234d83e8'/%3E%3Crect x='36' y='12' width='16' height='16' rx='3' fill='%2355c98a'/%3E%3Crect x='12' y='36' width='16' height='16' rx='3' fill='%235f7fae'/%3E%3Cpath d='M28 20h8M20 28v8M44 28v8M28 44h8' stroke='%23f3f7ff' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23315ea8'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-family='Arial' font-size='34' font-weight='700' fill='white'%3EE%3C/text%3E%3C/svg%3E"
     >
 
     <style>
         :root {
-            --bg: #080d19;
+            --bg: #080e1c;
             --panel: #0e1627;
-            --panel-2: #121d32;
-            --panel-3: #17233b;
-            --border: rgba(255,255,255,.08);
-            --border-strong: rgba(255,255,255,.12);
-            --text: #f3f7ff;
-            --muted: #72819b;
-            --muted-2: #56657f;
-            --accent: #4d83e8;
-            --accent-hover: #5b91f5;
+            --panel-2: #111b2e;
+            --panel-3: #182640;
+            --text: #edf3fc;
+            --muted: #71809c;
+            --border: rgba(151,176,220,.13);
+            --border-strong: rgba(116,153,216,.32);
+            --accent: #315ea8;
+            --accent-hover: #3b6fc0;
             --success: #55c98a;
-            --relation: #5f7fae;
         }
 
         * {
@@ -40,6 +43,9 @@
             width: 100%;
             height: 100%;
             margin: 0;
+        }
+
+        body {
             overflow: hidden;
             background: var(--bg);
             color: var(--text);
@@ -51,10 +57,6 @@
                 BlinkMacSystemFont,
                 "Segoe UI",
                 sans-serif;
-        }
-
-        body {
-            user-select: none;
         }
 
         button,
@@ -102,7 +104,11 @@
             align-items: center;
             justify-content: center;
             border-radius: 10px;
-            background: linear-gradient(145deg,#263b65,#172746);
+            background: linear-gradient(
+                145deg,
+                #263b65,
+                #172746
+            );
             border: 1px solid rgba(117,157,231,.18);
             color: #9fc0ff;
             font-size: 17px;
@@ -114,14 +120,9 @@
             display: flex;
             flex-direction: column;
             gap: 2px;
-            min-width: 0;
         }
 
         .erd-brand-title {
-            max-width: 350px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
             font-size: 15px;
             font-weight: 750;
             letter-spacing: -.2px;
@@ -277,6 +278,14 @@
             transform-origin: 0 0;
         }
 
+        .erd-workspace {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 5000px;
+            height: 5000px;
+        }
+
         .erd-relations {
             position: absolute;
             left: 0;
@@ -288,20 +297,7 @@
             overflow: visible;
         }
 
-        .erd-relation-line {
-            fill: none;
-            stroke: var(--relation);
-            stroke-width: 1.5;
-            opacity: .6;
-            marker-end: url(#erd-arrow);
-        }
-
         .erd-workspace {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 5000px;
-            height: 5000px;
             z-index: 2;
         }
 
@@ -319,7 +315,6 @@
             transition:
                 border-color .15s ease,
                 box-shadow .15s ease;
-            z-index: 2;
         }
 
         .erd-table:hover {
@@ -339,7 +334,12 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            background: linear-gradient(135deg,#182640,#142038);
+            background:
+                linear-gradient(
+                    145deg,
+                    #1b2a46,
+                    #142038
+                );
             border-bottom: 1px solid rgba(255,255,255,.07);
             cursor: grab;
         }
@@ -380,9 +380,6 @@
 
         .erd-table-meta {
             margin-top: 5px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
             color: #647795;
             font-size: 9px;
         }
@@ -394,7 +391,7 @@
         .erd-column {
             min-height: 31px;
             display: grid;
-            grid-template-columns: minmax(0,1fr) auto;
+            grid-template-columns: minmax(0, 1fr) auto;
             align-items: center;
             gap: 10px;
             padding: 0 13px;
@@ -460,61 +457,71 @@
 
         .erd-empty {
             position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%,-50%);
-            width: 360px;
-            padding: 35px;
-            text-align: center;
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            background: rgba(14,22,39,.88);
-            box-shadow: 0 25px 70px rgba(0,0,0,.25);
-        }
-
-        .erd-empty-icon {
-            width: 48px;
-            height: 48px;
-            margin: 0 auto 16px;
+            inset: 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 12px;
-            background: #172640;
-            color: #8fb5ff;
-            font-size: 20px;
+            flex-direction: column;
+            text-align: center;
+            color: #71809c;
+            pointer-events: auto;
+        }
+
+        .erd-empty-icon {
+            width: 58px;
+            height: 58px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            border-radius: 16px;
+            background:
+                linear-gradient(
+                    145deg,
+                    #263b65,
+                    #172746
+                );
+            border: 1px solid rgba(117,157,231,.18);
+            color: #9fc0ff;
+            font-size: 22px;
             font-weight: 800;
+            box-shadow: 0 15px 35px rgba(0,0,0,.25);
         }
 
         .erd-empty-title {
-            color: #f4f7fd;
-            font-size: 17px;
+            color: #edf3fc;
+            font-size: 16px;
             font-weight: 700;
         }
 
         .erd-empty-text {
-            margin: 8px 0 20px;
-            color: #6f7f98;
+            max-width: 390px;
+            margin-top: 7px;
+            margin-bottom: 18px;
+            color: #647795;
             font-size: 11px;
             line-height: 1.6;
         }
 
         .erd-bottom {
             position: absolute;
-            left: 16px;
-            right: 16px;
-            bottom: 14px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 44px;
+            min-height: 44px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            padding: 0 14px;
             pointer-events: none;
-            z-index: 30;
+            z-index: 50;
         }
 
         .erd-info {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             padding: 7px 10px;
             border: 1px solid rgba(255,255,255,.07);
             border-radius: 8px;
@@ -611,6 +618,36 @@
             transform: translateY(0);
         }
 
+        .erd-relation-line {
+            fill: none;
+            stroke: #5f7fae;
+            stroke-width: 1.5;
+            opacity: .55;
+            marker-end: url(#erd-arrow);
+            transition: opacity .15s ease;
+        }
+
+        .erd-relation-line:hover {
+            opacity: .9;
+            stroke-width: 2;
+        }
+
+        .erd-flow-particle {
+            fill: #8fb8ff;
+            opacity: .95;
+            filter: url(#erd-particle-glow);
+        }
+
+        .erd-flow-particle-core {
+            fill: #dceaff;
+        }
+
+        .erd-flow-particle-halo {
+            fill: #6f9fe9;
+            opacity: .22;
+            filter: url(#erd-particle-glow);
+        }
+
         @media (max-width: 900px) {
             .erd-brand-subtitle {
                 display: none;
@@ -643,7 +680,15 @@
             }
 
             .erd-brand-title {
-                max-width: 180px;
+                font-size: 13px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .erd-flow-particle,
+            .erd-flow-particle-core,
+            .erd-flow-particle-halo {
+                display: none;
             }
         }
     </style>
@@ -695,6 +740,20 @@
 
             <button
                 type="button"
+                class="erd-button primary"
+                id="analyzeButton"
+            >
+                <span class="erd-button-icon">
+                    ◈
+                </span>
+
+                <span class="erd-button-text">
+                    Analyze Schema
+                </span>
+            </button>
+
+            <button
+                type="button"
                 class="erd-button"
                 id="refreshButton"
                 style="display:none;"
@@ -727,7 +786,8 @@
                 id="erdRelations"
                 width="5000"
                 height="5000"
-                aria-hidden="true"
+                viewBox="0 0 5000 5000"
+                preserveAspectRatio="none"
             >
 
                 <defs>
@@ -746,6 +806,24 @@
                             fill="#5f7fae"
                         />
                     </marker>
+
+                    <filter
+                        id="erd-particle-glow"
+                        x="-100%"
+                        y="-100%"
+                        width="300%"
+                        height="300%"
+                    >
+                        <feGaussianBlur
+                            stdDeviation="2.5"
+                            result="blur"
+                        />
+
+                        <feMerge>
+                            <feMergeNode in="blur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
 
                 </defs>
 
@@ -832,7 +910,9 @@
 
     <footer class="erd-footer">
         Developed by
-        <strong>Karthik Guggilapu</strong>
+        <strong>
+            Karthik Guggilapu
+        </strong>
     </footer>
 
 </div>
@@ -853,46 +933,84 @@
     ]) !!};
 
     const canvas =
-        document.getElementById('erdCanvas');
+        document.getElementById(
+            'erdCanvas'
+        );
 
     const stage =
-        document.getElementById('erdStage');
+        document.getElementById(
+            'erdStage'
+        );
 
     const workspace =
-        document.getElementById('erdWorkspace');
+        document.getElementById(
+            'erdWorkspace'
+        );
+
+    const relationsSvg =
+        document.getElementById(
+            'erdRelations'
+        );
 
     const relationLines =
-        document.getElementById('erdRelationLines');
+        document.getElementById(
+            'erdRelationLines'
+        );
 
     const searchInput =
-        document.getElementById('tableSearch');
+        document.getElementById(
+            'tableSearch'
+        );
+
+    const analyzeButton =
+        document.getElementById(
+            'analyzeButton'
+        );
 
     const refreshButton =
-        document.getElementById('refreshButton');
+        document.getElementById(
+            'refreshButton'
+        );
 
     const tableCount =
-        document.getElementById('tableCount');
+        document.getElementById(
+            'tableCount'
+        );
 
     const modelCount =
-        document.getElementById('modelCount');
+        document.getElementById(
+            'modelCount'
+        );
 
     const relationCount =
-        document.getElementById('relationCount');
+        document.getElementById(
+            'relationCount'
+        );
 
     const zoomInButton =
-        document.getElementById('zoomIn');
+        document.getElementById(
+            'zoomIn'
+        );
 
     const zoomOutButton =
-        document.getElementById('zoomOut');
+        document.getElementById(
+            'zoomOut'
+        );
 
     const resetViewButton =
-        document.getElementById('resetView');
+        document.getElementById(
+            'resetView'
+        );
 
     const zoomValue =
-        document.getElementById('zoomValue');
+        document.getElementById(
+            'zoomValue'
+        );
 
     const toast =
-        document.getElementById('erdToast');
+        document.getElementById(
+            'erdToast'
+        );
 
     let tableElements = [];
 
@@ -912,6 +1030,9 @@
 
     let initialPanY = 0;
 
+    const SVG_NS =
+        'http://www.w3.org/2000/svg';
+
     function getTables() {
         const migrations =
             window.ERD.migrations?.migrations ?? [];
@@ -919,85 +1040,102 @@
         const tables =
             new Map();
 
-        migrations.forEach(migration => {
+        migrations.forEach(
+            migration => {
 
-            const migrationTables =
-                migration.tables ?? [];
+                const migrationTables =
+                    migration.tables ?? [];
 
-            migrationTables.forEach(table => {
+                migrationTables.forEach(
+                    table => {
 
-                if (!table.name) {
-                    return;
-                }
-
-                if (!tables.has(table.name)) {
-
-                    tables.set(
-                        table.name,
-                        {
-                            name: table.name,
-                            columns: table.columns ?? [],
-                            operation:
-                                table.operation ??
-                                'table',
-                            migration:
-                                migration.file ??
-                                migration.id ??
-                                null
+                        if (!table.name) {
+                            return;
                         }
-                    );
 
-                    return;
-                }
+                        if (!tables.has(table.name)) {
 
-                const existing =
-                    tables.get(table.name);
+                            tables.set(
+                                table.name,
+                                {
+                                    name:
+                                        table.name,
 
-                if (
-                    table.operation === 'create'
-                ) {
-                    existing.columns =
-                        table.columns ??
-                        existing.columns;
-                }
+                                    columns:
+                                        table.columns ?? [],
 
-                if (table.columns?.length) {
+                                    operation:
+                                        table.operation ??
+                                        'table',
 
-                    const existingNames =
-                        new Set(
-                            existing.columns.map(
-                                column => column.name
-                            )
-                        );
+                                    migration:
+                                        migration.file ??
+                                        migration.id ??
+                                        null
+                                }
+                            );
 
-                    table.columns.forEach(column => {
+                            return;
+                        }
+
+                        const existing =
+                            tables.get(
+                                table.name
+                            );
 
                         if (
-                            !existingNames.has(
-                                column.name
-                            )
+                            table.operation ===
+                            'create'
                         ) {
-                            existing.columns.push(
-                                column
+                            existing.columns =
+                                table.columns ??
+                                existing.columns;
+                        }
+
+                        if (
+                            table.columns?.length
+                        ) {
+
+                            const existingNames =
+                                new Set(
+                                    existing.columns.map(
+                                        column =>
+                                            column.name
+                                    )
+                                );
+
+                            table.columns.forEach(
+                                column => {
+
+                                    if (
+                                        !existingNames.has(
+                                            column.name
+                                        )
+                                    ) {
+                                        existing.columns.push(
+                                            column
+                                        );
+                                    }
+
+                                }
                             );
                         }
 
-                    });
-                }
+                        existing.operation =
+                            table.operation ??
+                            existing.operation;
 
-                existing.operation =
-                    table.operation ??
-                    existing.operation;
+                        existing.migration =
+                            migration.file ??
+                            existing.migration;
+                    }
+                );
+            }
+        );
 
-                existing.migration =
-                    migration.file ??
-                    existing.migration;
-
-            });
-
-        });
-
-        return [...tables.values()];
+        return [
+            ...tables.values()
+        ];
     }
 
     function getRelations() {
@@ -1007,37 +1145,24 @@
         );
     }
 
-    function updateToolbar() {
-        const tables =
-            getTables();
-
-        refreshButton.style.display =
-            tables.length
-                ? 'inline-flex'
-                : 'none';
-    }
-
     function renderTables() {
-
         workspace.innerHTML = '';
-
-        relationLines.innerHTML = '';
 
         tableElements = [];
 
+        clearRelations();
+
         const tables =
             getTables();
-
-        const models =
-            window.ERD.models?.models ?? [];
 
         const relations =
             getRelations();
 
-        updateToolbar();
-
         tableCount.textContent =
             `${tables.length} table${tables.length === 1 ? '' : 's'}`;
+
+        const models =
+            window.ERD.models?.models ?? [];
 
         modelCount.textContent =
             `${models.length} model${models.length === 1 ? '' : 's'}`;
@@ -1046,24 +1171,32 @@
             `${relations.length} relation${relations.length === 1 ? '' : 's'}`;
 
         if (!tables.length) {
+
             renderEmptyState();
+
+            refreshButton.style.display =
+                'none';
+
             return;
         }
 
-        tables.forEach((table, index) => {
+        tables.forEach(
+            (table, index) => {
 
-            const element =
-                createTable(table, index);
+                const element =
+                    createTable(
+                        table,
+                        index
+                    );
 
-            tableElements.push({
-                element,
-                name:
-                    table.name.toLowerCase(),
-                table:
-                    table
-            });
-
-        });
+                tableElements.push({
+                    element,
+                    name:
+                        table.name
+                            .toLowerCase()
+                });
+            }
+        );
 
         layoutTables();
 
@@ -1071,11 +1204,13 @@
 
         applySearch();
 
+        refreshButton.style.display =
+            'inline-flex';
+
         resetView();
     }
 
     function renderEmptyState() {
-
         workspace.innerHTML = `
             <div class="erd-empty">
 
@@ -1101,99 +1236,119 @@
                         ◈
                     </span>
 
-                    Analyze Schema
+                    <span>
+                        Analyze Schema
+                    </span>
                 </button>
 
             </div>
         `;
     }
 
-    function createTable(table, index) {
-
+    function createTable(
+        table,
+        index
+    ) {
         const element =
-            document.createElement('div');
+            document.createElement(
+                'div'
+            );
 
         element.className =
             'erd-table';
 
-        element.dataset.table =
-            table.name;
-
         const columns =
-            table.columns.map(column => {
+            table.columns
+                .map(
+                    column => {
 
-                const badges = [];
+                        const badges = [];
 
-                if (column.primary) {
-                    badges.push({
-                        text: 'PK',
-                        className: 'primary'
-                    });
-                }
+                        if (column.primary) {
+                            badges.push({
+                                text: 'PK',
+                                className:
+                                    'primary'
+                            });
+                        }
 
-                if (column.unique) {
-                    badges.push({
-                        text: 'UQ',
-                        className: 'unique'
-                    });
-                }
+                        if (column.unique) {
+                            badges.push({
+                                text: 'UQ',
+                                className:
+                                    'unique'
+                            });
+                        }
 
-                if (column.nullable) {
-                    badges.push({
-                        text: 'NULL',
-                        className: ''
-                    });
-                }
+                        if (column.nullable) {
+                            badges.push({
+                                text: 'NULL',
+                                className: ''
+                            });
+                        }
 
-                return `
-                    <div class="erd-column">
+                        return `
+                            <div class="erd-column">
 
-                        <div class="erd-column-name">
+                                <div class="erd-column-name">
 
-                            ${escapeHtml(
-                                column.name ?? ''
-                            )}
+                                    ${escapeHtml(
+                                        column.name ??
+                                        ''
+                                    )}
 
-                            ${
-                                badges.length
-                                    ? `
-                                        <span class="erd-badges">
-                                            ${badges.map(badge => `
-                                                <span class="erd-badge ${badge.className}">
-                                                    ${badge.text}
+                                    ${
+                                        badges.length
+                                            ? `
+                                                <span class="erd-badges">
+
+                                                    ${badges
+                                                        .map(
+                                                            badge => `
+                                                                <span
+                                                                    class="erd-badge ${badge.className}"
+                                                                >
+                                                                    ${badge.text}
+                                                                </span>
+                                                            `
+                                                        )
+                                                        .join('')}
+
                                                 </span>
-                                            `).join('')}
-                                        </span>
-                                    `
-                                    : ''
-                            }
+                                            `
+                                            : ''
+                                    }
 
-                        </div>
+                                </div>
 
-                        <div class="erd-column-type">
-                            ${escapeHtml(
-                                column.type ?? ''
-                            )}
-                        </div>
+                                <div class="erd-column-type">
+                                    ${escapeHtml(
+                                        column.type ??
+                                        ''
+                                    )}
+                                </div>
 
-                    </div>
-                `;
-
-            }).join('');
+                            </div>
+                        `;
+                    }
+                )
+                .join('');
 
         element.innerHTML = `
-
             <div class="erd-table-header">
 
                 <div class="erd-table-title-row">
 
                     <div class="erd-table-name">
-                        ${escapeHtml(table.name)}
+                        ${escapeHtml(
+                            table.name
+                        )}
                     </div>
 
                     <div class="erd-table-operation">
                         ${escapeHtml(
-                            table.operation
+                            table.operation ??
+                            'table'
                         )}
                     </div>
 
@@ -1201,7 +1356,8 @@
 
                 <div class="erd-table-meta">
                     ${escapeHtml(
-                        table.migration ?? ''
+                        table.migration ??
+                        ''
                     )}
                 </div>
 
@@ -1223,22 +1379,24 @@
             </div>
 
             <div class="erd-table-footer">
-
                 ${table.columns.length}
-
                 column${table.columns.length === 1 ? '' : 's'}
-
             </div>
         `;
 
-        makeDraggable(element);
+        makeDraggable(
+            element
+        );
 
-        workspace.appendChild(element);
+        workspace.appendChild(
+            element
+        );
 
         return element;
     }
 
     function layoutTables() {
+        const gapX = 80;
 
         const gapY = 70;
 
@@ -1250,40 +1408,604 @@
 
         const columnWidth = 380;
 
-        const columnHeights =
-            Array(columns).fill(startY);
+        let columnHeights =
+            Array(columns)
+                .fill(startY);
 
-        tableElements.forEach((item, index) => {
+        tableElements.forEach(
+            (item, index) => {
 
-            const element =
-                item.element;
+                const element =
+                    item.element;
 
-            const column =
-                index % columns;
+                const column =
+                    index % columns;
 
-            const x =
-                startX +
-                column * columnWidth;
+                const x =
+                    startX +
+                    column * columnWidth;
 
-            const y =
-                columnHeights[column];
+                const y =
+                    columnHeights[column];
 
-            element.style.left =
-                `${x}px`;
+                element.style.left =
+                    `${x}px`;
 
-            element.style.top =
-                `${y}px`;
+                element.style.top =
+                    `${y}px`;
 
-            columnHeights[column] =
-                y +
-                element.offsetHeight +
-                gapY;
-
-        });
+                columnHeights[column] =
+                    y +
+                    element.offsetHeight +
+                    gapY;
+            }
+        );
     }
 
-    function makeDraggable(element) {
+    function getTableElement(
+        tableName
+    ) {
+        const normalized =
+            String(
+                tableName ??
+                ''
+            ).toLowerCase();
 
+        const item =
+            tableElements.find(
+                table =>
+                    table.name ===
+                    normalized
+            );
+
+        return item?.element ??
+            null;
+    }
+
+    function getConnectionPoint(
+        element,
+        targetElement
+    ) {
+        const left =
+            parseFloat(
+                element.style.left
+            ) || 0;
+
+        const top =
+            parseFloat(
+                element.style.top
+            ) || 0;
+
+        const width =
+            element.offsetWidth;
+
+        const height =
+            element.offsetHeight;
+
+        const targetLeft =
+            parseFloat(
+                targetElement.style.left
+            ) || 0;
+
+        const targetTop =
+            parseFloat(
+                targetElement.style.top
+            ) || 0;
+
+        const targetWidth =
+            targetElement.offsetWidth;
+
+        const targetHeight =
+            targetElement.offsetHeight;
+
+        const centerX =
+            left +
+            width / 2;
+
+        const centerY =
+            top +
+            height / 2;
+
+        const targetCenterX =
+            targetLeft +
+            targetWidth / 2;
+
+        const targetCenterY =
+            targetTop +
+            targetHeight / 2;
+
+        const dx =
+            targetCenterX -
+            centerX;
+
+        const dy =
+            targetCenterY -
+            centerY;
+
+        if (Math.abs(dx) >= Math.abs(dy)) {
+
+            if (dx >= 0) {
+
+                return {
+                    x:
+                        left +
+                        width,
+
+                    y:
+                        centerY,
+
+                    side:
+                        'right'
+                };
+            }
+
+            return {
+                x:
+                    left,
+
+                y:
+                    centerY,
+
+                side:
+                    'left'
+            };
+        }
+
+        if (dy >= 0) {
+
+            return {
+                x:
+                    centerX,
+
+                y:
+                    top +
+                    height,
+
+                side:
+                    'bottom'
+            };
+        }
+
+        return {
+            x:
+                centerX,
+
+            y:
+                top,
+
+            side:
+                'top'
+        };
+    }
+
+    function createRelationPath(
+        from,
+        to
+    ) {
+        const distanceX =
+            Math.abs(
+                to.x -
+                from.x
+            );
+
+        const distanceY =
+            Math.abs(
+                to.y -
+                from.y
+            );
+
+        const curve =
+            Math.max(
+                70,
+                Math.min(
+                    220,
+                    Math.max(
+                        distanceX,
+                        distanceY
+                    ) * .35
+                )
+            );
+
+        let c1x =
+            from.x;
+
+        let c1y =
+            from.y;
+
+        let c2x =
+            to.x;
+
+        let c2y =
+            to.y;
+
+        if (
+            from.side ===
+            'right'
+        ) {
+            c1x += curve;
+        } else if (
+            from.side ===
+            'left'
+        ) {
+            c1x -= curve;
+        } else if (
+            from.side ===
+            'bottom'
+        ) {
+            c1y += curve;
+        } else {
+            c1y -= curve;
+        }
+
+        if (
+            to.side ===
+            'right'
+        ) {
+            c2x += curve;
+        } else if (
+            to.side ===
+            'left'
+        ) {
+            c2x -= curve;
+        } else if (
+            to.side ===
+            'bottom'
+        ) {
+            c2y += curve;
+        } else {
+            c2y -= curve;
+        }
+
+        return `
+            M ${from.x} ${from.y}
+            C
+            ${c1x} ${c1y},
+            ${c2x} ${c2y},
+            ${to.x} ${to.y}
+        `;
+    }
+
+    function clearRelations() {
+        relationLines.innerHTML = '';
+    }
+
+    function drawRelations() {
+        clearRelations();
+
+        const relations =
+            getRelations();
+
+        if (!relations.length) {
+            return;
+        }
+
+        relations.forEach(
+            (relation, relationIndex) => {
+
+                const fromElement =
+                    getTableElement(
+                        relation.from_table
+                    );
+
+                const toElement =
+                    getTableElement(
+                        relation.to_table
+                    );
+
+                if (
+                    !fromElement ||
+                    !toElement
+                ) {
+                    return;
+                }
+
+                if (
+                    fromElement.classList.contains(
+                        'hidden'
+                    ) ||
+                    toElement.classList.contains(
+                        'hidden'
+                    )
+                ) {
+                    return;
+                }
+
+                const from =
+                    getConnectionPoint(
+                        fromElement,
+                        toElement
+                    );
+
+                const to =
+                    getConnectionPoint(
+                        toElement,
+                        fromElement
+                    );
+
+                const pathData =
+                    createRelationPath(
+                        from,
+                        to
+                    );
+
+                const pathId =
+                    `erd-relation-${relationIndex}-${Date.now()}`;
+
+                const path =
+                    document.createElementNS(
+                        SVG_NS,
+                        'path'
+                    );
+
+                path.setAttribute(
+                    'id',
+                    pathId
+                );
+
+                path.setAttribute(
+                    'class',
+                    'erd-relation-line'
+                );
+
+                path.setAttribute(
+                    'd',
+                    pathData
+                );
+
+                path.setAttribute(
+                    'data-from',
+                    relation.from_table ??
+                    ''
+                );
+
+                path.setAttribute(
+                    'data-to',
+                    relation.to_table ??
+                    ''
+                );
+
+                relationLines.appendChild(
+                    path
+                );
+
+                createFlowParticles(
+                    path,
+                    relationIndex
+                );
+            }
+        );
+    }
+
+    function createFlowParticles(
+        path,
+        relationIndex
+    ) {
+        const particleCount = 3;
+
+        for (
+            let index = 0;
+            index < particleCount;
+            index++
+        ) {
+
+            const halo =
+                document.createElementNS(
+                    SVG_NS,
+                    'circle'
+                );
+
+            halo.setAttribute(
+                'r',
+                '5'
+            );
+
+            halo.setAttribute(
+                'class',
+                'erd-flow-particle-halo'
+            );
+
+            const motion =
+                document.createElementNS(
+                    SVG_NS,
+                    'animateMotion'
+                );
+
+            motion.setAttribute(
+                'dur',
+                `${2.8 + (relationIndex % 3) * .25}s`
+            );
+
+            motion.setAttribute(
+                'repeatCount',
+                'indefinite'
+            );
+
+            motion.setAttribute(
+                'begin',
+                `${index * .9}s`
+            );
+
+            motion.setAttribute(
+                'rotate',
+                'auto'
+            );
+
+            const mpath =
+                document.createElementNS(
+                    SVG_NS,
+                    'mpath'
+                );
+
+            mpath.setAttributeNS(
+                'http://www.w3.org/1999/xlink',
+                'href',
+                `#${path.id}`
+            );
+
+            mpath.setAttribute(
+                'href',
+                `#${path.id}`
+            );
+
+            motion.appendChild(
+                mpath
+            );
+
+            halo.appendChild(
+                motion
+            );
+
+            relationLines.appendChild(
+                halo
+            );
+
+            const particle =
+                document.createElementNS(
+                    SVG_NS,
+                    'circle'
+                );
+
+            particle.setAttribute(
+                'r',
+                '2.8'
+            );
+
+            particle.setAttribute(
+                'class',
+                'erd-flow-particle'
+            );
+
+            const particleMotion =
+                document.createElementNS(
+                    SVG_NS,
+                    'animateMotion'
+                );
+
+            particleMotion.setAttribute(
+                'dur',
+                `${2.8 + (relationIndex % 3) * .25}s`
+            );
+
+            particleMotion.setAttribute(
+                'repeatCount',
+                'indefinite'
+            );
+
+            particleMotion.setAttribute(
+                'begin',
+                `${index * .9}s`
+            );
+
+            particleMotion.setAttribute(
+                'rotate',
+                'auto'
+            );
+
+            const particlePath =
+                document.createElementNS(
+                    SVG_NS,
+                    'mpath'
+                );
+
+            particlePath.setAttributeNS(
+                'http://www.w3.org/1999/xlink',
+                'href',
+                `#${path.id}`
+            );
+
+            particlePath.setAttribute(
+                'href',
+                `#${path.id}`
+            );
+
+            particleMotion.appendChild(
+                particlePath
+            );
+
+            particle.appendChild(
+                particleMotion
+            );
+
+            relationLines.appendChild(
+                particle
+            );
+
+            const core =
+                document.createElementNS(
+                    SVG_NS,
+                    'circle'
+                );
+
+            core.setAttribute(
+                'r',
+                '1.25'
+            );
+
+            core.setAttribute(
+                'class',
+                'erd-flow-particle-core'
+            );
+
+            const coreMotion =
+                document.createElementNS(
+                    SVG_NS,
+                    'animateMotion'
+                );
+
+            coreMotion.setAttribute(
+                'dur',
+                `${2.8 + (relationIndex % 3) * .25}s`
+            );
+
+            coreMotion.setAttribute(
+                'repeatCount',
+                'indefinite'
+            );
+
+            coreMotion.setAttribute(
+                'begin',
+                `${index * .9}s`
+            );
+
+            coreMotion.setAttribute(
+                'rotate',
+                'auto'
+            );
+
+            const corePath =
+                document.createElementNS(
+                    SVG_NS,
+                    'mpath'
+                );
+
+            corePath.setAttributeNS(
+                'http://www.w3.org/1999/xlink',
+                'href',
+                `#${path.id}`
+            );
+
+            corePath.setAttribute(
+                'href',
+                `#${path.id}`
+            );
+
+            coreMotion.appendChild(
+                corePath
+            );
+
+            core.appendChild(
+                coreMotion
+            );
+
+            relationLines.appendChild(
+                core
+            );
+        }
+    }
+
+    function makeDraggable(
+        element
+    ) {
         const header =
             element.querySelector(
                 '.erd-table-header'
@@ -1328,7 +2050,6 @@
 
                 document.body.style.userSelect =
                     'none';
-
             }
         );
 
@@ -1355,17 +2076,18 @@
                 element.style.left =
                     `${Math.max(
                         0,
-                        startLeft + deltaX
+                        startLeft +
+                        deltaX
                     )}px`;
 
                 element.style.top =
                     `${Math.max(
                         0,
-                        startTop + deltaY
+                        startTop +
+                        deltaY
                     )}px`;
 
                 drawRelations();
-
             }
         );
 
@@ -1379,210 +2101,84 @@
 
                 dragging = false;
 
-                element.style.zIndex = '';
+                element.style.zIndex =
+                    '';
 
                 document.body.style.userSelect =
                     '';
-
             }
         );
     }
 
-    function findTableElement(name) {
-
-        const target =
-            String(name)
-                .toLowerCase();
-
-        const match =
-            tableElements.find(item =>
-                item.name === target
-            );
-
-        return match?.element ?? null;
-    }
-
-    function getConnectionPoint(
-        element,
-        side
-    ) {
-
-        const left =
-            parseFloat(
-                element.style.left
-            ) || 0;
-
-        const top =
-            parseFloat(
-                element.style.top
-            ) || 0;
-
-        const width =
-            element.offsetWidth;
-
-        const height =
-            element.offsetHeight;
-
-        if (side === 'left') {
-            return {
-                x: left,
-                y: top + height / 2
-            };
-        }
-
-        return {
-            x: left + width,
-            y: top + height / 2
-        };
-    }
-
-    function drawRelations() {
-
-        relationLines.innerHTML = '';
-
-        const relations =
-            getRelations();
-
-        relations.forEach(relation => {
-
-            const fromTable =
-                findTableElement(
-                    relation.from_table
-                );
-
-            const toTable =
-                findTableElement(
-                    relation.to_table
-                );
-
-            if (!fromTable || !toTable) {
-                return;
-            }
-
-            const fromRect =
-                getConnectionPoint(
-                    fromTable,
-                    'right'
-                );
-
-            const toRect =
-                getConnectionPoint(
-                    toTable,
-                    'left'
-                );
-
-            const distance =
-                Math.abs(
-                    toRect.x -
-                    fromRect.x
-                );
-
-            const curve =
-                Math.max(
-                    60,
-                    distance * .35
-                );
-
-            const path =
-                document.createElementNS(
-                    'http://www.w3.org/2000/svg',
-                    'path'
-                );
-
-            path.setAttribute(
-                'class',
-                'erd-relation-line'
-            );
-
-            path.setAttribute(
-                'd',
-                `
-                    M ${fromRect.x}
-                      ${fromRect.y}
-
-                    C ${fromRect.x + curve}
-                      ${fromRect.y},
-
-                      ${toRect.x - curve}
-                      ${toRect.y},
-
-                      ${toRect.x}
-                      ${toRect.y}
-                `
-            );
-
-            path.setAttribute(
-                'data-from',
-                relation.from_table
-            );
-
-            path.setAttribute(
-                'data-to',
-                relation.to_table
-            );
-
-            relationLines.appendChild(path);
-
-        });
-    }
-
     function applySearch() {
-
         const search =
             searchInput.value
                 .trim()
                 .toLowerCase();
 
-        tableElements.forEach(item => {
+        tableElements.forEach(
+            item => {
 
-            const visible =
-                !search ||
-                item.name.includes(search);
+                const visible =
+                    !search ||
+                    item.name.includes(
+                        search
+                    );
 
-            item.element.classList.toggle(
-                'hidden',
-                !visible
-            );
-
-        });
+                item.element.classList.toggle(
+                    'hidden',
+                    !visible
+                );
+            }
+        );
 
         drawRelations();
     }
 
     function updateView() {
-
         stage.style.transform =
             `translate(${panX}px, ${panY}px) scale(${zoom})`;
 
         zoomValue.textContent =
-            `${Math.round(zoom * 100)}%`;
+            `${Math.round(
+                zoom * 100
+            )}%`;
     }
 
-    function setZoom(value) {
-
+    function setZoom(
+        value
+    ) {
         zoom =
             Math.min(
                 1.8,
-                Math.max(.45, value)
+                Math.max(
+                    .45,
+                    value
+                )
             );
 
         updateView();
     }
 
     function resetView() {
-
         zoom = 1;
 
         panX =
             Math.max(
                 0,
-                (canvas.clientWidth - 1900) / 2
+                (
+                    canvas.clientWidth -
+                    1900
+                ) / 2
             );
 
         panY =
             Math.max(
                 0,
-                (canvas.clientHeight - 1300) / 2
+                (
+                    canvas.clientHeight -
+                    1300
+                ) / 2
             );
 
         updateView();
@@ -1651,7 +2247,6 @@
                 );
 
             updateView();
-
         }
     );
 
@@ -1668,7 +2263,6 @@
             canvas.classList.remove(
                 'is-panning'
             );
-
         }
     );
 
@@ -1688,9 +2282,9 @@
                     : -.1;
 
             setZoom(
-                zoom + direction
+                zoom +
+                direction
             );
-
         },
         {
             passive: false
@@ -1699,12 +2293,22 @@
 
     zoomInButton.addEventListener(
         'click',
-        () => setZoom(zoom + .1)
+        () => {
+            setZoom(
+                zoom +
+                .1
+            );
+        }
     );
 
     zoomOutButton.addEventListener(
         'click',
-        () => setZoom(zoom - .1)
+        () => {
+            setZoom(
+                zoom -
+                .1
+            );
+        }
     );
 
     resetViewButton.addEventListener(
@@ -1718,7 +2322,6 @@
     );
 
     async function analyzeSchema() {
-
         setLoading(true);
 
         try {
@@ -1728,6 +2331,7 @@
                     '{{ route('erd.refresh') }}',
                     {
                         method: 'POST',
+
                         headers: {
                             'X-CSRF-TOKEN':
                                 document
@@ -1773,12 +2377,10 @@
         } finally {
 
             setLoading(false);
-
         }
     }
 
     async function reloadRegistry() {
-
         const response =
             await fetch(
                 window.location.href,
@@ -1803,15 +2405,18 @@
             );
 
         const script =
-            [...documentObject.scripts]
-                .find(script =>
+            [
+                ...documentObject.scripts
+            ].find(
+                script =>
                     script.textContent.includes(
                         'window.ERD'
                     )
-                );
+            );
 
         if (!script) {
             window.location.reload();
+
             return;
         }
 
@@ -1822,6 +2427,7 @@
 
         if (!match) {
             window.location.reload();
+
             return;
         }
 
@@ -1837,24 +2443,54 @@
         } catch {
 
             window.location.reload();
-
         }
     }
 
-    function setLoading(loading) {
+    function setLoading(
+        loading
+    ) {
+        analyzeButton.disabled =
+            loading;
 
         refreshButton.disabled =
             loading;
 
+        analyzeButton.innerHTML =
+            loading
+                ? `
+                    <span>◌</span>
+                    <span>Analyzing...</span>
+                `
+                : `
+                    <span class="erd-button-icon">
+                        ◈
+                    </span>
+
+                    <span class="erd-button-text">
+                        Analyze Schema
+                    </span>
+                `;
+
         refreshButton.innerHTML =
             loading
-                ? '<span>◌</span><span class="erd-button-text">Analyzing...</span>'
-                : '<span class="erd-button-icon">↻</span><span class="erd-button-text">Refresh</span>';
+                ? `
+                    <span>◌</span>
+                    <span>Working...</span>
+                `
+                : `
+                    <span class="erd-button-icon">
+                        ↻
+                    </span>
 
+                    <span class="erd-button-text">
+                        Refresh
+                    </span>
+                `;
     }
 
-    function showToast(message) {
-
+    function showToast(
+        message
+    ) {
         toast.textContent =
             message;
 
@@ -1872,8 +2508,9 @@
         );
     }
 
-    function escapeHtml(value) {
-
+    function escapeHtml(
+        value
+    ) {
         return String(value)
             .replace(
                 /&/g,
@@ -1896,6 +2533,11 @@
                 '&#039;'
             );
     }
+
+    analyzeButton.addEventListener(
+        'click',
+        analyzeSchema
+    );
 
     refreshButton.addEventListener(
         'click',
