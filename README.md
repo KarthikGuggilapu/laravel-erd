@@ -37,7 +37,7 @@ Add the package repository:
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/YOUR_USERNAME/laravel-erd"
+            "url": "https://github.com/KarthikGuggilapu/laravel-erd"
         }
     ]
 }
@@ -71,7 +71,7 @@ For example:
 Once the repository has been added:
 
 ```bash
-composer require your-vendor/laravel-erd:dev-main
+composer require karthikguggilapu/laravel-erd:dev-main
 ```
 
 If your repository uses another branch, replace `dev-main` accordingly.
@@ -79,13 +79,13 @@ If your repository uses another branch, replace `dev-main` accordingly.
 For example:
 
 ```bash
-composer require your-vendor/laravel-erd:dev-develop
+composer require karthikguggilapu/laravel-erd:dev-develop
 ```
 
 Composer will clone the package from Git and install it into:
 
 ```text
-vendor/your-vendor/laravel-erd
+vendor/karthikguggilapu/laravel-erd
 ```
 
 ---
@@ -118,7 +118,7 @@ Inside `test-laravel-app/composer.json`:
 Then run:
 
 ```bash
-composer require your-vendor/laravel-erd:@dev
+composer require karthikguggilapu/laravel-erd:@dev
 ```
 
 Composer will use your local package directory instead of downloading it from Git.
@@ -290,13 +290,13 @@ This means you can modify the package source and immediately test the changes in
 When using the Git repository:
 
 ```bash
-composer update your-vendor/laravel-erd
+composer update karthikguggilapu/laravel-erd
 ```
 
 Or reinstall the latest development branch:
 
 ```bash
-composer require your-vendor/laravel-erd:dev-main
+composer require karthikguggilapu/laravel-erd:dev-main
 ```
 
 ---
