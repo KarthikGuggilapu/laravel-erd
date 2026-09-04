@@ -170,7 +170,7 @@ class RegistryManager
         $composer = dirname(__DIR__, 2) . '/composer.json';
 
         if (!File::exists($composer)) {
-            return '0.0.2';
+            return '0.0.1';
         }
 
         $data = json_decode(
@@ -178,6 +178,6 @@ class RegistryManager
             true
         );
 
-        return $data['version'] ?? '0.0.2';
+        return $data['version'] ?? '0.0.1';
     }
 }

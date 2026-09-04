@@ -13,24 +13,29 @@ class ErdServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(
-            __DIR__ . '/../config/erd.php',
+            __DIR__.'/../config/erd.php',
             'erd'
         );
 
         $this->app->singleton(
             RegistryManager::class,
-            fn () => new RegistryManager()
+            fn () => new RegistryManager
         );
     }
 
     public function boot(): void
     {
         $this->publishes([
-            __DIR__ . '/../config/erd.php' => config_path('erd.php'),
+            __DIR__.'/../config/erd.php' => config_path('erd.php'),
         ], 'erd-config');
 
+        $this->publishes([
+            __DIR__.'/../resources/css/erd.css' => public_path('vendor/erd/erd.css'),
+            __DIR__.'/../resources/js' => public_path('vendor/erd/js'),
+        ], 'erd-assets');
+
         $this->loadViewsFrom(
-            __DIR__ . '/../resources/views',
+            __DIR__.'/../resources/views',
             'erd'
         );
 
@@ -44,7 +49,7 @@ class ErdServiceProvider extends ServiceProvider
 
         if (config('erd.enabled')) {
             $this->loadRoutesFrom(
-                __DIR__ . '/../routes/web.php'
+                __DIR__.'/../routes/web.php'
             );
         }
     }

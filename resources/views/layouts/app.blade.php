@@ -13,19 +13,19 @@
     @yield('content')
 
     <script>
-        window.ERD = @json([
-            'metadata' => $metadata ?? [],
-            'migrations' => $migrations ?? [],
-            'models' => $models ?? [],
-            'relations' => $relations ?? [],
-            'history' => $history ?? [],
-            'layout' => $layout ?? [],
-        ]);
+        window.ERD = {
+            metadata: @json($metadata ?? []),
+            migrations: @json($migrations ?? []),
+            models: @json($models ?? []),
+            relations: @json($relations ?? []),
+            history: @json($history ?? []),
+            layout: @json($layout ?? [])
+        };
 
         window.ERD_CONFIG = {
             refreshUrl: @json(route('erd.refresh')),
             indexUrl: @json(route('erd.index')),
-            appName: @json(config('app.name')),
+            appName: @json(config('app.name'))
         };
     </script>
 
