@@ -2,8 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="csrf-token"
+        content="{{ csrf_token() }}"
+    >
 
     <title>{{ config('app.name') }} ERD</title>
 
@@ -14,16 +21,17 @@
 
     <style>
         :root {
-            --bg: #080e1c;
+            --bg: #080d19;
             --panel: #0e1627;
-            --panel-2: #111b2e;
-            --panel-3: #182640;
-            --text: #edf3fc;
-            --muted: #71809c;
-            --border: rgba(151,176,220,.13);
-            --border-strong: rgba(116,153,216,.32);
-            --accent: #315ea8;
-            --accent-hover: #3b6fc0;
+            --panel-2: #121d32;
+            --panel-3: #17233b;
+            --border: rgba(255,255,255,.08);
+            --border-strong: rgba(255,255,255,.14);
+            --text: #f3f7ff;
+            --muted: #72819b;
+            --muted-2: #56657f;
+            --accent: #4d83e8;
+            --accent-hover: #5b91f5;
             --success: #55c98a;
         }
 
@@ -36,9 +44,6 @@
             width: 100%;
             height: 100%;
             margin: 0;
-        }
-
-        body {
             overflow: hidden;
             background: var(--bg);
             color: var(--text);
@@ -50,6 +55,19 @@
                 BlinkMacSystemFont,
                 "Segoe UI",
                 sans-serif;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        html::-webkit-scrollbar,
+        body::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+            display: none;
+        }
+
+        body {
+            user-select: none;
         }
 
         button,
@@ -97,7 +115,11 @@
             align-items: center;
             justify-content: center;
             border-radius: 10px;
-            background: linear-gradient(145deg, #263b65, #172746);
+            background: linear-gradient(
+                145deg,
+                #263b65,
+                #172746
+            );
             border: 1px solid rgba(117,157,231,.18);
             color: #9fc0ff;
             font-size: 17px;
@@ -165,22 +187,22 @@
             left: 12px;
             top: 50%;
             transform: translateY(-50%);
-            color: #61718b;
-            font-size: 13px;
+            color: #647795;
+            font-size: 15px;
             pointer-events: none;
         }
 
         .erd-button {
             height: 38px;
-            padding: 0 14px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 7px;
+            padding: 0 13px;
             border: 1px solid var(--border);
-            border-radius: 9px;
+            border-radius: 8px;
             background: #17233a;
-            color: #dce7f8;
+            color: #dce6f6;
             cursor: pointer;
             font-size: 11px;
             font-weight: 650;
@@ -368,6 +390,9 @@
             margin-top: 5px;
             color: #647795;
             font-size: 9px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .erd-columns {
@@ -381,7 +406,7 @@
             align-items: center;
             gap: 10px;
             padding: 0 13px;
-            border-bottom: 1px solid rgba(255,255,255,.035);
+            border-bottom: 1px solid rgba(255,255,255,.045);
         }
 
         .erd-column:last-child {
@@ -393,52 +418,304 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            color: #d6e0ef;
+            color: #dce5f5;
             font-size: 10px;
         }
 
         .erd-column-type {
-            color: #7184a3;
-            font-size: 9px;
+            color: #7486a3;
             white-space: nowrap;
+            font-size: 9px;
         }
 
         .erd-badges {
             display: inline-flex;
             align-items: center;
             gap: 3px;
-            margin-left: 4px;
+            margin-left: 5px;
         }
 
         .erd-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             padding: 2px 4px;
-            border-radius: 3px;
-            background: rgba(255,255,255,.075);
-            color: #91a2bd;
+            border-radius: 4px;
+            background: rgba(255,255,255,.07);
+            color: #8fa1bd;
             font-size: 7px;
             font-weight: 750;
-            vertical-align: middle;
+            line-height: 1;
         }
 
         .erd-badge.primary {
             background: rgba(77,131,232,.16);
-            color: #8fb5ff;
+            color: #8eb5ff;
         }
 
         .erd-badge.unique {
-            background: rgba(85,201,138,.1);
-            color: #78d9a3;
+            background: rgba(85,201,138,.12);
+            color: #79d9a3;
         }
 
         .erd-table-footer {
-            height: 28px;
+            padding: 7px 13px;
+            border-top: 1px solid rgba(255,255,255,.06);
+            color: #596982;
+            font-size: 9px;
+        }
+
+        .erd-table.erd-simple-mode {
+            min-height: 48px;
+        }
+
+        .erd-table.erd-simple-mode .erd-table-header {
+            min-height: 48px;
+            border-bottom: 0;
+        }
+
+        .erd-table.erd-simple-mode .erd-table-operation,
+        .erd-table.erd-simple-mode .erd-table-meta,
+        .erd-table.erd-simple-mode .erd-table-details {
+            display: none;
+        }
+
+        .erd-table-details {
+            display: block;
+        }
+
+        .erd-view-selector,
+        .erd-table-selector {
+            position: absolute;
+            top: 16px;
+            z-index: 70;
+            border: 1px solid rgba(151,176,220,.14);
+            border-radius: 10px;
+            background: rgba(9,15,28,.9);
+            box-shadow:
+                0 15px 40px rgba(0,0,0,.25),
+                0 2px 8px rgba(0,0,0,.15);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+        }
+
+        .erd-view-selector {
+            left: 16px;
+            width: 145px;
+        }
+
+        .erd-table-selector {
+            right: 16px;
+            width: 240px;
+            max-height: min(520px, calc(100% - 100px));
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .erd-selector-title {
+            padding: 10px 12px 8px;
+            color: #dce6f5;
+            font-size: 9px;
+            font-weight: 750;
+            text-transform: uppercase;
+            letter-spacing: .7px;
+        }
+
+        .erd-view-options {
+            padding: 4px 7px 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .erd-view-option {
+            width: 100%;
+            min-height: 34px;
             display: flex;
             align-items: center;
-            padding: 0 13px;
-            border-top: 1px solid rgba(255,255,255,.05);
-            background: rgba(7,12,23,.22);
-            color: #52627c;
+            gap: 9px;
+            padding: 0 9px;
+            border: 1px solid transparent;
+            border-radius: 7px;
+            background: transparent;
+            color: #8190a8;
+            cursor: pointer;
+            text-align: left;
+            font-size: 10px;
+            transition:
+                background .15s ease,
+                border-color .15s ease,
+                color .15s ease;
+        }
+
+        .erd-view-option:hover {
+            background: rgba(255,255,255,.045);
+            color: #dbe5f5;
+        }
+
+        .erd-view-option.active {
+            background: rgba(77,131,232,.11);
+            border-color: rgba(77,131,232,.22);
+            color: #e8f0ff;
+        }
+
+        .erd-view-radio {
+            width: 13px;
+            height: 13px;
+            flex-shrink: 0;
+            border: 1px solid #53657f;
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .erd-view-option.active .erd-view-radio {
+            border-color: #6e9bf0;
+        }
+
+        .erd-view-option.active .erd-view-radio::after {
+            content: "";
+            position: absolute;
+            left: 3px;
+            top: 3px;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: #6e9bf0;
+        }
+
+        .erd-table-selector-header {
+            padding: 11px 11px 9px;
+            border-bottom: 1px solid rgba(255,255,255,.07);
+        }
+
+        .erd-table-selector-title-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .erd-table-selector-title {
+            color: #e2eaf7;
+            font-size: 10px;
+            font-weight: 750;
+        }
+
+        .erd-table-selector-count {
+            color: #667895;
             font-size: 8px;
+        }
+
+        .erd-selector-search {
+            width: 100%;
+            height: 30px;
+            margin-top: 8px;
+            padding: 0 9px;
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 7px;
+            outline: none;
+            background: #0a1220;
+            color: #e5edf9;
+            font-size: 9px;
+        }
+
+        .erd-selector-search:focus {
+            border-color: rgba(77,131,232,.45);
+        }
+
+        .erd-selector-search::placeholder {
+            color: #56657d;
+        }
+
+        .erd-selector-actions {
+            display: flex;
+            gap: 5px;
+            margin-top: 7px;
+        }
+
+        .erd-selector-action {
+            flex: 1;
+            height: 27px;
+            border: 1px solid rgba(255,255,255,.07);
+            border-radius: 6px;
+            background: rgba(255,255,255,.035);
+            color: #7d8da6;
+            cursor: pointer;
+            font-size: 8px;
+            font-weight: 650;
+        }
+
+        .erd-selector-action:hover {
+            background: rgba(255,255,255,.07);
+            color: #dce6f5;
+        }
+
+        .erd-table-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 5px;
+            scrollbar-width: thin;
+            scrollbar-color: #263650 transparent;
+        }
+
+        .erd-table-list::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .erd-table-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .erd-table-list::-webkit-scrollbar-thumb {
+            background: #263650;
+            border-radius: 10px;
+        }
+
+        .erd-table-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-height: 31px;
+            padding: 0 7px;
+            border-radius: 6px;
+            color: #8998af;
+            cursor: pointer;
+            transition: background .12s ease;
+        }
+
+        .erd-table-item:hover {
+            background: rgba(255,255,255,.045);
+            color: #dce6f5;
+        }
+
+        .erd-table-item.hidden-by-search {
+            display: none;
+        }
+
+        .erd-table-checkbox {
+            width: 13px;
+            height: 13px;
+            flex-shrink: 0;
+            margin: 0;
+            accent-color: var(--accent);
+            cursor: pointer;
+        }
+
+        .erd-table-item-name {
+            min-width: 0;
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 9px;
+        }
+
+        .erd-table-selector-empty {
+            padding: 18px 10px;
+            text-align: center;
+            color: #5d6d87;
+            font-size: 9px;
         }
 
         .erd-empty {
@@ -449,27 +726,21 @@
             justify-content: center;
             flex-direction: column;
             text-align: center;
-            color: #71809c;
-            pointer-events: auto;
+            color: #647795;
         }
 
         .erd-empty-icon {
-            width: 58px;
-            height: 58px;
+            width: 46px;
+            height: 46px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 15px;
-            border-radius: 16px;
-            background:
-                linear-gradient(
-                    145deg,
-                    #263b65,
-                    #172746
-                );
-            border: 1px solid rgba(117,157,231,.18);
-            color: #9fc0ff;
-            font-size: 22px;
+            margin-bottom: 13px;
+            border: 1px solid rgba(116,153,216,.18);
+            border-radius: 12px;
+            background: #111d32;
+            color: #7fa7ed;
+            font-size: 17px;
             font-weight: 800;
             box-shadow: 0 15px 35px rgba(0,0,0,.25);
         }
@@ -634,181 +905,6 @@
             filter: url(#erd-particle-glow);
         }
 
-        .erd-table-selector {
-            position: absolute;
-            top: 18px;
-            right: 18px;
-            width: 280px;
-            max-height: calc(100% - 90px);
-            display: flex;
-            flex-direction: column;
-            background: rgba(14,22,39,.94);
-            border: 1px solid rgba(151,176,220,.16);
-            border-radius: 12px;
-            box-shadow:
-                0 20px 50px rgba(0,0,0,.35),
-                0 4px 14px rgba(0,0,0,.2);
-            backdrop-filter: blur(16px);
-            z-index: 70;
-            overflow: hidden;
-        }
-
-        .erd-selector-header {
-            padding: 13px 14px 10px;
-            border-bottom: 1px solid rgba(255,255,255,.06);
-        }
-
-        .erd-selector-title-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-        }
-
-        .erd-selector-title {
-            color: #edf3fc;
-            font-size: 11px;
-            font-weight: 750;
-        }
-
-        .erd-selector-count {
-            padding: 3px 7px;
-            border-radius: 5px;
-            background: rgba(77,131,232,.13);
-            color: #8fb5ff;
-            font-size: 8px;
-            font-weight: 700;
-        }
-
-        .erd-selector-search-wrap {
-            position: relative;
-            margin-top: 10px;
-        }
-
-        .erd-selector-search {
-            width: 100%;
-            height: 32px;
-            padding: 0 10px 0 30px;
-            border: 1px solid rgba(151,176,220,.12);
-            border-radius: 7px;
-            outline: none;
-            background: #09111f;
-            color: #dce7f8;
-            font-size: 10px;
-        }
-
-        .erd-selector-search:focus {
-            border-color: rgba(77,131,232,.5);
-        }
-
-        .erd-selector-search::placeholder {
-            color: #566681;
-        }
-
-        .erd-selector-search-icon {
-            position: absolute;
-            left: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #61718b;
-            font-size: 11px;
-            pointer-events: none;
-        }
-
-        .erd-selector-actions {
-            display: flex;
-            gap: 6px;
-            margin-top: 8px;
-        }
-
-        .erd-selector-action {
-            flex: 1;
-            height: 27px;
-            border: 1px solid rgba(151,176,220,.1);
-            border-radius: 6px;
-            background: rgba(255,255,255,.035);
-            color: #8090a9;
-            cursor: pointer;
-            font-size: 8px;
-            font-weight: 650;
-        }
-
-        .erd-selector-action:hover {
-            background: rgba(255,255,255,.07);
-            color: #dce7f8;
-        }
-
-        .erd-selector-list {
-            overflow-y: auto;
-            padding: 7px;
-        }
-
-        .erd-selector-list::-webkit-scrollbar {
-            width: 5px;
-        }
-
-        .erd-selector-list::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .erd-selector-list::-webkit-scrollbar-thumb {
-            background: rgba(151,176,220,.16);
-            border-radius: 10px;
-        }
-
-        .erd-selector-item {
-            min-height: 34px;
-            display: flex;
-            align-items: center;
-            gap: 9px;
-            padding: 0 8px;
-            border-radius: 7px;
-            cursor: pointer;
-            transition: background .15s ease;
-        }
-
-        .erd-selector-item:hover {
-            background: rgba(255,255,255,.05);
-        }
-
-        .erd-selector-checkbox {
-            width: 14px;
-            height: 14px;
-            margin: 0;
-            accent-color: #4d83e8;
-            cursor: pointer;
-        }
-
-        .erd-selector-name {
-            min-width: 0;
-            flex: 1;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            color: #cbd6e8;
-            font-size: 9px;
-        }
-
-        .erd-selector-item-count {
-            color: #526681;
-            font-size: 8px;
-        }
-
-        .erd-selector-empty {
-            padding: 18px 10px;
-            text-align: center;
-            color: #61718b;
-            font-size: 9px;
-        }
-
-        .erd-selector-footer {
-            padding: 8px 12px;
-            border-top: 1px solid rgba(255,255,255,.06);
-            color: #52627c;
-            font-size: 8px;
-            line-height: 1.5;
-        }
-
         @media (max-width: 900px) {
             .erd-brand-subtitle {
                 display: none;
@@ -823,7 +919,7 @@
             }
 
             .erd-table-selector {
-                width: 240px;
+                width: 210px;
             }
         }
 
@@ -848,10 +944,15 @@
                 font-size: 13px;
             }
 
+            .erd-view-selector {
+                left: 10px;
+                top: 10px;
+            }
+
             .erd-table-selector {
-                top: 12px;
-                right: 12px;
-                width: 220px;
+                right: 10px;
+                top: 10px;
+                width: 190px;
             }
         }
 
@@ -948,6 +1049,39 @@
     >
 
         <div
+            class="erd-view-selector"
+            id="erdViewSelector"
+        >
+
+            <div class="erd-selector-title">
+                View Mode
+            </div>
+
+            <div class="erd-view-options">
+
+                <button
+                    type="button"
+                    class="erd-view-option active"
+                    data-view-mode="simple"
+                >
+                    <span class="erd-view-radio"></span>
+                    <span>Simple</span>
+                </button>
+
+                <button
+                    type="button"
+                    class="erd-view-option"
+                    data-view-mode="detailed"
+                >
+                    <span class="erd-view-radio"></span>
+                    <span>Detailed</span>
+                </button>
+
+            </div>
+
+        </div>
+
+        <div
             class="erd-stage"
             id="erdStage"
         >
@@ -957,8 +1091,6 @@
                 id="erdRelations"
                 width="5000"
                 height="5000"
-                viewBox="0 0 5000 5000"
-                preserveAspectRatio="none"
             >
 
                 <defs>
@@ -986,7 +1118,7 @@
                         height="300%"
                     >
                         <feGaussianBlur
-                            stdDeviation="2.5"
+                            stdDeviation="2"
                             result="blur"
                         />
 
@@ -1009,43 +1141,35 @@
 
         </div>
 
-        <div
+        <aside
             class="erd-table-selector"
             id="erdTableSelector"
         >
 
-            <div class="erd-selector-header">
+            <div class="erd-table-selector-header">
 
-                <div class="erd-selector-title-row">
+                <div class="erd-table-selector-title-row">
 
-                    <div class="erd-selector-title">
+                    <div class="erd-table-selector-title">
                         Tables
                     </div>
 
                     <div
-                        class="erd-selector-count"
-                        id="selectedTableCount"
+                        class="erd-table-selector-count"
+                        id="tableSelectorCount"
                     >
                         0 / 0
                     </div>
 
                 </div>
 
-                <div class="erd-selector-search-wrap">
-
-                    <span class="erd-selector-search-icon">
-                        ⌕
-                    </span>
-
-                    <input
-                        type="search"
-                        id="tableSelectorSearch"
-                        class="erd-selector-search"
-                        placeholder="Find table..."
-                        autocomplete="off"
-                    >
-
-                </div>
+                <input
+                    type="search"
+                    class="erd-selector-search"
+                    id="tableSelectorSearch"
+                    placeholder="Find table..."
+                    autocomplete="off"
+                >
 
                 <div class="erd-selector-actions">
 
@@ -1070,17 +1194,11 @@
             </div>
 
             <div
-                class="erd-selector-list"
+                class="erd-table-list"
                 id="erdTableList"
             ></div>
 
-            <div class="erd-selector-footer">
-                Select the tables you want to display.
-                Relations are shown only when both connected
-                tables are selected.
-            </div>
-
-        </div>
+        </aside>
 
         <div class="erd-bottom">
 
@@ -1092,17 +1210,13 @@
                     0 tables
                 </span>
 
-                <span>
-                    ·
-                </span>
+                <span>·</span>
 
                 <span id="modelCount">
                     0 models
                 </span>
 
-                <span>
-                    ·
-                </span>
+                <span>·</span>
 
                 <span id="relationCount">
                     0 relations
@@ -1123,7 +1237,7 @@
 
                 <div
                     class="erd-zoom"
-                    id="zoomValue"
+                    id="zoomLevel"
                 >
                     100%
                 </div>
@@ -1154,9 +1268,7 @@
 
     <footer class="erd-footer">
         Developed by
-        <strong>
-            Karthik Guggilapu
-        </strong>
+        <strong>Karthik Guggilapu</strong>
     </footer>
 
 </div>
@@ -1197,6 +1309,9 @@
     const refreshButton =
         document.getElementById('refreshButton');
 
+    const toast =
+        document.getElementById('erdToast');
+
     const tableCount =
         document.getElementById('tableCount');
 
@@ -1206,57 +1321,78 @@
     const relationCount =
         document.getElementById('relationCount');
 
-    const zoomInButton =
+    const zoomLevel =
+        document.getElementById('zoomLevel');
+
+    const zoomIn =
         document.getElementById('zoomIn');
 
-    const zoomOutButton =
+    const zoomOut =
         document.getElementById('zoomOut');
 
     const resetViewButton =
         document.getElementById('resetView');
 
-    const zoomValue =
-        document.getElementById('zoomValue');
+    const viewSelector =
+        document.getElementById('erdViewSelector');
 
-    const toast =
-        document.getElementById('erdToast');
+    const tableSelector =
+        document.getElementById('erdTableSelector');
 
     const tableSelectorSearch =
         document.getElementById('tableSelectorSearch');
 
-    const tableList =
+    const tableSelectorList =
         document.getElementById('erdTableList');
 
-    const selectedTableCount =
-        document.getElementById('selectedTableCount');
+    const tableSelectorCount =
+        document.getElementById('tableSelectorCount');
 
-    const selectAllTablesButton =
+    const selectAllTables =
         document.getElementById('selectAllTables');
 
-    const clearAllTablesButton =
+    const clearAllTables =
         document.getElementById('clearAllTables');
+
+    const viewModeButtons =
+        document.querySelectorAll(
+            '[data-view-mode]'
+        );
 
     let tableElements = [];
 
-    let zoom = 1;
+    let selectedTables =
+        new Set();
 
-    let panX = 0;
+    let tableSelectionInitialized =
+        false;
 
-    let panY = 0;
+    let viewMode =
+        'simple';
 
-    let isPanning = false;
+    let zoom =
+        1;
 
-    let panStartX = 0;
+    let panX =
+        0;
 
-    let panStartY = 0;
+    let panY =
+        0;
 
-    let initialPanX = 0;
+    let isPanning =
+        false;
 
-    let initialPanY = 0;
+    let panStartX =
+        0;
 
-    let selectedTables = new Set();
+    let panStartY =
+        0;
 
-    let tableSelectionInitialized = false;
+    let initialPanX =
+        0;
+
+    let initialPanY =
+        0;
 
     const SVG_NS =
         'http://www.w3.org/2000/svg';
@@ -1286,9 +1422,16 @@
                             tables.set(
                                 table.name,
                                 {
-                                    name: table.name,
-                                    columns: table.columns ?? [],
-                                    operation: table.operation ?? 'table',
+                                    name:
+                                        table.name,
+
+                                    columns:
+                                        table.columns ?? [],
+
+                                    operation:
+                                        table.operation ??
+                                        'table',
+
                                     migration:
                                         migration.file ??
                                         migration.id ??
@@ -1300,17 +1443,22 @@
                         }
 
                         const existing =
-                            tables.get(table.name);
+                            tables.get(
+                                table.name
+                            );
 
                         if (
-                            table.operation === 'create'
+                            table.operation ===
+                            'create'
                         ) {
                             existing.columns =
                                 table.columns ??
                                 existing.columns;
                         }
 
-                        if (table.columns?.length) {
+                        if (
+                            table.columns?.length
+                        ) {
 
                             const existingNames =
                                 new Set(
@@ -1349,7 +1497,9 @@
             }
         );
 
-        return [...tables.values()];
+        return [
+            ...tables.values()
+        ];
     }
 
     function getRelations() {
@@ -1359,189 +1509,33 @@
         );
     }
 
-    function normalizeTableName(name) {
-        return String(name ?? '')
+    function normalizeTableName(value) {
+        return String(
+            value ?? ''
+        )
             .trim()
             .toLowerCase();
     }
 
-    function initializeTableSelection(tables) {
-        const currentNames =
-            new Set(
-                tables.map(
-                    table =>
-                        normalizeTableName(table.name)
-                )
-            );
-
-        if (!tableSelectionInitialized) {
-
-            selectedTables =
-                new Set(currentNames);
-
-            tableSelectionInitialized = true;
-
-            return;
-        }
-
-        selectedTables =
-            new Set(
-                [...selectedTables].filter(
-                    name =>
-                        currentNames.has(name)
-                )
-            );
-    }
-
-    function renderTableSelector(tables) {
-        initializeTableSelection(tables);
-
-        const selectorSearch =
-            tableSelectorSearch.value
-                .trim()
-                .toLowerCase();
-
-        const filteredTables =
-            tables.filter(
-                table =>
-                    !selectorSearch ||
-                    normalizeTableName(
-                        table.name
-                    ).includes(selectorSearch)
-            );
-
-        tableList.innerHTML = '';
-
-        if (!filteredTables.length) {
-
-            tableList.innerHTML = `
-                <div class="erd-selector-empty">
-                    No tables found
-                </div>
-            `;
-
-        } else {
-
-            filteredTables.forEach(
-                table => {
-
-                    const name =
-                        normalizeTableName(
-                            table.name
-                        );
-
-                    const item =
-                        document.createElement('label');
-
-                    item.className =
-                        'erd-selector-item';
-
-                    const checkbox =
-                        document.createElement('input');
-
-                    checkbox.type =
-                        'checkbox';
-
-                    checkbox.className =
-                        'erd-selector-checkbox';
-
-                    checkbox.checked =
-                        selectedTables.has(name);
-
-                    checkbox.dataset.table =
-                        name;
-
-                    const nameElement =
-                        document.createElement('span');
-
-                    nameElement.className =
-                        'erd-selector-name';
-
-                    nameElement.textContent =
-                        table.name;
-
-                    const columnCount =
-                        document.createElement('span');
-
-                    columnCount.className =
-                        'erd-selector-item-count';
-
-                    columnCount.textContent =
-                        table.columns.length;
-
-                    checkbox.addEventListener(
-                        'change',
-                        () => {
-
-                            if (checkbox.checked) {
-                                selectedTables.add(name);
-                            } else {
-                                selectedTables.delete(name);
-                            }
-
-                            updateTableSelection();
-                        }
-                    );
-
-                    item.appendChild(checkbox);
-                    item.appendChild(nameElement);
-                    item.appendChild(columnCount);
-
-                    tableList.appendChild(item);
-                }
-            );
-        }
-
-        updateSelectedTableCount(tables);
-    }
-
-    function updateSelectedTableCount(tables = getTables()) {
-        selectedTableCount.textContent =
-            `${selectedTables.size} / ${tables.length}`;
-    }
-
-    function updateTableSelection() {
-        tableElements.forEach(
-            item => {
-
-                const visible =
-                    selectedTables.has(
-                        item.name
-                    );
-
-                item.element.classList.toggle(
-                    'hidden',
-                    !visible
-                );
-            }
-        );
-
-        drawRelations();
-
-        const tables =
-            getTables();
-
-        const visibleRelations =
-            getVisibleRelations();
-
-        relationCount.textContent =
-            `${visibleRelations.length} relation${visibleRelations.length === 1 ? '' : 's'}`;
-
-        updateSelectedTableCount(tables);
-    }
-
     function getVisibleRelations() {
-        return getRelations().filter(
+        const relations =
+            getRelations();
+
+        return relations.filter(
             relation => {
 
                 const from =
                     normalizeTableName(
-                        relation.from_table
+                        relation.from_table ??
+                        relation.from ??
+                        relation.table
                     );
 
                 const to =
                     normalizeTableName(
-                        relation.to_table
+                        relation.to_table ??
+                        relation.to ??
+                        relation.referenced_table
                     );
 
                 return (
@@ -1553,6 +1547,7 @@
     }
 
     function renderTables() {
+
         workspace.innerHTML = '';
 
         tableElements = [];
@@ -1561,9 +1556,6 @@
 
         const tables =
             getTables();
-
-        const relations =
-            getRelations();
 
         tableCount.textContent =
             `${tables.length} table${tables.length === 1 ? '' : 's'}`;
@@ -1578,24 +1570,57 @@
 
             renderEmptyState();
 
-            tableList.innerHTML = `
-                <div class="erd-selector-empty">
-                    No tables available
-                </div>
-            `;
-
-            selectedTables.clear();
-
-            selectedTableCount.textContent =
-                '0 / 0';
-
             refreshButton.style.display =
                 'none';
 
-            relationCount.textContent =
-                '0 relations';
+            renderTableSelector([]);
 
             return;
+        }
+
+        const currentNames =
+            new Set(
+                tables.map(
+                    table =>
+                        normalizeTableName(
+                            table.name
+                        )
+                )
+            );
+
+        if (!tableSelectionInitialized) {
+
+            selectedTables =
+                new Set(currentNames);
+
+            tableSelectionInitialized =
+                true;
+
+        } else {
+
+            selectedTables =
+                new Set(
+                    [...selectedTables].filter(
+                        name =>
+                            currentNames.has(name)
+                    )
+                );
+
+            tables.forEach(
+                table => {
+
+                    const name =
+                        normalizeTableName(
+                            table.name
+                        );
+
+                    if (
+                        !selectedTables.has(name)
+                    ) {
+                        return;
+                    }
+                }
+            );
         }
 
         tables.forEach(
@@ -1612,16 +1637,16 @@
                     name:
                         normalizeTableName(
                             table.name
-                        )
+                        ),
+                    originalName:
+                        table.name
                 });
             }
         );
 
         renderTableSelector(tables);
 
-        layoutTables();
-
-        updateTableSelection();
+        applyViewMode();
 
         applySearch();
 
@@ -1632,7 +1657,9 @@
     }
 
     function renderEmptyState() {
+
         workspace.innerHTML = `
+
             <div class="erd-empty">
 
                 <div class="erd-empty-icon">
@@ -1663,6 +1690,7 @@
                 </button>
 
             </div>
+
         `;
     }
 
@@ -1670,47 +1698,61 @@
         table,
         index
     ) {
+
         const element =
-            document.createElement('div');
+            document.createElement(
+                'div'
+            );
 
         element.className =
             'erd-table';
 
         const columns =
-            table.columns
+            (table.columns ?? [])
                 .map(
                     column => {
 
                         const badges = [];
 
                         if (column.primary) {
+
                             badges.push({
                                 text: 'PK',
-                                className: 'primary'
+                                className:
+                                    'primary'
                             });
+
                         }
 
                         if (column.unique) {
+
                             badges.push({
                                 text: 'UQ',
-                                className: 'unique'
+                                className:
+                                    'unique'
                             });
+
                         }
 
                         if (column.nullable) {
+
                             badges.push({
                                 text: 'NULL',
-                                className: ''
+                                className:
+                                    ''
                             });
+
                         }
 
                         return `
+
                             <div class="erd-column">
 
                                 <div class="erd-column-name">
 
                                     ${escapeHtml(
-                                        column.name ?? ''
+                                        column.name ??
+                                        ''
                                     )}
 
                                     ${
@@ -1728,8 +1770,7 @@
                                                                 </span>
                                                             `
                                                         )
-                                                        .join('')
-                                                    }
+                                                        .join('')}
 
                                                 </span>
                                             `
@@ -1740,17 +1781,20 @@
 
                                 <div class="erd-column-type">
                                     ${escapeHtml(
-                                        column.type ?? ''
+                                        column.type ??
+                                        ''
                                     )}
                                 </div>
 
                             </div>
+
                         `;
                     }
                 )
                 .join('');
 
         element.innerHTML = `
+
             <div class="erd-table-header">
 
                 <div class="erd-table-title-row">
@@ -1763,7 +1807,8 @@
 
                     <div class="erd-table-operation">
                         ${escapeHtml(
-                            table.operation ?? 'table'
+                            table.operation ??
+                            'table'
                         )}
                     </div>
 
@@ -1771,47 +1816,71 @@
 
                 <div class="erd-table-meta">
                     ${escapeHtml(
-                        table.migration ?? ''
+                        table.migration ??
+                        ''
                     )}
                 </div>
 
             </div>
 
-            <div class="erd-columns">
+            <div class="erd-table-details">
 
-                ${
-                    columns ||
-                    `
-                        <div class="erd-column">
-                            <div class="erd-column-name">
-                                No columns detected
+                <div class="erd-columns">
+
+                    ${
+                        columns ||
+                        `
+                            <div class="erd-column">
+
+                                <div class="erd-column-name">
+                                    No columns detected
+                                </div>
+
                             </div>
-                        </div>
-                    `
-                }
+                        `
+                    }
+
+                </div>
+
+                <div class="erd-table-footer">
+                    ${(table.columns ?? []).length}
+                    column${(table.columns ?? []).length === 1 ? '' : 's'}
+                </div>
 
             </div>
 
-            <div class="erd-table-footer">
-                ${table.columns.length}
-                column${table.columns.length === 1 ? '' : 's'}
-            </div>
         `;
 
-        makeDraggable(element);
+        makeDraggable(
+            element
+        );
 
-        workspace.appendChild(element);
+        workspace.appendChild(
+            element
+        );
 
         return element;
     }
 
     function layoutTables() {
-        const gapX = 80;
-        const gapY = 70;
-        const startX = 100;
-        const startY = 100;
-        const columns = 4;
-        const columnWidth = 380;
+
+        const gapX =
+            80;
+
+        const gapY =
+            70;
+
+        const startX =
+            100;
+
+        const startY =
+            100;
+
+        const columns =
+            4;
+
+        const columnWidth =
+            380;
 
         let columnHeights =
             Array(columns)
@@ -1839,186 +1908,286 @@
                 element.style.top =
                     `${y}px`;
 
-                columnHeights[column] =
-                    y +
+                columnHeights[column] +=
                     element.offsetHeight +
                     gapY;
             }
         );
     }
 
-    function getTableElement(tableName) {
-        const normalized =
-            normalizeTableName(tableName);
+    function applyViewMode() {
 
-        const item =
-            tableElements.find(
-                table =>
-                    table.name === normalized
-            );
+        viewModeButtons.forEach(
+            button => {
 
-        return item?.element ?? null;
-    }
+                const active =
+                    button.dataset.viewMode ===
+                    viewMode;
 
-    function getConnectionPoint(
-        element,
-        targetElement
-    ) {
-        const left =
-            parseFloat(
-                element.style.left
-            ) || 0;
-
-        const top =
-            parseFloat(
-                element.style.top
-            ) || 0;
-
-        const width =
-            element.offsetWidth;
-
-        const height =
-            element.offsetHeight;
-
-        const targetLeft =
-            parseFloat(
-                targetElement.style.left
-            ) || 0;
-
-        const targetTop =
-            parseFloat(
-                targetElement.style.top
-            ) || 0;
-
-        const targetWidth =
-            targetElement.offsetWidth;
-
-        const targetHeight =
-            targetElement.offsetHeight;
-
-        const centerX =
-            left +
-            width / 2;
-
-        const centerY =
-            top +
-            height / 2;
-
-        const targetCenterX =
-            targetLeft +
-            targetWidth / 2;
-
-        const targetCenterY =
-            targetTop +
-            targetHeight / 2;
-
-        const dx =
-            targetCenterX -
-            centerX;
-
-        const dy =
-            targetCenterY -
-            centerY;
-
-        if (Math.abs(dx) >= Math.abs(dy)) {
-
-            if (dx >= 0) {
-                return {
-                    x: left + width,
-                    y: centerY,
-                    side: 'right'
-                };
+                button.classList.toggle(
+                    'active',
+                    active
+                );
             }
+        );
 
-            return {
-                x: left,
-                y: centerY,
-                side: 'left'
-            };
-        }
+        tableElements.forEach(
+            item => {
 
-        if (dy >= 0) {
-            return {
-                x: centerX,
-                y: top + height,
-                side: 'bottom'
-            };
-        }
+                item.element.classList.toggle(
+                    'erd-simple-mode',
+                    viewMode === 'simple'
+                );
+            }
+        );
 
-        return {
-            x: centerX,
-            y: top,
-            side: 'top'
-        };
+        layoutTables();
+
+        drawRelations();
     }
 
-    function createRelationPath(
-        from,
-        to
+    function renderTableSelector(
+        tables
     ) {
-        const distanceX =
-            Math.abs(
-                to.x -
-                from.x
-            );
 
-        const distanceY =
-            Math.abs(
-                to.y -
-                from.y
-            );
+        tableSelectorList.innerHTML = '';
 
-        const curve =
-            Math.max(
-                70,
-                Math.min(
-                    220,
-                    Math.max(
-                        distanceX,
-                        distanceY
-                    ) * .35
-                )
-            );
+        if (!tables.length) {
 
-        let c1x = from.x;
-        let c1y = from.y;
-        let c2x = to.x;
-        let c2y = to.y;
+            tableSelectorList.innerHTML = `
+                <div class="erd-table-selector-empty">
+                    No tables available
+                </div>
+            `;
 
-        if (from.side === 'right') {
-            c1x += curve;
-        } else if (from.side === 'left') {
-            c1x -= curve;
-        } else if (from.side === 'bottom') {
-            c1y += curve;
-        } else {
-            c1y -= curve;
+            updateTableSelectorCount();
+
+            return;
         }
 
-        if (to.side === 'right') {
-            c2x += curve;
-        } else if (to.side === 'left') {
-            c2x -= curve;
-        } else if (to.side === 'bottom') {
-            c2y += curve;
-        } else {
-            c2y -= curve;
-        }
+        tables.forEach(
+            table => {
 
-        return `
-            M ${from.x} ${from.y}
-            C
-            ${c1x} ${c1y},
-            ${c2x} ${c2y},
-            ${to.x} ${to.y}
-        `;
+                const name =
+                    normalizeTableName(
+                        table.name
+                    );
+
+                const item =
+                    document.createElement(
+                        'label'
+                    );
+
+                item.className =
+                    'erd-table-item';
+
+                item.dataset.tableName =
+                    name;
+
+                item.innerHTML = `
+
+                    <input
+                        type="checkbox"
+                        class="erd-table-checkbox"
+                        data-table-name="${escapeHtml(name)}"
+                        ${selectedTables.has(name) ? 'checked' : ''}
+                    >
+
+                    <span class="erd-table-item-name">
+                        ${escapeHtml(table.name)}
+                    </span>
+
+                `;
+
+                const checkbox =
+                    item.querySelector(
+                        '.erd-table-checkbox'
+                    );
+
+                checkbox.addEventListener(
+                    'change',
+                    event => {
+
+                        event.stopPropagation();
+
+                        if (
+                            event.target.checked
+                        ) {
+
+                            selectedTables.add(
+                                name
+                            );
+
+                        } else {
+
+                            selectedTables.delete(
+                                name
+                            );
+
+                        }
+
+                        applyTableSelection();
+                    }
+                );
+
+                item.addEventListener(
+                    'mousedown',
+                    event => {
+                        event.stopPropagation();
+                    }
+                );
+
+                item.addEventListener(
+                    'wheel',
+                    event => {
+                        event.stopPropagation();
+                    },
+                    {
+                        passive: true
+                    }
+                );
+
+                tableSelectorList.appendChild(
+                    item
+                );
+            }
+        );
+
+        updateTableSelectorCount();
+        applyTableSelectorSearch();
+    }
+
+    function applyTableSelection() {
+
+        tableElements.forEach(
+            item => {
+
+                const visible =
+                    selectedTables.has(
+                        item.name
+                    );
+
+                item.element.classList.toggle(
+                    'hidden',
+                    !visible
+                );
+            }
+        );
+
+        updateTableSelectorCount();
+
+        drawRelations();
+    }
+
+    function updateTableSelectorCount() {
+
+        const total =
+            tableElements.length;
+
+        let selected =
+            0;
+
+        tableElements.forEach(
+            item => {
+
+                if (
+                    selectedTables.has(
+                        item.name
+                    )
+                ) {
+                    selected++;
+                }
+
+            }
+        );
+
+        tableSelectorCount.textContent =
+            `${selected} / ${total}`;
+    }
+
+    function applyTableSelectorSearch() {
+
+        const search =
+            tableSelectorSearch.value
+                .trim()
+                .toLowerCase();
+
+        tableSelectorList
+            .querySelectorAll(
+                '.erd-table-item'
+            )
+            .forEach(
+                item => {
+
+                    const name =
+                        item.dataset.tableName ??
+                        '';
+
+                    item.classList.toggle(
+                        'hidden-by-search',
+                        Boolean(
+                            search &&
+                            !name.includes(search)
+                        )
+                    );
+                }
+            );
+    }
+
+    function selectAll() {
+
+        tableElements.forEach(
+            item => {
+
+                selectedTables.add(
+                    item.name
+                );
+            }
+        );
+
+        tableSelectorList
+            .querySelectorAll(
+                '.erd-table-checkbox'
+            )
+            .forEach(
+                checkbox => {
+                    checkbox.checked =
+                        true;
+                }
+            );
+
+        applyTableSelection();
+    }
+
+    function clearAll() {
+
+        selectedTables.clear();
+
+        tableSelectorList
+            .querySelectorAll(
+                '.erd-table-checkbox'
+            )
+            .forEach(
+                checkbox => {
+                    checkbox.checked =
+                        false;
+                }
+            );
+
+        applyTableSelection();
     }
 
     function clearRelations() {
-        relationLines.innerHTML = '';
+
+        relationLines.innerHTML =
+            '';
+
+        relationCount.textContent =
+            '0 relations';
     }
 
     function drawRelations() {
+
         clearRelations();
 
         const relations =
@@ -2031,17 +2200,52 @@
             return;
         }
 
+        const visibleItems =
+            new Map();
+
+        tableElements.forEach(
+            item => {
+
+                if (
+                    item.element.classList.contains(
+                        'hidden'
+                    )
+                ) {
+                    return;
+                }
+
+                visibleItems.set(
+                    item.name,
+                    item.element
+                );
+            }
+        );
+
         relations.forEach(
-            (relation, relationIndex) => {
+            (relation, index) => {
+
+                const fromName =
+                    normalizeTableName(
+                        relation.from_table ??
+                        relation.from ??
+                        relation.table
+                    );
+
+                const toName =
+                    normalizeTableName(
+                        relation.to_table ??
+                        relation.to ??
+                        relation.referenced_table
+                    );
 
                 const fromElement =
-                    getTableElement(
-                        relation.from_table
+                    visibleItems.get(
+                        fromName
                     );
 
                 const toElement =
-                    getTableElement(
-                        relation.to_table
+                    visibleItems.get(
+                        toName
                     );
 
                 if (
@@ -2051,80 +2255,272 @@
                     return;
                 }
 
-                if (
-                    fromElement.classList.contains('hidden') ||
-                    toElement.classList.contains('hidden')
-                ) {
+                const path =
+                    createRelationPath(
+                        fromElement,
+                        toElement,
+                        index
+                    );
+
+                if (!path) {
                     return;
                 }
 
-                const from =
-                    getConnectionPoint(
-                        fromElement,
-                        toElement
-                    );
-
-                const to =
-                    getConnectionPoint(
-                        toElement,
-                        fromElement
-                    );
-
-                const pathData =
-                    createRelationPath(
-                        from,
-                        to
-                    );
-
-                const pathId =
-                    `erd-relation-${relationIndex}-${Date.now()}`;
-
-                const path =
-                    document.createElementNS(
-                        SVG_NS,
-                        'path'
-                    );
-
-                path.setAttribute(
-                    'id',
-                    pathId
+                relationLines.appendChild(
+                    path
                 );
-
-                path.setAttribute(
-                    'class',
-                    'erd-relation-line'
-                );
-
-                path.setAttribute(
-                    'd',
-                    pathData
-                );
-
-                path.setAttribute(
-                    'data-from',
-                    relation.from_table ?? ''
-                );
-
-                path.setAttribute(
-                    'data-to',
-                    relation.to_table ?? ''
-                );
-
-                relationLines.appendChild(path);
 
                 createFlowParticles(
                     path,
-                    relationIndex
+                    index
                 );
             }
         );
+    }
+
+    function createRelationPath(
+        fromElement,
+        toElement,
+        index
+    ) {
+
+        const fromRect =
+            getElementRect(
+                fromElement
+            );
+
+        const toRect =
+            getElementRect(
+                toElement
+            );
+
+        if (
+            !fromRect ||
+            !toRect
+        ) {
+            return null;
+        }
+
+        const fromCenterX =
+            fromRect.left +
+            fromRect.width / 2;
+
+        const fromCenterY =
+            fromRect.top +
+            fromRect.height / 2;
+
+        const toCenterX =
+            toRect.left +
+            toRect.width / 2;
+
+        const toCenterY =
+            toRect.top +
+            toRect.height / 2;
+
+        let startX;
+        let startY;
+        let endX;
+        let endY;
+
+        const deltaX =
+            toCenterX -
+            fromCenterX;
+
+        const deltaY =
+            toCenterY -
+            fromCenterY;
+
+        if (
+            Math.abs(deltaX) >
+            Math.abs(deltaY)
+        ) {
+
+            if (deltaX >= 0) {
+
+                startX =
+                    fromRect.left +
+                    fromRect.width;
+
+                startY =
+                    fromCenterY;
+
+                endX =
+                    toRect.left;
+
+                endY =
+                    toCenterY;
+
+            } else {
+
+                startX =
+                    fromRect.left;
+
+                startY =
+                    fromCenterY;
+
+                endX =
+                    toRect.left +
+                    toRect.width;
+
+                endY =
+                    toCenterY;
+            }
+
+        } else {
+
+            if (deltaY >= 0) {
+
+                startX =
+                    fromCenterX;
+
+                startY =
+                    fromRect.top +
+                    fromRect.height;
+
+                endX =
+                    toCenterX;
+
+                endY =
+                    toRect.top;
+
+            } else {
+
+                startX =
+                    fromCenterX;
+
+                startY =
+                    fromRect.top;
+
+                endX =
+                    toCenterX;
+
+                endY =
+                    toRect.top +
+                    toRect.height;
+            }
+        }
+
+        const distance =
+            Math.sqrt(
+                Math.pow(
+                    endX - startX,
+                    2
+                ) +
+                Math.pow(
+                    endY - startY,
+                    2
+                )
+            );
+
+        const curve =
+            Math.max(
+                45,
+                Math.min(
+                    180,
+                    distance * .35
+                )
+            );
+
+        let c1x =
+            startX;
+
+        let c1y =
+            startY;
+
+        let c2x =
+            endX;
+
+        let c2y =
+            endY;
+
+        if (
+            Math.abs(deltaX) >
+            Math.abs(deltaY)
+        ) {
+
+            if (deltaX >= 0) {
+
+                c1x += curve;
+                c2x -= curve;
+
+            } else {
+
+                c1x -= curve;
+                c2x += curve;
+            }
+
+        } else {
+
+            if (deltaY >= 0) {
+
+                c1y += curve;
+                c2y -= curve;
+
+            } else {
+
+                c1y -= curve;
+                c2y += curve;
+            }
+        }
+
+        const path =
+            document.createElementNS(
+                SVG_NS,
+                'path'
+            );
+
+        path.id =
+            `erd-relation-${index}-${Date.now()}`;
+
+        path.setAttribute(
+            'class',
+            'erd-relation-line'
+        );
+
+        path.setAttribute(
+            'd',
+            `
+                M ${startX} ${startY}
+                C ${c1x} ${c1y},
+                  ${c2x} ${c2y},
+                  ${endX} ${endY}
+            `
+        );
+
+        return path;
+    }
+
+    function getElementRect(
+        element
+    ) {
+
+        const left =
+            parseFloat(
+                element.style.left
+            ) || 0;
+
+        const top =
+            parseFloat(
+                element.style.top
+            ) || 0;
+
+        return {
+            left,
+            top,
+            width:
+                element.offsetWidth,
+            height:
+                element.offsetHeight
+        };
     }
 
     function createFlowParticles(
         path,
         relationIndex
     ) {
-        const particleCount = 3;
+
+        const particleCount =
+            3;
 
         for (
             let index = 0;
@@ -2191,9 +2587,17 @@
                 `#${path.id}`
             );
 
-            motion.appendChild(mpath);
-            halo.appendChild(motion);
-            relationLines.appendChild(halo);
+            motion.appendChild(
+                mpath
+            );
+
+            halo.appendChild(
+                motion
+            );
+
+            relationLines.appendChild(
+                halo
+            );
 
             const particle =
                 document.createElementNS(
@@ -2339,17 +2743,33 @@
         }
     }
 
-    function makeDraggable(element) {
+    function makeDraggable(
+        element
+    ) {
+
         const header =
             element.querySelector(
                 '.erd-table-header'
             );
 
-        let dragging = false;
-        let startX = 0;
-        let startY = 0;
-        let startLeft = 0;
-        let startTop = 0;
+        if (!header) {
+            return;
+        }
+
+        let dragging =
+            false;
+
+        let startX =
+            0;
+
+        let startY =
+            0;
+
+        let startLeft =
+            0;
+
+        let startTop =
+            0;
 
         header.addEventListener(
             'mousedown',
@@ -2357,7 +2777,8 @@
 
                 event.stopPropagation();
 
-                dragging = true;
+                dragging =
+                    true;
 
                 startX =
                     event.clientX;
@@ -2427,10 +2848,8 @@
                     return;
                 }
 
-                dragging = false;
-
-                element.style.zIndex =
-                    '';
+                dragging =
+                    false;
 
                 document.body.style.userSelect =
                     '';
@@ -2439,6 +2858,7 @@
     }
 
     function applySearch() {
+
         const search =
             searchInput.value
                 .trim()
@@ -2460,8 +2880,10 @@
 
                 item.element.classList.toggle(
                     'hidden',
-                    !selected ||
-                    !matches
+                    !(
+                        selected &&
+                        matches
+                    )
                 );
             }
         );
@@ -2469,64 +2891,533 @@
         drawRelations();
     }
 
-    function updateView() {
+    function updateStage() {
+
         stage.style.transform =
             `translate(${panX}px, ${panY}px) scale(${zoom})`;
 
-        zoomValue.textContent =
+        zoomLevel.textContent =
             `${Math.round(zoom * 100)}%`;
     }
 
-    function setZoom(value) {
-        zoom =
-            Math.min(
-                1.8,
-                Math.max(.45, value)
-            );
-
-        updateView();
-    }
-
     function resetView() {
-        zoom = 1;
+
+        zoom =
+            1;
+
+        const rect =
+            canvas.getBoundingClientRect();
 
         panX =
             Math.max(
-                0,
+                30,
                 (
-                    canvas.clientWidth -
-                    1900
+                    rect.width -
+                    5000
                 ) / 2
             );
 
         panY =
             Math.max(
-                0,
+                30,
                 (
-                    canvas.clientHeight -
-                    1300
+                    rect.height -
+                    5000
                 ) / 2
             );
 
-        updateView();
+        updateStage();
     }
+
+    function setZoom(
+        nextZoom,
+        centerX = canvas.clientWidth / 2,
+        centerY = canvas.clientHeight / 2
+    ) {
+
+        const oldZoom =
+            zoom;
+
+        zoom =
+            Math.min(
+                2,
+                Math.max(
+                    .35,
+                    nextZoom
+                )
+            );
+
+        if (
+            zoom === oldZoom
+        ) {
+            return;
+        }
+
+        const worldX =
+            (
+                centerX -
+                panX
+            ) / oldZoom;
+
+        const worldY =
+            (
+                centerY -
+                panY
+            ) / oldZoom;
+
+        panX =
+            centerX -
+            worldX * zoom;
+
+        panY =
+            centerY -
+            worldY * zoom;
+
+        updateStage();
+    }
+
+    function analyzeSchema() {
+
+        setLoading(
+            analyzeButton,
+            true
+        );
+
+        fetch(
+            '{{ url(config("erd.route.prefix") . "/refresh") }}',
+            {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN':
+                        document
+                            .querySelector(
+                                'meta[name="csrf-token"]'
+                            )
+                            .getAttribute(
+                                'content'
+                            ),
+
+                    'Accept':
+                        'application/json',
+
+                    'Content-Type':
+                        'application/json'
+                },
+
+                body:
+                    JSON.stringify({})
+            }
+        )
+            .then(
+                response => {
+
+                    if (!response.ok) {
+                        throw new Error(
+                            'Schema analysis failed.'
+                        );
+                    }
+
+                    return response.json();
+                }
+            )
+            .then(
+                response => {
+
+                    if (
+                        !response.success
+                    ) {
+                        throw new Error(
+                            response.message ??
+                            'Schema analysis failed.'
+                        );
+                    }
+
+                    showToast(
+                        response.message ??
+                        'Schema analyzed successfully.'
+                    );
+
+                    return fetch(
+                        window.location.href,
+                        {
+                            headers: {
+                                'X-Requested-With':
+                                    'XMLHttpRequest'
+                            }
+                        }
+                    );
+                }
+            )
+            .then(
+                response => {
+
+                    if (!response.ok) {
+                        throw new Error(
+                            'Failed to reload schema.'
+                        );
+                    }
+
+                    return response.text();
+                }
+            )
+            .then(
+                html => {
+
+                    const parser =
+                        new DOMParser();
+
+                    const document =
+                        parser.parseFromString(
+                            html,
+                            'text/html'
+                        );
+
+                    const script =
+                        [...document.scripts]
+                            .find(
+                                script =>
+                                    script.textContent.includes(
+                                        'window.ERD ='
+                                    )
+                            );
+
+                    if (!script) {
+                        throw new Error(
+                            'Unable to reload ERD data.'
+                        );
+                    }
+
+                    const match =
+                        script.textContent.match(
+                            /window\.ERD\s*=\s*(\{[\s\S]*?\});/
+                        );
+
+                    if (!match) {
+                        throw new Error(
+                            'Unable to parse ERD data.'
+                        );
+                    }
+
+                    window.ERD =
+                        Function(
+                            `"use strict"; return (${match[1]});`
+                        )();
+
+                    renderTables();
+                }
+            )
+            .catch(
+                error => {
+
+                    showToast(
+                        error.message ??
+                        'Something went wrong.'
+                    );
+                }
+            )
+            .finally(
+                () => {
+
+                    setLoading(
+                        analyzeButton,
+                        false
+                    );
+                }
+            );
+    }
+
+    function reloadRegistry() {
+
+        fetch(
+            '{{ url(config("erd.route.prefix") . "/refresh") }}',
+            {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN':
+                        document
+                            .querySelector(
+                                'meta[name="csrf-token"]'
+                            )
+                            .getAttribute(
+                                'content'
+                            ),
+
+                    'Accept':
+                        'application/json',
+
+                    'Content-Type':
+                        'application/json'
+                },
+
+                body:
+                    JSON.stringify({})
+            }
+        )
+            .then(
+                response =>
+                    response.json()
+            )
+            .then(
+                response => {
+
+                    if (
+                        !response.success
+                    ) {
+                        throw new Error(
+                            response.message ??
+                            'Refresh failed.'
+                        );
+                    }
+
+                    window.location.reload();
+                }
+            )
+            .catch(
+                error => {
+
+                    showToast(
+                        error.message ??
+                        'Refresh failed.'
+                    );
+                }
+            );
+    }
+
+    function setLoading(
+        button,
+        loading
+    ) {
+
+        if (!button) {
+            return;
+        }
+
+        button.disabled =
+            loading;
+
+        if (loading) {
+
+            button.dataset.originalHtml =
+                button.innerHTML;
+
+            button.innerHTML =
+                `
+                    <span class="erd-button-icon">
+                        ◌
+                    </span>
+
+                    <span class="erd-button-text">
+                        Analyzing...
+                    </span>
+                `;
+
+        } else {
+
+            button.innerHTML =
+                button.dataset.originalHtml ??
+                button.innerHTML;
+        }
+    }
+
+    function showToast(
+        message
+    ) {
+
+        toast.textContent =
+            message;
+
+        toast.classList.add(
+            'show'
+        );
+
+        clearTimeout(
+            showToast.timer
+        );
+
+        showToast.timer =
+            setTimeout(
+                () => {
+
+                    toast.classList.remove(
+                        'show'
+                    );
+
+                },
+                3000
+            );
+    }
+
+    function escapeHtml(
+        value
+    ) {
+
+        return String(
+            value ?? ''
+        )
+            .replace(
+                /&/g,
+                '&amp;'
+            )
+            .replace(
+                /</g,
+                '&lt;'
+            )
+            .replace(
+                />/g,
+                '&gt;'
+            )
+            .replace(
+                /"/g,
+                '&quot;'
+            )
+            .replace(
+                /'/g,
+                '&#039;'
+            );
+    }
+
+    viewModeButtons.forEach(
+        button => {
+
+            button.addEventListener(
+                'click',
+                event => {
+
+                    event.stopPropagation();
+
+                    viewMode =
+                        button.dataset.viewMode;
+
+                    applyViewMode();
+                }
+            );
+        }
+    );
+
+    searchInput.addEventListener(
+        'input',
+        applySearch
+    );
+
+    tableSelectorSearch.addEventListener(
+        'input',
+        applyTableSelectorSearch
+    );
+
+    selectAllTables.addEventListener(
+        'click',
+        event => {
+
+            event.stopPropagation();
+
+            selectAll();
+        }
+    );
+
+    clearAllTables.addEventListener(
+        'click',
+        event => {
+
+            event.stopPropagation();
+
+            clearAll();
+        }
+    );
+
+    analyzeButton.addEventListener(
+        'click',
+        event => {
+
+            event.stopPropagation();
+
+            analyzeSchema();
+        }
+    );
+
+    refreshButton.addEventListener(
+        'click',
+        event => {
+
+            event.stopPropagation();
+
+            reloadRegistry();
+        }
+    );
+
+    viewSelector.addEventListener(
+        'mousedown',
+        event => {
+            event.stopPropagation();
+        }
+    );
+
+    viewSelector.addEventListener(
+        'wheel',
+        event => {
+            event.stopPropagation();
+        },
+        {
+            passive: true
+        }
+    );
+
+    tableSelector.addEventListener(
+        'mousedown',
+        event => {
+            event.stopPropagation();
+        }
+    );
+
+    tableSelector.addEventListener(
+        'wheel',
+        event => {
+            event.stopPropagation();
+        },
+        {
+            passive: true
+        }
+    );
+
+    zoomIn.addEventListener(
+        'click',
+        event => {
+
+            event.stopPropagation();
+
+            setZoom(
+                zoom + .1
+            );
+        }
+    );
+
+    zoomOut.addEventListener(
+        'click',
+        event => {
+
+            event.stopPropagation();
+
+            setZoom(
+                zoom - .1
+            );
+        }
+    );
+
+    resetViewButton.addEventListener(
+        'click',
+        event => {
+
+            event.stopPropagation();
+
+            resetView();
+        }
+    );
 
     canvas.addEventListener(
         'mousedown',
         event => {
 
             if (
-                event.target.closest(
-                    '.erd-table'
-                )
-            ) {
-                return;
-            }
-
-            if (
-                event.target.closest(
-                    '.erd-controls'
-                )
+                event.button !== 0
             ) {
                 return;
             }
@@ -2534,12 +3425,25 @@
             if (
                 event.target.closest(
                     '.erd-table-selector'
+                ) ||
+                event.target.closest(
+                    '.erd-view-selector'
+                ) ||
+                event.target.closest(
+                    '.erd-controls'
+                ) ||
+                event.target.closest(
+                    '.erd-button'
+                ) ||
+                event.target.closest(
+                    'input'
                 )
             ) {
                 return;
             }
 
-            isPanning = true;
+            isPanning =
+                true;
 
             panStartX =
                 event.clientX;
@@ -2581,7 +3485,7 @@
                     panStartY
                 );
 
-            updateView();
+            updateStage();
         }
     );
 
@@ -2593,7 +3497,8 @@
                 return;
             }
 
-            isPanning = false;
+            isPanning =
+                false;
 
             canvas.classList.remove(
                 'is-panning'
@@ -2605,19 +3510,40 @@
         'wheel',
         event => {
 
-            if (!event.ctrlKey) {
+            if (
+                event.target.closest(
+                    '.erd-table-selector'
+                ) ||
+                event.target.closest(
+                    '.erd-view-selector'
+                )
+            ) {
                 return;
             }
 
             event.preventDefault();
 
+            const rect =
+                canvas.getBoundingClientRect();
+
+            const centerX =
+                event.clientX -
+                rect.left;
+
+            const centerY =
+                event.clientY -
+                rect.top;
+
             const direction =
                 event.deltaY < 0
-                    ? .1
-                    : -.1;
+                    ? 1
+                    : -1;
 
             setZoom(
-                zoom + direction
+                zoom +
+                direction * .08,
+                centerX,
+                centerY
             );
         },
         {
@@ -2625,284 +3551,18 @@
         }
     );
 
-    zoomInButton.addEventListener(
-        'click',
-        () => {
-            setZoom(
-                zoom + .1
-            );
-        }
-    );
-
-    zoomOutButton.addEventListener(
-        'click',
-        () => {
-            setZoom(
-                zoom - .1
-            );
-        }
-    );
-
-    resetViewButton.addEventListener(
-        'click',
-        resetView
-    );
-
-    searchInput.addEventListener(
-        'input',
-        applySearch
-    );
-
-    tableSelectorSearch.addEventListener(
-        'input',
-        () => {
-            renderTableSelector(
-                getTables()
-            );
-        }
-    );
-
-    selectAllTablesButton.addEventListener(
-        'click',
+    window.addEventListener(
+        'resize',
         () => {
 
-            getTables().forEach(
-                table => {
-                    selectedTables.add(
-                        normalizeTableName(
-                            table.name
-                        )
-                    );
-                }
-            );
-
-            renderTableSelector(
-                getTables()
-            );
-
-            applySearch();
-
+            updateStage();
             drawRelations();
         }
-    );
-
-    clearAllTablesButton.addEventListener(
-        'click',
-        () => {
-
-            selectedTables.clear();
-
-            renderTableSelector(
-                getTables()
-            );
-
-            applySearch();
-
-            drawRelations();
-        }
-    );
-
-    async function analyzeSchema() {
-        setLoading(true);
-
-        try {
-
-            const response =
-                await fetch(
-                    '{{ route('erd.refresh') }}',
-                    {
-                        method: 'POST',
-
-                        headers: {
-                            'X-CSRF-TOKEN':
-                                document
-                                    .querySelector(
-                                        'meta[name="csrf-token"]'
-                                    )
-                                    .getAttribute(
-                                        'content'
-                                    ),
-
-                            'Accept':
-                                'application/json'
-                        }
-                    }
-                );
-
-            const data =
-                await response.json();
-
-            if (
-                !response.ok ||
-                !data.success
-            ) {
-                throw new Error(
-                    data.message ||
-                    'Schema analysis failed.'
-                );
-            }
-
-            showToast(
-                `Schema analyzed: ${data.migrations} migrations, ${data.models} models, ${data.relations} relations.`
-            );
-
-            await reloadRegistry();
-
-        } catch (error) {
-
-            showToast(
-                error.message ||
-                'Schema analysis failed.'
-            );
-
-        } finally {
-
-            setLoading(false);
-        }
-    }
-
-    async function reloadRegistry() {
-        const response =
-            await fetch(
-                window.location.href,
-                {
-                    headers: {
-                        'Accept':
-                            'text/html'
-                    }
-                }
-            );
-
-        const html =
-            await response.text();
-
-        const parser =
-            new DOMParser();
-
-        const documentObject =
-            parser.parseFromString(
-                html,
-                'text/html'
-            );
-
-        const script =
-            [
-                ...documentObject.scripts
-            ].find(
-                script =>
-                    script.textContent.includes(
-                        'window.ERD'
-                    )
-            );
-
-        if (!script) {
-            window.location.reload();
-            return;
-        }
-
-        const match =
-            script.textContent.match(
-                /window\.ERD\s*=\s*(\{[\s\S]*?\});/
-            );
-
-        if (!match) {
-            window.location.reload();
-            return;
-        }
-
-        try {
-
-            window.ERD =
-                JSON.parse(
-                    match[1]
-                );
-
-            renderTables();
-
-        } catch {
-
-            window.location.reload();
-        }
-    }
-
-    function setLoading(loading) {
-        analyzeButton.disabled =
-            loading;
-
-        refreshButton.disabled =
-            loading;
-
-        analyzeButton.innerHTML =
-            loading
-                ? `
-                    <span>◌</span>
-                    <span>Analyzing...</span>
-                `
-                : `
-                    <span class="erd-button-icon">
-                        ◈
-                    </span>
-
-                    <span class="erd-button-text">
-                        Analyze Schema
-                    </span>
-                `;
-
-        refreshButton.innerHTML =
-            loading
-                ? `
-                    <span>◌</span>
-                    <span>Working...</span>
-                `
-                : `
-                    <span class="erd-button-icon">
-                        ↻
-                    </span>
-
-                    <span class="erd-button-text">
-                        Refresh
-                    </span>
-                `;
-    }
-
-    function showToast(message) {
-        toast.textContent =
-            message;
-
-        toast.classList.add(
-            'show'
-        );
-
-        setTimeout(
-            () => {
-                toast.classList.remove(
-                    'show'
-                );
-            },
-            3000
-        );
-    }
-
-    function escapeHtml(value) {
-        return String(value)
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#039;');
-    }
-
-    analyzeButton.addEventListener(
-        'click',
-        analyzeSchema
-    );
-
-    refreshButton.addEventListener(
-        'click',
-        analyzeSchema
     );
 
     renderTables();
+
+    updateStage();
 </script>
 
 </body>
