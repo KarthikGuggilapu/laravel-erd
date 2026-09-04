@@ -11,4 +11,7 @@ Route::middleware([
     ->group(function () {
         Route::get('/', [ErdController::class, 'index'])
             ->name('erd.index');
+
+        Route::post('/refresh', [ErdController::class, 'refresh'])
+            ->name('erd.refresh');
     });
