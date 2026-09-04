@@ -1,5 +1,6 @@
 {
-    "name": "your-vendor/laravel-erd",
+    "name": "karthikguggilapu/laravel-erd",
+    "version": "0.0.1",
     "description": "Interactive database ERD visualization for Laravel applications",
     "type": "library",
     "license": "MIT",

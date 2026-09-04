@@ -5,6 +5,7 @@ namespace YourVendor\LaravelErd;
 use Illuminate\Support\ServiceProvider;
 use YourVendor\LaravelErd\Commands\InstallCommand;
 use YourVendor\LaravelErd\Commands\RefreshCommand;
+use YourVendor\LaravelErd\Commands\UninstallCommand;
 use YourVendor\LaravelErd\Services\RegistryManager;
 
 class ErdServiceProvider extends ServiceProvider
@@ -37,6 +38,7 @@ class ErdServiceProvider extends ServiceProvider
             $this->commands([
                 InstallCommand::class,
                 RefreshCommand::class,
+                UninstallCommand::class,
             ]);
         }
 
