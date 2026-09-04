@@ -1112,7 +1112,7 @@
 
             </div>
 
-            <button
+            {{-- <button
                 type="button"
                 class="erd-button primary"
                 id="analyzeButton"
@@ -1124,7 +1124,7 @@
                 <span class="erd-button-text">
                     Analyze Schema
                 </span>
-            </button>
+            </button> --}}
 
             <button
                 type="button"
