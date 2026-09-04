@@ -16,11 +16,6 @@
     <title>{{ config('app.name') }} ERD</title>
 
     <link
-        rel="icon"
-        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23315ea8'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-family='Arial' font-size='34' font-weight='700' fill='white'%3EE%3C/text%3E%3C/svg%3E"
-    >
-
-    <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
     >
@@ -111,11 +106,12 @@
             align-items: center;
             justify-content: center;
             border-radius: 10px;
-            background: linear-gradient(
-                145deg,
-                #263b65,
-                #172746
-            );
+            background:
+                linear-gradient(
+                    145deg,
+                    #263b65,
+                    #172746
+                );
             border: 1px solid rgba(117,157,231,.18);
             color: #9fc0ff;
             font-size: 17px;
@@ -123,24 +119,20 @@
         }
 
         .erd-brand-copy {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
             min-width: 0;
         }
 
         .erd-brand-title {
             color: #edf3fc;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 750;
-            line-height: 1.2;
             white-space: nowrap;
         }
 
         .erd-brand-subtitle {
-            color: #687996;
-            font-size: 10px;
-            line-height: 1.2;
+            margin-top: 2px;
+            color: #71809c;
+            font-size: 9px;
             white-space: nowrap;
         }
 
@@ -148,34 +140,29 @@
             display: flex;
             align-items: center;
             gap: 4px;
-            margin-left: 10px;
-            padding: 3px;
-            border: 1px solid rgba(151,176,220,.08);
-            border-radius: 9px;
-            background: rgba(255,255,255,.018);
+            margin-left: 4px;
         }
 
         .erd-navbar-filter {
             position: relative;
-            width: 34px;
-            height: 32px;
-            display: inline-flex;
+            width: 36px;
+            height: 34px;
+            display: flex;
             align-items: center;
             justify-content: center;
             border: 1px solid transparent;
-            border-radius: 7px;
+            border-radius: 8px;
             background: transparent;
             color: #687995;
             cursor: pointer;
             transition:
                 background .16s ease,
-                color .16s ease,
                 border-color .16s ease,
-                transform .16s ease;
+                color .16s ease;
         }
 
         .erd-navbar-filter i {
-            font-size: 13px;
+            font-size: 12px;
         }
 
         .erd-navbar-filter:hover {
@@ -183,77 +170,43 @@
             color: #dce6f5;
         }
 
-        .erd-navbar-filter:active {
-            transform: translateY(1px);
-        }
-
         .erd-navbar-filter.active {
             background: rgba(77,131,232,.13);
-            border-color: rgba(77,131,232,.26);
+            border-color: rgba(77,131,232,.25);
             color: #9dbdff;
-        }
-
-        .erd-navbar-filter.active i {
-            color: #78a5f5;
         }
 
         .erd-navbar-filter[data-tooltip]::after {
             content: attr(data-tooltip);
             position: absolute;
             left: 50%;
-            top: calc(100% + 9px);
-            transform: translateX(-50%) translateY(-3px);
+            top: calc(100% + 8px);
+            transform:
+                translate(-50%, -3px);
             padding: 6px 8px;
-            border: 1px solid rgba(151,176,220,.12);
             border-radius: 6px;
             background: #17233a;
+            border: 1px solid rgba(255,255,255,.08);
             color: #dce6f5;
-            box-shadow: 0 8px 25px rgba(0,0,0,.35);
             font-size: 9px;
-            font-weight: 600;
-            line-height: 1;
             white-space: nowrap;
             opacity: 0;
-            visibility: hidden;
             pointer-events: none;
-            transition:
-                opacity .15s ease,
-                transform .15s ease;
+            transition: .15s ease;
             z-index: 500;
         }
 
-        .erd-navbar-filter[data-tooltip]::before {
-            content: "";
-            position: absolute;
-            left: 50%;
-            top: calc(100% + 5px);
-            width: 7px;
-            height: 7px;
-            border-left: 1px solid rgba(151,176,220,.12);
-            border-top: 1px solid rgba(151,176,220,.12);
-            background: #17233a;
-            transform: translateX(-50%) rotate(45deg);
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity .15s ease;
-            z-index: 501;
-        }
-
-        .erd-navbar-filter:hover[data-tooltip]::after,
-        .erd-navbar-filter:hover[data-tooltip]::before {
+        .erd-navbar-filter:hover::after {
             opacity: 1;
-            visibility: visible;
-        }
-
-        .erd-navbar-filter:hover[data-tooltip]::after {
-            transform: translateX(-50%) translateY(0);
+            transform:
+                translate(-50%, 0);
         }
 
         .erd-toolbar {
             display: flex;
             align-items: center;
             justify-content: flex-end;
-            gap: 9px;
+            gap: 8px;
             min-width: 0;
         }
 
@@ -261,67 +214,57 @@
             position: relative;
         }
 
+        .erd-search {
+            width: 230px;
+            height: 38px;
+            padding: 0 13px 0 36px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            outline: none;
+            background: #09111f;
+            color: var(--text);
+            font-size: 12px;
+        }
+
+        .erd-search:focus {
+            border-color: rgba(77,131,232,.65);
+            box-shadow:
+                0 0 0 3px rgba(77,131,232,.08);
+        }
+
+        .erd-search::placeholder {
+            color: #5e6d86;
+        }
+
         .erd-search-icon {
             position: absolute;
             left: 12px;
             top: 50%;
             transform: translateY(-50%);
-            color: #647593;
+            color: #61718b;
             font-size: 13px;
             pointer-events: none;
         }
 
-        .erd-search {
-            width: 240px;
-            height: 38px;
-            padding: 0 13px 0 34px;
-            outline: none;
-            border: 1px solid rgba(151,176,220,.11);
-            border-radius: 8px;
-            background: #0a1222;
-            color: #edf3fc;
-            font-size: 11px;
-            transition:
-                border-color .16s ease,
-                background .16s ease;
-        }
-
-        .erd-search::placeholder {
-            color: #596a86;
-        }
-
-        .erd-search:focus {
-            border-color: rgba(116,153,216,.42);
-            background: #0c1527;
-        }
-
         .erd-button {
             height: 38px;
+            padding: 0 14px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 7px;
-            padding: 0 14px;
-            border: 1px solid rgba(151,176,220,.11);
-            border-radius: 8px;
-            background: #182640;
-            color: #edf3fc;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            background: #17233a;
+            color: #dce7f8;
             cursor: pointer;
             font-size: 11px;
             font-weight: 650;
-            transition:
-                background .18s ease,
-                border-color .18s ease,
-                transform .18s ease;
         }
 
         .erd-button:hover {
             background: #1d2c48;
             border-color: var(--border-strong);
-        }
-
-        .erd-button:active {
-            transform: translateY(1px);
         }
 
         .erd-button.primary {
@@ -337,12 +280,6 @@
         .erd-button:disabled {
             opacity: .55;
             cursor: wait;
-            transform: none;
-        }
-
-        .erd-button-icon {
-            font-size: 13px;
-            line-height: 1;
         }
 
         .erd-main {
@@ -392,22 +329,21 @@
             transform-origin: 0 0;
         }
 
+        .erd-workspace {
+            position: absolute;
+            inset: 0;
+            width: 5000px;
+            height: 5000px;
+        }
+
         .erd-relations {
             position: absolute;
-            left: 0;
-            top: 0;
+            inset: 0;
+            width: 5000px;
+            height: 5000px;
             z-index: 1;
             pointer-events: none;
             overflow: visible;
-        }
-
-        .erd-workspace {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 5000px;
-            height: 5000px;
-            z-index: 2;
         }
 
         .erd-table {
@@ -416,21 +352,17 @@
             overflow: hidden;
             border: 1px solid rgba(151,176,220,.14);
             border-radius: 11px;
-            background: rgba(14,22,39,.97);
+            background: rgba(14,22,39,.98);
             box-shadow:
                 0 18px 45px rgba(0,0,0,.28),
                 0 3px 10px rgba(0,0,0,.18);
             user-select: none;
-            transition:
-                border-color .15s ease,
-                box-shadow .15s ease;
+            z-index: 2;
         }
 
         .erd-table:hover {
-            border-color: rgba(116,153,216,.3);
-            box-shadow:
-                0 22px 55px rgba(0,0,0,.34),
-                0 0 0 1px rgba(77,131,232,.04);
+            border-color:
+                rgba(116,153,216,.3);
         }
 
         .erd-table.hidden {
@@ -443,9 +375,19 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            background: #182640;
-            border-bottom: 1px solid rgba(151,176,220,.08);
-            cursor: move;
+            background:
+                linear-gradient(
+                    135deg,
+                    #1b2a46,
+                    #142038
+                );
+            border-bottom:
+                1px solid rgba(255,255,255,.07);
+            cursor: grab;
+        }
+
+        .erd-table-header:active {
+            cursor: grabbing;
         }
 
         .erd-table-title-row {
@@ -460,26 +402,25 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            color: #edf3fc;
-            font-size: 14px;
+            color: #f4f7fd;
+            font-size: 13px;
             font-weight: 750;
         }
 
         .erd-table-operation {
-            flex: 0 0 auto;
+            flex-shrink: 0;
             padding: 3px 6px;
-            border-radius: 4px;
-            background: rgba(255,255,255,.055);
-            color: #7f91ae;
+            border-radius: 5px;
+            background: rgba(255,255,255,.06);
+            color: #7287a7;
             font-size: 8px;
-            font-weight: 700;
+            font-weight: 650;
             text-transform: uppercase;
-            letter-spacing: .3px;
         }
 
         .erd-table-meta {
-            margin-top: 4px;
-            color: #667895;
+            margin-top: 5px;
+            color: #647795;
             font-size: 9px;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -491,12 +432,15 @@
         }
 
         .erd-column {
+            min-height: 31px;
             display: grid;
-            grid-template-columns: minmax(0,1fr) auto;
+            grid-template-columns:
+                minmax(0, 1fr) auto;
+            align-items: center;
             gap: 10px;
-            padding: 7px 13px;
-            border-bottom: 1px solid rgba(255,255,255,.045);
-            font-size: 11px;
+            padding: 0 13px;
+            border-bottom:
+                1px solid rgba(255,255,255,.035);
         }
 
         .erd-column:last-child {
@@ -505,340 +449,235 @@
 
         .erd-column-name {
             min-width: 0;
-            color: #d9e2f2;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            color: #d6e0ef;
+            font-size: 10px;
         }
 
         .erd-column-type {
-            color: #7486a3;
+            color: #7184a3;
+            font-size: 9px;
             white-space: nowrap;
         }
 
         .erd-badges {
-            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            margin-left: 4px;
         }
 
         .erd-badge {
-            display: inline-block;
-            margin-left: 4px;
             padding: 2px 4px;
             border-radius: 3px;
-            background: rgba(255,255,255,.08);
-            color: #9aaac2;
-            font-size: 8px;
+            background: rgba(255,255,255,.075);
+            color: #91a2bd;
+            font-size: 7px;
             font-weight: 750;
         }
 
         .erd-badge.primary {
-            background: rgba(82,130,226,.15);
-            color: #8db5ff;
+            background: rgba(77,131,232,.16);
+            color: #8fb5ff;
         }
 
         .erd-badge.unique {
-            background: rgba(85,201,138,.12);
-            color: #7ee0a9;
+            background: rgba(85,201,138,.1);
+            color: #78d9a3;
         }
 
         .erd-table-footer {
-            padding: 7px 13px;
-            border-top: 1px solid rgba(255,255,255,.06);
-            color: #596982;
-            font-size: 10px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            padding: 0 13px;
+            border-top:
+                1px solid rgba(255,255,255,.05);
+            background:
+                rgba(7,12,23,.22);
+            color: #52627c;
+            font-size: 8px;
         }
 
-        .erd-table.simple {
-            width: 280px;
-        }
-
-        .erd-table.simple .erd-table-header {
-            min-height: 54px;
-            border-bottom: 0;
-        }
-
-        .erd-table.simple .erd-table-operation,
-        .erd-table.simple .erd-table-meta,
-        .erd-table.simple .erd-columns,
-        .erd-table.simple .erd-table-footer {
-            display: none;
+        .erd-view-selector,
+        .erd-table-selector {
+            position: fixed;
+            z-index: 80;
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            background:
+                rgba(14,22,39,.94);
+            box-shadow:
+                0 18px 45px rgba(0,0,0,.25);
+            backdrop-filter: blur(12px);
         }
 
         .erd-view-selector {
-            position: fixed;
-            left: 18px;
+            left: 24px;
             top: 88px;
-            width: 145px;
-            padding: 11px;
-            border: 1px solid rgba(151,176,220,.12);
-            border-radius: 10px;
-            background: rgba(14,22,39,.94);
-            box-shadow: 0 14px 35px rgba(0,0,0,.25);
-            backdrop-filter: blur(10px);
-            z-index: 30;
+            width: 156px;
+            padding: 13px;
         }
 
         .erd-selector-title {
-            margin-bottom: 8px;
-            color: #8192ad;
+            margin-bottom: 10px;
+            color: #7f91ae;
             font-size: 9px;
             font-weight: 750;
             text-transform: uppercase;
-            letter-spacing: .6px;
+            letter-spacing: .5px;
         }
 
         .erd-view-options {
             display: flex;
-            gap: 4px;
+            gap: 5px;
         }
 
         .erd-view-option {
             flex: 1;
-            height: 30px;
+            height: 32px;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 6px;
             border: 1px solid transparent;
-            border-radius: 6px;
+            border-radius: 7px;
             background: transparent;
-            color: #6e7f9b;
+            color: #7485a1;
             cursor: pointer;
             font-size: 9px;
-            font-weight: 650;
-        }
-
-        .erd-view-option:hover {
-            background: rgba(255,255,255,.035);
-            color: #dce6f5;
         }
 
         .erd-view-option.active {
-            background: rgba(77,131,232,.12);
-            border-color: rgba(77,131,232,.22);
-            color: #a4c2ff;
+            background:
+                rgba(77,131,232,.12);
+            border-color:
+                rgba(77,131,232,.25);
+            color: #9dbdff;
         }
 
         .erd-view-radio {
             width: 7px;
             height: 7px;
             border-radius: 50%;
-            border: 1px solid #5e7190;
+            border: 1px solid #647795;
         }
 
-        .erd-view-option.active .erd-view-radio {
-            border-color: #78a5f5;
+        .erd-view-option.active
+        .erd-view-radio {
             background: #78a5f5;
-            box-shadow: 0 0 0 2px rgba(120,165,245,.12);
+            border-color: #78a5f5;
+            box-shadow:
+                0 0 7px rgba(120,165,245,.45);
         }
 
         .erd-table-selector {
-            position: fixed;
-            top: 88px;
             right: 18px;
-            width: 220px;
-            max-height: calc(100vh - 155px);
-            display: flex;
-            flex-direction: column;
-            border: 1px solid rgba(151,176,220,.12);
-            border-radius: 10px;
-            background: rgba(14,22,39,.95);
-            box-shadow: 0 14px 35px rgba(0,0,0,.28);
-            backdrop-filter: blur(10px);
-            z-index: 30;
+            top: 88px;
+            width: 238px;
+            overflow: hidden;
         }
 
         .erd-table-selector-header {
-            padding: 11px;
-            border-bottom: 1px solid rgba(151,176,220,.08);
+            padding: 12px;
+            border-bottom:
+                1px solid rgba(255,255,255,.06);
         }
 
         .erd-table-selector-title-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 8px;
         }
 
         .erd-table-selector-title {
-            color: #dce6f5;
-            font-size: 10px;
-            font-weight: 750;
+            color: #edf3fc;
+            font-size: 11px;
+            font-weight: 700;
         }
 
         .erd-table-selector-count {
-            color: #647693;
-            font-size: 9px;
+            color: #60718d;
+            font-size: 8px;
         }
 
         .erd-selector-search {
             width: 100%;
-            height: 30px;
+            height: 31px;
+            margin-top: 9px;
             padding: 0 9px;
+            border:
+                1px solid rgba(255,255,255,.08);
+            border-radius: 7px;
             outline: none;
-            border: 1px solid rgba(151,176,220,.1);
-            border-radius: 6px;
-            background: #0a1222;
-            color: #eaf1fb;
+            background: #09111f;
+            color: #dce6f5;
             font-size: 9px;
         }
 
-        .erd-selector-search::placeholder {
-            color: #586984;
-        }
-
-        .erd-selector-search:focus {
-            border-color: rgba(116,153,216,.35);
-        }
-
         .erd-selector-actions {
-            display: flex;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 5px;
             margin-top: 7px;
         }
 
         .erd-selector-action {
-            flex: 1;
-            height: 26px;
-            border: 1px solid rgba(151,176,220,.09);
-            border-radius: 5px;
+            height: 29px;
+            border:
+                1px solid rgba(255,255,255,.07);
+            border-radius: 6px;
             background: rgba(255,255,255,.025);
-            color: #7f91ad;
+            color: #8292ac;
             cursor: pointer;
             font-size: 8px;
-            font-weight: 650;
         }
 
         .erd-selector-action:hover {
-            background: rgba(255,255,255,.055);
+            background: rgba(255,255,255,.06);
             color: #dce6f5;
         }
 
         .erd-table-list {
+            max-height: 360px;
             overflow-y: auto;
-            padding: 5px;
-            scrollbar-width: thin;
-            scrollbar-color: #273754 transparent;
+            padding: 5px 0;
         }
 
         .erd-table-list::-webkit-scrollbar {
             width: 5px;
         }
 
-        .erd-table-list::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
         .erd-table-list::-webkit-scrollbar-thumb {
-            background: #273754;
-            border-radius: 10px;
+            background: #273650;
+            border-radius: 5px;
         }
 
-        .erd-table-item {
+        .erd-table-option {
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 7px 7px;
-            border-radius: 6px;
-            color: #9baac0;
-            cursor: pointer;
-            font-size: 9px;
-        }
-
-        .erd-table-item:hover {
-            background: rgba(255,255,255,.035);
-            color: #e3ebf8;
-        }
-
-        .erd-table-item input {
-            width: 12px;
-            height: 12px;
-            margin: 0;
-            accent-color: #5f8ee5;
-        }
-
-        .erd-table-item-name {
-            min-width: 0;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .erd-table-item.filtered {
-            display: none;
-        }
-
-        .erd-bottom {
-            position: fixed;
-            left: 0;
-            right: 0;
-            bottom: 32px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 18px;
-            pointer-events: none;
-            z-index: 20;
-        }
-
-        .erd-info {
-            display: flex;
-            align-items: center;
-            gap: 7px;
-            padding: 7px 10px;
-            border: 1px solid rgba(151,176,220,.09);
-            border-radius: 7px;
-            background: rgba(11,18,33,.88);
-            color: #62728c;
-            font-size: 9px;
-            backdrop-filter: blur(8px);
-        }
-
-        .erd-info-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: #55c98a;
-            box-shadow: 0 0 8px rgba(85,201,138,.45);
-        }
-
-        .erd-controls {
-            display: flex;
-            align-items: center;
-            gap: 3px;
-            padding: 4px;
-            border: 1px solid rgba(151,176,220,.1);
-            border-radius: 8px;
-            background: rgba(11,18,33,.9);
-            pointer-events: auto;
-            backdrop-filter: blur(8px);
-        }
-
-        .erd-control {
-            width: 27px;
-            height: 27px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 5px;
-            background: transparent;
-            color: #71829d;
-            cursor: pointer;
-            font-size: 11px;
-        }
-
-        .erd-control:hover {
-            background: rgba(255,255,255,.05);
-            color: #dce6f5;
-        }
-
-        .erd-zoom-value {
-            min-width: 40px;
-            text-align: center;
-            color: #687996;
+            min-height: 28px;
+            padding: 0 12px;
+            color: #9aaac1;
             font-size: 8px;
-            font-weight: 650;
+            cursor: pointer;
+        }
+
+        .erd-table-option:hover {
+            background: rgba(255,255,255,.035);
+        }
+
+        .erd-table-option input {
+            width: 13px;
+            height: 13px;
+            accent-color: #5d8fe8;
+        }
+
+        .erd-table-option.hidden {
+            display: none;
         }
 
         .erd-empty {
@@ -849,43 +688,138 @@
             justify-content: center;
             flex-direction: column;
             text-align: center;
-            color: #71809c;
+            pointer-events: auto;
         }
 
         .erd-empty-icon {
-            width: 48px;
-            height: 48px;
+            width: 58px;
+            height: 58px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 13px;
-            border: 1px solid rgba(116,153,216,.16);
-            border-radius: 13px;
-            background: #111d32;
-            color: #8fb4ff;
-            font-size: 19px;
+            margin-bottom: 15px;
+            border-radius: 16px;
+            background:
+                linear-gradient(
+                    145deg,
+                    #263b65,
+                    #172746
+                );
+            color: #9fc0ff;
+            font-size: 22px;
             font-weight: 800;
         }
 
         .erd-empty-title {
-            margin-bottom: 6px;
-            color: #dce6f5;
-            font-size: 15px;
+            color: #edf3fc;
+            font-size: 16px;
             font-weight: 700;
         }
 
         .erd-empty-text {
-            max-width: 360px;
-            margin-bottom: 15px;
-            color: #61728d;
-            font-size: 10px;
+            max-width: 390px;
+            margin: 7px 0 18px;
+            color: #647795;
+            font-size: 11px;
             line-height: 1.6;
+        }
+
+        .erd-bottom {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 14px;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        .erd-info,
+        .erd-controls {
+            border: 1px solid rgba(255,255,255,.07);
+            background:
+                rgba(9,15,28,.86);
+            backdrop-filter: blur(10px);
+        }
+
+        .erd-info {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 7px 10px;
+            border-radius: 8px;
+            color: #60718d;
+            font-size: 9px;
+        }
+
+        .erd-info-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--success);
+        }
+
+        .erd-controls {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px;
+            border-radius: 9px;
+            pointer-events: auto;
+        }
+
+        .erd-control {
+            width: 30px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            background: transparent;
+            color: #91a1ba;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .erd-control:hover {
+            background: rgba(255,255,255,.07);
+            color: #fff;
+        }
+
+        .erd-zoom {
+            min-width: 48px;
+            text-align: center;
+            color: #687993;
+            font-size: 9px;
+        }
+
+        .erd-footer {
+            height: 30px;
+            min-height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-top: 1px solid var(--border);
+            background: #0b1221;
+            color: #52627c;
+            font-size: 9px;
+            z-index: 100;
+        }
+
+        .erd-footer strong {
+            margin-left: 4px;
+            color: #8192ad;
+            font-weight: 600;
         }
 
         .erd-toast {
             position: fixed;
             right: 20px;
-            bottom: 85px;
+            bottom: 48px;
             z-index: 200;
             padding: 10px 14px;
             border: 1px solid rgba(255,255,255,.08);
@@ -905,140 +839,60 @@
             transform: translateY(0);
         }
 
-        .erd-footer {
-            height: 32px;
-            min-height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-top: 1px solid rgba(255,255,255,.06);
-            background: #0d1425;
-            color: #596982;
-            font-size: 9px;
-            z-index: 100;
-        }
-
-        .erd-footer strong {
-            margin-left: 4px;
-            color: #8192ad;
-            font-weight: 600;
-        }
-
         .erd-relation-line {
             fill: none;
             stroke: #5f7fae;
             stroke-width: 1.5;
             opacity: .55;
             marker-end: url(#erd-arrow);
-            transition:
-                opacity .15s ease,
-                stroke-width .15s ease;
         }
 
-        .erd-relation-line:hover {
-            opacity: .9;
-            stroke-width: 2;
-        }
-
-        .erd-flow-particle {
+        .erd-relation-dot {
             fill: #8fb8ff;
-            opacity: .95;
-            filter: url(#erd-particle-glow);
+            opacity: .9;
         }
 
-        .erd-flow-particle-core {
-            fill: #dceaff;
-        }
-
-        .erd-flow-particle-halo {
-            fill: #6f9fe9;
-            opacity: .22;
-            filter: url(#erd-particle-glow);
-        }
-
-        @media (max-width: 1100px) {
+        @media (max-width: 900px) {
             .erd-brand-subtitle {
                 display: none;
             }
 
-            .erd-table-selector {
-                width: 190px;
-            }
-
             .erd-search {
                 width: 180px;
             }
+
+            .erd-table-selector {
+                width: 210px;
+            }
         }
 
-        @media (max-width: 800px) {
-            .erd-brand {
-                min-width: auto;
-            }
-
-            .erd-brand-copy {
-                display: none;
+        @media (max-width: 700px) {
+            .erd-header {
+                padding: 0 12px;
             }
 
             .erd-navbar-filters {
-                margin-left: 0;
-            }
-
-            .erd-table-selector {
-                width: 180px;
-            }
-
-            .erd-view-selector {
-                left: 10px;
-            }
-
-            .erd-table-selector {
-                right: 10px;
+                display: none;
             }
 
             .erd-search {
-                width: 150px;
-            }
-        }
-
-        @media (max-width: 600px) {
-            .erd-header {
-                padding: 0 10px;
-                gap: 8px;
-            }
-
-            .erd-logo {
-                width: 34px;
-                height: 34px;
-                flex-basis: 34px;
-            }
-
-            .erd-navbar-filter {
-                width: 31px;
-                height: 30px;
-            }
-
-            .erd-search {
-                width: 120px;
-            }
-
-            .erd-button {
-                padding: 0 10px;
+                width: 140px;
             }
 
             .erd-button-text {
                 display: none;
             }
 
-            .erd-table-selector {
-                width: 165px;
+            .erd-button {
+                padding: 0 10px;
             }
-        }
 
-        @media (prefers-reduced-motion: reduce) {
-            .erd-flow-particle,
-            .erd-flow-particle-core,
-            .erd-flow-particle-halo {
-                display: none;
+            .erd-view-selector {
+                left: 12px;
+            }
+
+            .erd-table-selector {
+                right: 12px;
             }
         }
     </style>
@@ -1057,7 +911,6 @@
             </div>
 
             <div class="erd-brand-copy">
-
                 <div class="erd-brand-title">
                     {{ config('app.name') }} ERD
                 </div>
@@ -1065,7 +918,6 @@
                 <div class="erd-brand-subtitle">
                     Database schema visualizer
                 </div>
-
             </div>
 
             <div class="erd-navbar-filters">
@@ -1075,7 +927,7 @@
                     class="erd-navbar-filter active"
                     data-table-filter="relational"
                     data-tooltip="Relational tables"
-                    aria-label="Show relational tables"
+                    aria-label="Relational tables"
                 >
                     <i class="fa-solid fa-code-branch"></i>
                 </button>
@@ -1085,7 +937,7 @@
                     class="erd-navbar-filter"
                     data-table-filter="non-relational"
                     data-tooltip="Non-relational tables"
-                    aria-label="Show non-relational tables"
+                    aria-label="Non-relational tables"
                 >
                     <i class="fa-solid fa-layer-group"></i>
                 </button>
@@ -1117,9 +969,7 @@
                 class="erd-button primary"
                 id="analyzeButton"
             >
-                <span class="erd-button-icon">
-                    <i class="fa-solid fa-wand-magic-sparkles"></i>
-                </span>
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
 
                 <span class="erd-button-text">
                     Analyze Schema
@@ -1132,9 +982,7 @@
                 id="refreshButton"
                 style="display:none;"
             >
-                <span class="erd-button-icon">
-                    <i class="fa-solid fa-arrows-rotate"></i>
-                </span>
+                <i class="fa-solid fa-rotate"></i>
 
                 <span class="erd-button-text">
                     Refresh
@@ -1149,69 +997,6 @@
         class="erd-main"
         id="erdCanvas"
     >
-
-        <div
-            class="erd-stage"
-            id="erdStage"
-        >
-
-            <svg
-                class="erd-relations"
-                id="erdRelations"
-                width="5000"
-                height="5000"
-                viewBox="0 0 5000 5000"
-                preserveAspectRatio="none"
-            >
-
-                <defs>
-
-                    <marker
-                        id="erd-arrow"
-                        markerWidth="8"
-                        markerHeight="8"
-                        refX="7"
-                        refY="4"
-                        orient="auto"
-                        markerUnits="strokeWidth"
-                    >
-                        <path
-                            d="M0,0 L8,4 L0,8 Z"
-                            fill="#5f7fae"
-                        />
-                    </marker>
-
-                    <filter
-                        id="erd-particle-glow"
-                        x="-100%"
-                        y="-100%"
-                        width="300%"
-                        height="300%"
-                    >
-                        <feGaussianBlur
-                            stdDeviation="2.5"
-                            result="blur"
-                        />
-
-                        <feMerge>
-                            <feMergeNode in="blur"/>
-                            <feMergeNode in="SourceGraphic"/>
-                        </feMerge>
-
-                    </filter>
-
-                </defs>
-
-                <g id="erdRelationLines"></g>
-
-            </svg>
-
-            <div
-                class="erd-workspace"
-                id="erdWorkspace"
-            ></div>
-
-        </div>
 
         <div
             class="erd-view-selector"
@@ -1305,6 +1090,49 @@
 
         </aside>
 
+        <div
+            class="erd-stage"
+            id="erdStage"
+        >
+
+            <svg
+                class="erd-relations"
+                id="erdRelations"
+                width="5000"
+                height="5000"
+                viewBox="0 0 5000 5000"
+            >
+
+                <defs>
+
+                    <marker
+                        id="erd-arrow"
+                        markerWidth="8"
+                        markerHeight="8"
+                        refX="7"
+                        refY="4"
+                        orient="auto"
+                        markerUnits="strokeWidth"
+                    >
+                        <path
+                            d="M0,0 L8,4 L0,8 Z"
+                            fill="#5f7fae"
+                        />
+                    </marker>
+
+                </defs>
+
+                <g id="erdRelationLines"></g>
+
+            </svg>
+
+            <div
+                class="erd-workspace"
+                id="erdWorkspace"
+            ></div>
+
+        </div>
+
         <div class="erd-bottom">
 
             <div class="erd-info">
@@ -1315,17 +1143,13 @@
                     0 tables
                 </span>
 
-                <span>
-                    ·
-                </span>
+                <span>·</span>
 
                 <span id="modelCount">
                     0 models
                 </span>
 
-                <span>
-                    ·
-                </span>
+                <span>·</span>
 
                 <span id="relationCount">
                     0 relations
@@ -1341,15 +1165,15 @@
                     id="zoomOut"
                     title="Zoom out"
                 >
-                    <i class="fa-solid fa-minus"></i>
+                    −
                 </button>
 
-                <span
-                    class="erd-zoom-value"
+                <div
+                    class="erd-zoom"
                     id="zoomValue"
                 >
                     100%
-                </span>
+                </div>
 
                 <button
                     type="button"
@@ -1357,7 +1181,7 @@
                     id="zoomIn"
                     title="Zoom in"
                 >
-                    <i class="fa-solid fa-plus"></i>
+                    +
                 </button>
 
                 <button
@@ -1375,102 +1199,120 @@
 
     </main>
 
-    <div
-        class="erd-toast"
-        id="erdToast"
-    ></div>
-
     <footer class="erd-footer">
         Developed by
-        <strong>
-            Karthik Guggilapu
-        </strong>
+        <strong>Karthik Guggilapu</strong>
     </footer>
 
 </div>
 
+<div
+    class="erd-toast"
+    id="erdToast"
+></div>
+
 <script>
     window.ERD = {!! json_encode([
-        'metadata' => $metadata ?? [],
-        'migrations' => $migrations ?? [],
-        'models' => $models ?? [],
-        'relations' => $relations ?? [],
-        'history' => $history ?? [],
-        'layout' => $layout ?? [],
+        'metadata' => $metadata,
+        'migrations' => $migrations,
+        'models' => $models,
+        'relations' => $relations,
+        'history' => $history,
+        'layout' => $layout,
     ]) !!};
 
     const canvas =
-        document.getElementById('erdCanvas');
+        document.getElementById(
+            'erdCanvas'
+        );
 
     const stage =
-        document.getElementById('erdStage');
+        document.getElementById(
+            'erdStage'
+        );
 
     const workspace =
-        document.getElementById('erdWorkspace');
+        document.getElementById(
+            'erdWorkspace'
+        );
 
     const relationLines =
-        document.getElementById('erdRelationLines');
+        document.getElementById(
+            'erdRelationLines'
+        );
 
     const searchInput =
-        document.getElementById('tableSearch');
+        document.getElementById(
+            'tableSearch'
+        );
 
     const analyzeButton =
-        document.getElementById('analyzeButton');
+        document.getElementById(
+            'analyzeButton'
+        );
 
     const refreshButton =
-        document.getElementById('refreshButton');
+        document.getElementById(
+            'refreshButton'
+        );
 
     const tableCount =
-        document.getElementById('tableCount');
+        document.getElementById(
+            'tableCount'
+        );
 
     const modelCount =
-        document.getElementById('modelCount');
+        document.getElementById(
+            'modelCount'
+        );
 
     const relationCount =
-        document.getElementById('relationCount');
-
-    const zoomInButton =
-        document.getElementById('zoomIn');
-
-    const zoomOutButton =
-        document.getElementById('zoomOut');
-
-    const resetViewButton =
-        document.getElementById('resetView');
-
-    const zoomValue =
-        document.getElementById('zoomValue');
-
-    const toast =
-        document.getElementById('erdToast');
+        document.getElementById(
+            'relationCount'
+        );
 
     const tableSelector =
-        document.getElementById('erdTableSelector');
-
-    const tableList =
-        document.getElementById('erdTableList');
+        document.getElementById(
+            'erdTableList'
+        );
 
     const tableSelectorSearch =
-        document.getElementById('tableSelectorSearch');
+        document.getElementById(
+            'tableSelectorSearch'
+        );
 
     const tableSelectorCount =
-        document.getElementById('tableSelectorCount');
-
-    const selectAllTables =
-        document.getElementById('selectAllTables');
-
-    const clearAllTables =
-        document.getElementById('clearAllTables');
-
-    const viewModeButtons =
-        document.querySelectorAll(
-            '[data-view-mode]'
+        document.getElementById(
+            'tableSelectorCount'
         );
 
-    const navbarFilterButtons =
-        document.querySelectorAll(
-            '[data-table-filter]'
+    const zoomValue =
+        document.getElementById(
+            'zoomValue'
         );
+
+    const zoomInButton =
+        document.getElementById(
+            'zoomIn'
+        );
+
+    const zoomOutButton =
+        document.getElementById(
+            'zoomOut'
+        );
+
+    const resetViewButton =
+        document.getElementById(
+            'resetView'
+        );
+
+    const toast =
+        document.getElementById(
+            'erdToast'
+        );
+
+    const SVG_NS =
+        'http://www.w3.org/2000/svg';
 
     let tableElements = [];
 
@@ -1496,24 +1338,30 @@
 
     let initialPanY = 0;
 
-    const SVG_NS =
-        'http://www.w3.org/2000/svg';
-
-
     function normalizeTableName(
         value
     ) {
         return String(
             value ?? ''
         )
+            .replace(
+                /[`'"]/g,
+                ''
+            )
             .trim()
             .toLowerCase();
     }
 
-
     function getTables() {
         const migrations =
-            window.ERD.migrations?.migrations ?? [];
+            window.ERD
+                ?.migrations
+                ?.migrations ?? [];
+
+        const models =
+            window.ERD
+                ?.models
+                ?.models ?? [];
 
         const tables =
             new Map();
@@ -1521,10 +1369,9 @@
         migrations.forEach(
             migration => {
 
-                const migrationTables =
-                    migration.tables ?? [];
-
-                migrationTables.forEach(
+                (
+                    migration.tables ?? []
+                ).forEach(
                     table => {
 
                         if (!table.name) {
@@ -1545,7 +1392,8 @@
                                         table.name,
 
                                     columns:
-                                        table.columns ?? [],
+                                        table.columns ??
+                                        [],
 
                                     operation:
                                         table.operation ??
@@ -1573,50 +1421,76 @@
                                 existing.columns;
                         }
 
-                        if (
-                            table.columns?.length
-                        ) {
-
-                            const existingNames =
-                                new Set(
-                                    existing.columns.map(
-                                        column =>
-                                            normalizeTableName(
-                                                column.name
-                                            )
-                                    )
-                                );
-
-                            table.columns.forEach(
-                                column => {
-
-                                    const columnName =
+                        const names =
+                            new Set(
+                                existing.columns.map(
+                                    column =>
                                         normalizeTableName(
                                             column.name
-                                        );
-
-                                    if (
-                                        columnName &&
-                                        !existingNames.has(
-                                            columnName
                                         )
-                                    ) {
-                                        existing.columns.push(
-                                            column
-                                        );
-                                    }
-
-                                }
+                                )
                             );
-                        }
 
-                        existing.operation =
-                            table.operation ??
-                            existing.operation;
+                        (
+                            table.columns ?? []
+                        ).forEach(
+                            column => {
 
-                        existing.migration =
-                            migration.file ??
-                            existing.migration;
+                                const columnName =
+                                    normalizeTableName(
+                                        column.name
+                                    );
+
+                                if (
+                                    !names.has(
+                                        columnName
+                                    )
+                                ) {
+                                    existing.columns.push(
+                                        column
+                                    );
+                                }
+                            }
+                        );
+                    }
+                );
+            }
+        );
+
+        models.forEach(
+            model => {
+
+                if (!model.table) {
+                    return;
+                }
+
+                const key =
+                    normalizeTableName(
+                        model.table
+                    );
+
+                if (
+                    tables.has(key)
+                ) {
+                    return;
+                }
+
+                tables.set(
+                    key,
+                    {
+                        name:
+                            model.table,
+
+                        columns: [],
+
+                        operation:
+                            'model',
+
+                        migration:
+                            null,
+
+                        modelOnly:
+                            true
                     }
                 );
             }
@@ -1627,90 +1501,60 @@
         ];
     }
 
-
     function getRelations() {
         return (
-            window.ERD.relations?.relations ??
-            []
+            window.ERD
+                ?.relations
+                ?.relations ?? []
         );
     }
-
-
-    function getRelationEndpoint(
-        relation,
-        side
-    ) {
-        if (side === 'from') {
-
-            return normalizeTableName(
-                relation.from_table ??
-                relation.from ??
-                relation.table
-            );
-        }
-
-        return normalizeTableName(
-            relation.to_table ??
-            relation.to ??
-            relation.referenced_table
-        );
-    }
-
 
     function getRelationshipTables() {
-        const relationshipTables =
+        const result =
             new Set();
 
         getRelations().forEach(
             relation => {
 
                 const from =
-                    getRelationEndpoint(
-                        relation,
-                        'from'
+                    normalizeTableName(
+                        relation.from_table ??
+                        relation.from ??
+                        relation.table
                     );
 
                 const to =
-                    getRelationEndpoint(
-                        relation,
-                        'to'
+                    normalizeTableName(
+                        relation.to_table ??
+                        relation.to ??
+                        relation.referenced_table
                     );
 
                 if (from) {
-                    relationshipTables.add(
-                        from
-                    );
+                    result.add(from);
                 }
 
                 if (to) {
-                    relationshipTables.add(
-                        to
-                    );
+                    result.add(to);
                 }
             }
         );
 
-        return relationshipTables;
+        return result;
     }
-
 
     function matchesTableFilter(
         tableName
     ) {
-        const relationshipTables =
+        const relational =
             getRelationshipTables();
-
-        const normalized =
-            normalizeTableName(
-                tableName
-            );
 
         if (
             tableFilter ===
             'relational'
         ) {
-            return relationshipTables.has(
-                normalized
+            return relational.has(
+                tableName
             );
         }
 
@@ -1718,21 +1562,20 @@
             tableFilter ===
             'non-relational'
         ) {
-            return !relationshipTables.has(
-                normalized
+            return !relational.has(
+                tableName
             );
         }
 
         return true;
     }
 
-
     function renderTables() {
         workspace.innerHTML = '';
 
-        tableElements = [];
+        relationLines.innerHTML = '';
 
-        clearRelations();
+        tableElements = [];
 
         const tables =
             getTables();
@@ -1740,31 +1583,27 @@
         const relations =
             getRelations();
 
-        tableCount.textContent =
-            `${tables.length} table${tables.length === 1 ? '' : 's'}`;
-
         const models =
-            window.ERD.models?.models ?? [];
+            window.ERD
+                ?.models
+                ?.models ?? [];
+
+        tableCount.textContent =
+            `${tables.length} tables`;
 
         modelCount.textContent =
-            `${models.length} model${models.length === 1 ? '' : 's'}`;
+            `${models.length} models`;
 
         relationCount.textContent =
-            `${relations.length} relation${relations.length === 1 ? '' : 's'}`;
+            `${relations.length} relations`;
 
         if (!tables.length) {
-
             renderEmptyState();
-
-            refreshButton.style.display =
-                'none';
-
-            renderTableSelector();
 
             return;
         }
 
-        const currentNames =
+        const available =
             new Set(
                 tables.map(
                     table =>
@@ -1774,38 +1613,56 @@
                 )
             );
 
-        selectedTables =
-            new Set(
-                [...selectedTables]
-                    .filter(
-                        name =>
-                            currentNames.has(
-                                name
-                            )
-                    )
-            );
-
         if (
-            selectedTables.size === 0
+            selectedTables.size === 0 &&
+            !sessionStorage.getItem(
+                'laravel-erd-selection'
+            )
         ) {
-            tables.forEach(
-                table => {
-                    selectedTables.add(
-                        normalizeTableName(
-                            table.name
+            selectedTables =
+                new Set(
+                    available
+                );
+        } else {
+            selectedTables =
+                new Set(
+                    [...selectedTables]
+                        .filter(
+                            name =>
+                                available.has(
+                                    name
+                                )
                         )
-                    );
+                );
+
+            if (
+                selectedTables.size === 0
+            ) {
+                const stored =
+                    loadSelection();
+
+                if (
+                    stored.length
+                ) {
+                    selectedTables =
+                        new Set(
+                            stored.filter(
+                                name =>
+                                    available.has(
+                                        name
+                                    )
+                            )
+                        );
                 }
-            );
+            }
         }
 
         tables.forEach(
-            (table, index) => {
+            table => {
 
                 const element =
                     createTable(
-                        table,
-                        index
+                        table
                     );
 
                 tableElements.push({
@@ -1818,13 +1675,11 @@
             }
         );
 
+        saveSelection();
+
         renderTableSelector();
 
-        layoutTables();
-
-        applyViewMode(false);
-
-        applySearch();
+        applyVisibility();
 
         refreshButton.style.display =
             'inline-flex';
@@ -1832,6 +1687,168 @@
         resetView();
     }
 
+    function createTable(
+        table
+    ) {
+        const element =
+            document.createElement(
+                'div'
+            );
+
+        element.className =
+            'erd-table';
+
+        element.dataset.table =
+            normalizeTableName(
+                table.name
+            );
+
+        const columns =
+            Array.isArray(
+                table.columns
+            )
+                ? table.columns
+                : [];
+
+        const columnMarkup =
+            columns.map(
+                column => {
+
+                    const badges = [];
+
+                    if (
+                        column.primary
+                    ) {
+                        badges.push(
+                            `<span class="erd-badge primary">PK</span>`
+                        );
+                    }
+
+                    if (
+                        column.unique
+                    ) {
+                        badges.push(
+                            `<span class="erd-badge unique">UQ</span>`
+                        );
+                    }
+
+                    if (
+                        column.nullable
+                    ) {
+                        badges.push(
+                            `<span class="erd-badge">NULL</span>`
+                        );
+                    }
+
+                    return `
+                        <div
+                            class="erd-column"
+                            data-column="${escapeHtml(
+                                column.name ?? ''
+                            )}"
+                        >
+                            <div class="erd-column-name">
+                                ${escapeHtml(
+                                    column.name ?? ''
+                                )}
+                                ${
+                                    badges.length
+                                        ? `
+                                            <span class="erd-badges">
+                                                ${badges.join('')}
+                                            </span>
+                                        `
+                                        : ''
+                                }
+                            </div>
+
+                            <div class="erd-column-type">
+                                ${escapeHtml(
+                                    column.type ?? ''
+                                )}
+                            </div>
+                        </div>
+                    `;
+                }
+            ).join('');
+
+        element.innerHTML = `
+            <div class="erd-table-header">
+
+                <div class="erd-table-title-row">
+
+                    <div class="erd-table-name">
+                        ${escapeHtml(
+                            table.name
+                        )}
+                    </div>
+
+                    ${
+                        table.modelOnly
+                            ? ''
+                            : `
+                                <div class="erd-table-operation">
+                                    ${escapeHtml(
+                                        table.operation ??
+                                        'table'
+                                    )}
+                                </div>
+                            `
+                    }
+
+                </div>
+
+                ${
+                    table.migration
+                        ? `
+                            <div class="erd-table-meta">
+                                ${escapeHtml(
+                                    table.migration
+                                )}
+                            </div>
+                        `
+                        : ''
+                }
+
+            </div>
+
+            ${
+                viewMode === 'detailed'
+                    ? `
+                        <div class="erd-columns">
+
+                            ${
+                                columnMarkup ||
+                                `
+                                    <div class="erd-column">
+                                        <div class="erd-column-name">
+                                            No columns detected
+                                        </div>
+                                    </div>
+                                `
+                            }
+
+                        </div>
+
+                        <div class="erd-table-footer">
+                            ${columns.length}
+                            column${columns.length === 1 ? '' : 's'}
+                        </div>
+                    `
+                    : ''
+            }
+        `;
+
+        makeDraggable(
+            element
+        );
+
+        workspace.appendChild(
+            element
+        );
+
+        return element;
+    }
 
     function renderEmptyState() {
         workspace.innerHTML = `
@@ -1846,8 +1863,8 @@
                 </div>
 
                 <div class="erd-empty-text">
-                    Analyze your Laravel migrations to
-                    generate the database schema visualization.
+                    Analyze your Laravel application
+                    to generate the ERD.
                 </div>
 
                 <button
@@ -1855,432 +1872,15 @@
                     class="erd-button primary"
                     onclick="analyzeSchema()"
                 >
-                    <span class="erd-button-icon">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i>
-                    </span>
-
-                    <span>
-                        Analyze Schema
-                    </span>
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    Analyze Schema
                 </button>
 
             </div>
         `;
     }
 
-
-    function createTable(
-        table,
-        index
-    ) {
-        const element =
-            document.createElement(
-                'div'
-            );
-
-        element.className =
-            'erd-table';
-
-        const columns =
-            (table.columns ?? [])
-                .map(
-                    column => {
-
-                        const badges = [];
-
-                        if (column.primary) {
-                            badges.push({
-                                text: 'PK',
-                                className:
-                                    'primary'
-                            });
-                        }
-
-                        if (column.unique) {
-                            badges.push({
-                                text: 'UQ',
-                                className:
-                                    'unique'
-                            });
-                        }
-
-                        if (column.nullable) {
-                            badges.push({
-                                text: 'NULL',
-                                className: ''
-                            });
-                        }
-
-                        return `
-                            <div class="erd-column">
-
-                                <div class="erd-column-name">
-
-                                    ${escapeHtml(
-                                        column.name ??
-                                        ''
-                                    )}
-
-                                    ${
-                                        badges.length
-                                            ? `
-                                                <span class="erd-badges">
-
-                                                    ${badges
-                                                        .map(
-                                                            badge => `
-                                                                <span
-                                                                    class="erd-badge ${badge.className}"
-                                                                >
-                                                                    ${badge.text}
-                                                                </span>
-                                                            `
-                                                        )
-                                                        .join('')
-                                                    }
-
-                                                </span>
-                                            `
-                                            : ''
-                                    }
-
-                                </div>
-
-                                <div class="erd-column-type">
-                                    ${escapeHtml(
-                                        column.type ??
-                                        ''
-                                    )}
-                                </div>
-
-                            </div>
-                        `;
-                    }
-                )
-                .join('');
-
-        const columnCount =
-            (table.columns ?? []).length;
-
-        element.innerHTML = `
-            <div class="erd-table-header">
-
-                <div class="erd-table-title-row">
-
-                    <div class="erd-table-name">
-                        ${escapeHtml(
-                            table.name
-                        )}
-                    </div>
-
-                    <div class="erd-table-operation">
-                        ${escapeHtml(
-                            table.operation ??
-                            'table'
-                        )}
-                    </div>
-
-                </div>
-
-                <div class="erd-table-meta">
-                    ${escapeHtml(
-                        table.migration ??
-                        ''
-                    )}
-                </div>
-
-            </div>
-
-            <div class="erd-columns">
-
-                ${
-                    columns ||
-                    `
-                        <div class="erd-column">
-                            <div class="erd-column-name">
-                                No columns detected
-                            </div>
-                        </div>
-                    `
-                }
-
-            </div>
-
-            <div class="erd-table-footer">
-                ${columnCount}
-                column${columnCount === 1 ? '' : 's'}
-            </div>
-        `;
-
-        makeDraggable(
-            element
-        );
-
-        workspace.appendChild(
-            element
-        );
-
-        return element;
-    }
-
-
-    function layoutTables() {
-        const gapX = 80;
-
-        const gapY = 70;
-
-        const startX = 100;
-
-        const startY = 100;
-
-        const columns = 4;
-
-        const columnWidth = 380;
-
-        let columnHeights =
-            Array(columns)
-                .fill(startY);
-
-        tableElements.forEach(
-            (item, index) => {
-
-                const element =
-                    item.element;
-
-                const column =
-                    index % columns;
-
-                const x =
-                    startX +
-                    column * columnWidth;
-
-                const y =
-                    columnHeights[column];
-
-                element.style.left =
-                    `${x}px`;
-
-                element.style.top =
-                    `${y}px`;
-
-                columnHeights[column] =
-                    y +
-                    element.offsetHeight +
-                    gapY;
-            }
-        );
-    }
-
-
-    function applyViewMode(
-        relayout = true
-    ) {
-        viewModeButtons.forEach(
-            button => {
-
-                button.classList.toggle(
-                    'active',
-                    button.dataset.viewMode ===
-                    viewMode
-                );
-            }
-        );
-
-        tableElements.forEach(
-            item => {
-
-                item.element.classList.toggle(
-                    'simple',
-                    viewMode ===
-                    'simple'
-                );
-            }
-        );
-
-        if (relayout) {
-            layoutTables();
-        }
-
-        drawRelations();
-    }
-
-
-    function renderTableSelector() {
-        const tables =
-            getTables();
-
-        tableList.innerHTML = '';
-
-        tables.forEach(
-            table => {
-
-                const name =
-                    normalizeTableName(
-                        table.name
-                    );
-
-                const item =
-                    document.createElement(
-                        'label'
-                    );
-
-                item.className =
-                    'erd-table-item';
-
-                item.dataset.name =
-                    name;
-
-                const checkbox =
-                    document.createElement(
-                        'input'
-                    );
-
-                checkbox.type =
-                    'checkbox';
-
-                checkbox.checked =
-                    selectedTables.has(
-                        name
-                    );
-
-                checkbox.addEventListener(
-                    'change',
-                    () => {
-
-                        if (
-                            checkbox.checked
-                        ) {
-                            selectedTables.add(
-                                name
-                            );
-                        } else {
-                            selectedTables.delete(
-                                name
-                            );
-                        }
-
-                        updateTableSelectorCount();
-
-                        applySearch();
-                    }
-                );
-
-                const label =
-                    document.createElement(
-                        'span'
-                    );
-
-                label.className =
-                    'erd-table-item-name';
-
-                label.textContent =
-                    table.name;
-
-                item.appendChild(
-                    checkbox
-                );
-
-                item.appendChild(
-                    label
-                );
-
-                tableList.appendChild(
-                    item
-                );
-            }
-        );
-
-        updateTableSelectorCount();
-
-        applyTableSelectorSearch();
-    }
-
-
-    function updateTableSelectorCount() {
-        const total =
-            getTables().length;
-
-        const selected =
-            selectedTables.size;
-
-        tableSelectorCount.textContent =
-            `${selected} / ${total}`;
-    }
-
-
-    function applyTableSelectorSearch() {
-        const search =
-            tableSelectorSearch.value
-                .trim()
-                .toLowerCase();
-
-        tableList
-            .querySelectorAll(
-                '.erd-table-item'
-            )
-            .forEach(
-                item => {
-
-                    item.classList.toggle(
-                        'filtered',
-                        !!search &&
-                        !item.dataset.name.includes(
-                            search
-                        )
-                    );
-                }
-            );
-    }
-
-
-    function selectAll() {
-        getTables().forEach(
-            table => {
-
-                selectedTables.add(
-                    normalizeTableName(
-                        table.name
-                    )
-                );
-            }
-        );
-
-        tableList
-            .querySelectorAll(
-                'input[type="checkbox"]'
-            )
-            .forEach(
-                checkbox => {
-                    checkbox.checked = true;
-                }
-            );
-
-        updateTableSelectorCount();
-
-        applySearch();
-    }
-
-
-    function clearAll() {
-        selectedTables.clear();
-
-        tableList
-            .querySelectorAll(
-                'input[type="checkbox"]'
-            )
-            .forEach(
-                checkbox => {
-                    checkbox.checked = false;
-                }
-            );
-
-        updateTableSelectorCount();
-
-        applySearch();
-    }
-
-
-    function applySearch() {
+    function applyVisibility() {
         const search =
             searchInput.value
                 .trim()
@@ -2305,25 +1905,354 @@
                         item.name
                     );
 
+                const visible =
+                    selected &&
+                    matchesSearch &&
+                    matchesFilter;
+
                 item.element.classList.toggle(
                     'hidden',
-                    !(
-                        selected &&
-                        matchesSearch &&
-                        matchesFilter
-                    )
+                    !visible
                 );
             }
         );
 
+        layoutTables();
+
         drawRelations();
     }
 
+    function layoutTables() {
+        const visible =
+            tableElements.filter(
+                item =>
+                    !item.element
+                        .classList
+                        .contains('hidden')
+            );
 
-    function clearRelations() {
-        relationLines.innerHTML = '';
+        if (!visible.length) {
+            return;
+        }
+
+        const graph =
+            new Map();
+
+        visible.forEach(
+            item => {
+                graph.set(
+                    item.name,
+                    new Set()
+                );
+            }
+        );
+
+        getRelations().forEach(
+            relation => {
+
+                const from =
+                    normalizeTableName(
+                        relation.from_table ??
+                        relation.from ??
+                        relation.table
+                    );
+
+                const to =
+                    normalizeTableName(
+                        relation.to_table ??
+                        relation.to ??
+                        relation.referenced_table
+                    );
+
+                if (
+                    !graph.has(from) ||
+                    !graph.has(to) ||
+                    from === to
+                ) {
+                    return;
+                }
+
+                graph.get(from).add(to);
+                graph.get(to).add(from);
+            }
+        );
+
+        const components =
+            getConnectedComponents(
+                graph
+            );
+
+        const positions =
+            new Map();
+
+        let componentY = 100;
+
+        components.forEach(
+            component => {
+
+                const levels =
+                    buildLevels(
+                        component,
+                        graph
+                    );
+
+                let maxWidth = 0;
+
+                levels.forEach(
+                    (nodes, level) => {
+
+                        const width =
+                            nodes.length *
+                            390;
+
+                        maxWidth =
+                            Math.max(
+                                maxWidth,
+                                width
+                            );
+
+                        nodes.forEach(
+                            (name, index) => {
+
+                                const element =
+                                    getTableElement(
+                                        name
+                                    );
+
+                                if (
+                                    !element
+                                ) {
+                                    return;
+                                }
+
+                                const center =
+                                    (
+                                        nodes.length -
+                                        1
+                                    ) / 2;
+
+                                positions.set(
+                                    name,
+                                    {
+                                        x:
+                                            250 +
+                                            (
+                                                index -
+                                                center
+                                            ) *
+                                            390,
+
+                                        y:
+                                            componentY +
+                                            level *
+                                            280
+                                    }
+                                );
+                            }
+                        );
+                    }
+                );
+
+                const componentHeight =
+                    levels.size *
+                    280;
+
+                componentY +=
+                    Math.max(
+                        componentHeight +
+                        100,
+                        360
+                    );
+            }
+        );
+
+        visible.forEach(
+            item => {
+
+                const position =
+                    positions.get(
+                        item.name
+                    );
+
+                if (!position) {
+                    return;
+                }
+
+                item.element.style.left =
+                    `${position.x}px`;
+
+                item.element.style.top =
+                    `${position.y}px`;
+            }
+        );
     }
 
+    function getConnectedComponents(
+        graph
+    ) {
+        const components = [];
+
+        const visited =
+            new Set();
+
+        graph.forEach(
+            (_, start) => {
+
+                if (
+                    visited.has(start)
+                ) {
+                    return;
+                }
+
+                const component = [];
+
+                const queue = [
+                    start
+                ];
+
+                visited.add(
+                    start
+                );
+
+                while (
+                    queue.length
+                ) {
+                    const current =
+                        queue.shift();
+
+                    component.push(
+                        current
+                    );
+
+                    (
+                        graph.get(current) ??
+                        []
+                    ).forEach(
+                        neighbor => {
+
+                            if (
+                                visited.has(
+                                    neighbor
+                                )
+                            ) {
+                                return;
+                            }
+
+                            visited.add(
+                                neighbor
+                            );
+
+                            queue.push(
+                                neighbor
+                            );
+                        }
+                    );
+                }
+
+                components.push(
+                    component
+                );
+            }
+        );
+
+        return components;
+    }
+
+    function buildLevels(
+        component,
+        graph
+    ) {
+        const root =
+            component
+                .slice()
+                .sort(
+                    (a, b) =>
+                        (
+                            graph.get(b)?.size ??
+                            0
+                        ) -
+                        (
+                            graph.get(a)?.size ??
+                            0
+                        )
+                )[0];
+
+        const levels =
+            new Map();
+
+        const visited =
+            new Set();
+
+        const queue = [
+            {
+                name: root,
+                level: 0
+            }
+        ];
+
+        visited.add(
+            root
+        );
+
+        while (
+            queue.length
+        ) {
+            const current =
+                queue.shift();
+
+            if (
+                !levels.has(
+                    current.level
+                )
+            ) {
+                levels.set(
+                    current.level,
+                    []
+                );
+            }
+
+            levels
+                .get(
+                    current.level
+                )
+                .push(
+                    current.name
+                );
+
+            (
+                graph.get(
+                    current.name
+                ) ?? []
+            )
+                .forEach(
+                    neighbor => {
+
+                        if (
+                            visited.has(
+                                neighbor
+                            )
+                        ) {
+                            return;
+                        }
+
+                        visited.add(
+                            neighbor
+                        );
+
+                        queue.push({
+                            name:
+                                neighbor,
+
+                            level:
+                                current.level +
+                                1
+                        });
+                    }
+                );
+        }
+
+        return levels;
+    }
 
     function getTableElement(
         tableName
@@ -2333,161 +2262,309 @@
                 tableName
             );
 
-        const item =
+        return (
             tableElements.find(
-                table =>
-                    table.name ===
+                item =>
+                    item.name ===
                     normalized
-            );
-
-        return item?.element ?? null;
+            )?.element ?? null
+        );
     }
 
+    function drawRelations() {
+        relationLines.innerHTML = '';
 
-    function getElementRect(
-        element
-    ) {
-        return {
-            left:
-                parseFloat(
-                    element.style.left
-                ) || 0,
+        const relations =
+            getRelations();
 
-            top:
-                parseFloat(
-                    element.style.top
-                ) || 0,
+        relations.forEach(
+            (
+                relation,
+                index
+            ) => {
 
-            width:
-                element.offsetWidth,
+                const fromElement =
+                    getTableElement(
+                        relation.from_table ??
+                        relation.from ??
+                        relation.table
+                    );
 
-            height:
-                element.offsetHeight
-        };
+                const toElement =
+                    getTableElement(
+                        relation.to_table ??
+                        relation.to ??
+                        relation.referenced_table
+                    );
+
+                if (
+                    !fromElement ||
+                    !toElement
+                ) {
+                    return;
+                }
+
+                if (
+                    fromElement
+                        .classList
+                        .contains('hidden') ||
+                    toElement
+                        .classList
+                        .contains('hidden')
+                ) {
+                    return;
+                }
+
+                const from =
+                    getConnectionPoint(
+                        fromElement,
+                        relation.from_column,
+                        toElement
+                    );
+
+                const to =
+                    getConnectionPoint(
+                        toElement,
+                        relation.to_column,
+                        fromElement
+                    );
+
+                const path =
+                    document.createElementNS(
+                        SVG_NS,
+                        'path'
+                    );
+
+                path.setAttribute(
+                    'class',
+                    'erd-relation-line'
+                );
+
+                path.setAttribute(
+                    'd',
+                    createRelationPath(
+                        from,
+                        to
+                    )
+                );
+
+                path.setAttribute(
+                    'data-from',
+                    `${relation.from_table ?? ''}.${relation.from_column ?? ''}`
+                );
+
+                path.setAttribute(
+                    'data-to',
+                    `${relation.to_table ?? ''}.${relation.to_column ?? ''}`
+                );
+
+                relationLines.appendChild(
+                    path
+                );
+
+                createRelationDot(
+                    from,
+                    index
+                );
+
+                createRelationDot(
+                    to,
+                    index
+                );
+            }
+        );
     }
-
 
     function getConnectionPoint(
-        fromElement,
-        toElement
+        element,
+        columnName,
+        target
     ) {
-        const from =
-            getElementRect(
-                fromElement
-            );
+        const left =
+            parseFloat(
+                element.style.left
+            ) || 0;
 
-        const to =
-            getElementRect(
-                toElement
-            );
+        const top =
+            parseFloat(
+                element.style.top
+            ) || 0;
 
-        const fromCenterX =
-            from.left +
-            from.width / 2;
+        const width =
+            element.offsetWidth;
 
-        const fromCenterY =
-            from.top +
-            from.height / 2;
+        const height =
+            element.offsetHeight;
 
-        const toCenterX =
-            to.left +
-            to.width / 2;
+        const targetLeft =
+            parseFloat(
+                target.style.left
+            ) || 0;
 
-        const toCenterY =
-            to.top +
-            to.height / 2;
+        const targetTop =
+            parseFloat(
+                target.style.top
+            ) || 0;
 
-        const deltaX =
-            toCenterX -
-            fromCenterX;
+        const targetWidth =
+            target.offsetWidth;
 
-        const deltaY =
-            toCenterY -
-            fromCenterY;
+        const targetHeight =
+            target.offsetHeight;
+
+        const centerX =
+            left +
+            width / 2;
+
+        const centerY =
+            top +
+            height / 2;
+
+        const targetCenterX =
+            targetLeft +
+            targetWidth / 2;
+
+        const targetCenterY =
+            targetTop +
+            targetHeight / 2;
 
         if (
-            Math.abs(deltaX) >=
-            Math.abs(deltaY)
+            viewMode === 'detailed' &&
+            columnName
         ) {
+            const column =
+                [
+                    ...element.querySelectorAll(
+                        '.erd-column'
+                    )
+                ].find(
+                    item =>
+                        normalizeTableName(
+                            item.dataset.column
+                        ) ===
+                        normalizeTableName(
+                            columnName
+                        )
+                );
 
-            if (deltaX >= 0) {
+            if (column) {
+                const y =
+                    top +
+                    column.offsetTop +
+                    column.offsetHeight /
+                    2;
+
+                if (
+                    targetCenterX >= centerX
+                ) {
+                    return {
+                        x:
+                            left +
+                            width,
+
+                        y,
+
+                        side:
+                            'right'
+                    };
+                }
+
                 return {
                     x:
-                        from.left +
-                        from.width,
+                        left,
+
+                    y,
+
+                    side:
+                        'left'
+                };
+            }
+        }
+
+        const dx =
+            targetCenterX -
+            centerX;
+
+        const dy =
+            targetCenterY -
+            centerY;
+
+        if (
+            Math.abs(dx) >=
+            Math.abs(dy)
+        ) {
+            return dx >= 0
+                ? {
+                    x:
+                        left +
+                        width,
 
                     y:
-                        fromCenterY,
+                        centerY,
 
                     side:
                         'right'
+                }
+                : {
+                    x:
+                        left,
+
+                    y:
+                        centerY,
+
+                    side:
+                        'left'
                 };
-            }
-
-            return {
-                x:
-                    from.left,
-
-                y:
-                    fromCenterY,
-
-                side:
-                    'left'
-            };
         }
 
-        if (deltaY >= 0) {
-            return {
+        return dy >= 0
+            ? {
                 x:
-                    fromCenterX,
+                    centerX,
 
                 y:
-                    from.top +
-                    from.height,
+                    top +
+                    height,
 
                 side:
                     'bottom'
+            }
+            : {
+                x:
+                    centerX,
+
+                y:
+                    top,
+
+                side:
+                    'top'
             };
-        }
-
-        return {
-            x:
-                fromCenterX,
-
-            y:
-                from.top,
-
-            side:
-                'top'
-        };
     }
-
 
     function createRelationPath(
         from,
         to
     ) {
-        const distanceX =
-            Math.abs(
-                to.x -
-                from.x
-            );
+        const dx =
+            to.x -
+            from.x;
 
-        const distanceY =
-            Math.abs(
-                to.y -
-                from.y
+        const dy =
+            to.y -
+            from.y;
+
+        const distance =
+            Math.max(
+                Math.abs(dx),
+                Math.abs(dy)
             );
 
         const curve =
             Math.max(
-                70,
+                60,
                 Math.min(
-                    220,
-                    Math.max(
-                        distanceX,
-                        distanceY
-                    ) * .35
+                    180,
+                    distance * .35
                 )
             );
 
@@ -2504,40 +2581,50 @@
             to.y;
 
         if (
-            from.side ===
-            'right'
+            from.side === 'right'
         ) {
             c1x += curve;
-        } else if (
-            from.side ===
-            'left'
+        }
+
+        if (
+            from.side === 'left'
         ) {
             c1x -= curve;
-        } else if (
-            from.side ===
-            'bottom'
+        }
+
+        if (
+            from.side === 'bottom'
         ) {
             c1y += curve;
-        } else {
+        }
+
+        if (
+            from.side === 'top'
+        ) {
             c1y -= curve;
         }
 
         if (
-            to.side ===
-            'right'
+            to.side === 'right'
         ) {
             c2x += curve;
-        } else if (
-            to.side ===
-            'left'
+        }
+
+        if (
+            to.side === 'left'
         ) {
             c2x -= curve;
-        } else if (
-            to.side ===
-            'bottom'
+        }
+
+        if (
+            to.side === 'bottom'
         ) {
             c2y += curve;
-        } else {
+        }
+
+        if (
+            to.side === 'top'
+        ) {
             c2y -= curve;
         }
 
@@ -2550,281 +2637,40 @@
         `;
     }
 
-
-    function drawRelations() {
-        clearRelations();
-
-        const relations =
-            getRelations();
-
-        if (!relations.length) {
-            return;
-        }
-
-        relations.forEach(
-            (relation, relationIndex) => {
-
-                const fromName =
-                    getRelationEndpoint(
-                        relation,
-                        'from'
-                    );
-
-                const toName =
-                    getRelationEndpoint(
-                        relation,
-                        'to'
-                    );
-
-                if (
-                    !fromName ||
-                    !toName
-                ) {
-                    return;
-                }
-
-                if (
-                    !selectedTables.has(
-                        fromName
-                    ) ||
-                    !selectedTables.has(
-                        toName
-                    )
-                ) {
-                    return;
-                }
-
-                const fromElement =
-                    getTableElement(
-                        fromName
-                    );
-
-                const toElement =
-                    getTableElement(
-                        toName
-                    );
-
-                if (
-                    !fromElement ||
-                    !toElement
-                ) {
-                    return;
-                }
-
-                if (
-                    fromElement.classList.contains(
-                        'hidden'
-                    ) ||
-                    toElement.classList.contains(
-                        'hidden'
-                    )
-                ) {
-                    return;
-                }
-
-                const from =
-                    getConnectionPoint(
-                        fromElement,
-                        toElement
-                    );
-
-                const to =
-                    getConnectionPoint(
-                        toElement,
-                        fromElement
-                    );
-
-                const pathData =
-                    createRelationPath(
-                        from,
-                        to
-                    );
-
-                const pathId =
-                    `erd-relation-${relationIndex}-${Date.now()}`;
-
-                const path =
-                    document.createElementNS(
-                        SVG_NS,
-                        'path'
-                    );
-
-                path.setAttribute(
-                    'id',
-                    pathId
-                );
-
-                path.setAttribute(
-                    'class',
-                    'erd-relation-line'
-                );
-
-                path.setAttribute(
-                    'd',
-                    pathData
-                );
-
-                path.setAttribute(
-                    'data-from',
-                    fromName
-                );
-
-                path.setAttribute(
-                    'data-to',
-                    toName
-                );
-
-                relationLines.appendChild(
-                    path
-                );
-
-                createFlowParticles(
-                    path,
-                    relationIndex
-                );
-            }
-        );
-    }
-
-
-    function createFlowParticles(
-        path,
+    function createRelationDot(
+        point,
         index
     ) {
-        const duration =
-            2.8 +
-            (
-                index % 4
-            ) * .35;
-
-        const particle =
+        const circle =
             document.createElementNS(
                 SVG_NS,
                 'circle'
             );
 
-        particle.setAttribute(
-            'r',
-            '3'
-        );
-
-        particle.setAttribute(
+        circle.setAttribute(
             'class',
-            'erd-flow-particle'
+            'erd-relation-dot'
         );
 
-        const animation =
-            document.createElementNS(
-                SVG_NS,
-                'animateMotion'
-            );
-
-        animation.setAttribute(
-            'dur',
-            `${duration}s`
+        circle.setAttribute(
+            'r',
+            '2.5'
         );
 
-        animation.setAttribute(
-            'repeatCount',
-            'indefinite'
+        circle.setAttribute(
+            'cx',
+            point.x
         );
 
-        animation.setAttribute(
-            'rotate',
-            'auto'
-        );
-
-        const mpath =
-            document.createElementNS(
-                SVG_NS,
-                'mpath'
-            );
-
-        mpath.setAttribute(
-            'href',
-            `#${path.id}`
-        );
-
-        mpath.setAttributeNS(
-            'http://www.w3.org/1999/xlink',
-            'xlink:href',
-            `#${path.id}`
-        );
-
-        animation.appendChild(
-            mpath
-        );
-
-        particle.appendChild(
-            animation
+        circle.setAttribute(
+            'cy',
+            point.y
         );
 
         relationLines.appendChild(
-            particle
-        );
-
-        const halo =
-            document.createElementNS(
-                SVG_NS,
-                'circle'
-            );
-
-        halo.setAttribute(
-            'r',
-            '6'
-        );
-
-        halo.setAttribute(
-            'class',
-            'erd-flow-particle-halo'
-        );
-
-        const haloAnimation =
-            document.createElementNS(
-                SVG_NS,
-                'animateMotion'
-            );
-
-        haloAnimation.setAttribute(
-            'dur',
-            `${duration}s`
-        );
-
-        haloAnimation.setAttribute(
-            'repeatCount',
-            'indefinite'
-        );
-
-        const haloPath =
-            document.createElementNS(
-                SVG_NS,
-                'mpath'
-            );
-
-        haloPath.setAttribute(
-            'href',
-            `#${path.id}`
-        );
-
-        haloPath.setAttributeNS(
-            'http://www.w3.org/1999/xlink',
-            'xlink:href',
-            `#${path.id}`
-        );
-
-        haloAnimation.appendChild(
-            haloPath
-        );
-
-        halo.appendChild(
-            haloAnimation
-        );
-
-        relationLines.appendChild(
-            halo
+            circle
         );
     }
-
 
     function makeDraggable(
         element
@@ -2937,6 +2783,185 @@
         );
     }
 
+    function renderTableSelector() {
+        const tables =
+            getTables();
+
+        tableSelector.innerHTML =
+            '';
+
+        tables.forEach(
+            table => {
+
+                const name =
+                    normalizeTableName(
+                        table.name
+                    );
+
+                const label =
+                    document.createElement(
+                        'label'
+                    );
+
+                label.className =
+                    'erd-table-option';
+
+                label.dataset.name =
+                    name;
+
+                label.innerHTML = `
+                    <input
+                        type="checkbox"
+                        value="${escapeHtml(name)}"
+                        ${selectedTables.has(name) ? 'checked' : ''}
+                    >
+
+                    <span>
+                        ${escapeHtml(
+                            table.name
+                        )}
+                    </span>
+                `;
+
+                const checkbox =
+                    label.querySelector(
+                        'input'
+                    );
+
+                checkbox.addEventListener(
+                    'change',
+                    () => {
+
+                        if (
+                            checkbox.checked
+                        ) {
+                            selectedTables.add(
+                                name
+                            );
+                        } else {
+                            selectedTables.delete(
+                                name
+                            );
+                        }
+
+                        saveSelection();
+
+                        updateTableSelectorCount();
+
+                        applyVisibility();
+                    }
+                );
+
+                tableSelector.appendChild(
+                    label
+                );
+            }
+        );
+
+        updateTableSelectorCount();
+    }
+
+    function updateTableSelectorCount() {
+        const total =
+            getTables().length;
+
+        const selected =
+            selectedTables.size;
+
+        tableSelectorCount.textContent =
+            `${selected} / ${total}`;
+    }
+
+    function applySelectorSearch() {
+        const search =
+            tableSelectorSearch.value
+                .trim()
+                .toLowerCase();
+
+        [
+            ...tableSelector.children
+        ].forEach(
+            item => {
+
+                const visible =
+                    !search ||
+                    item.dataset.name.includes(
+                        search
+                    );
+
+                item.classList.toggle(
+                    'hidden',
+                    !visible
+                );
+            }
+        );
+    }
+
+    function selectAllTables() {
+        selectedTables =
+            new Set(
+                getTables().map(
+                    table =>
+                        normalizeTableName(
+                            table.name
+                        )
+                )
+            );
+
+        saveSelection();
+
+        renderTableSelector();
+
+        applyVisibility();
+    }
+
+    function clearAllTables() {
+        selectedTables =
+            new Set();
+
+        saveSelection();
+
+        renderTableSelector();
+
+        applyVisibility();
+    }
+
+    function saveSelection() {
+        sessionStorage.setItem(
+            'laravel-erd-selection',
+            JSON.stringify(
+                [...selectedTables]
+            )
+        );
+    }
+
+    function loadSelection() {
+        try {
+            return JSON.parse(
+                sessionStorage.getItem(
+                    'laravel-erd-selection'
+                ) ?? '[]'
+            );
+        } catch {
+            return [];
+        }
+    }
+
+    function applyViewMode() {
+        const current =
+            [...selectedTables];
+
+        renderTables();
+
+        selectedTables =
+            new Set(
+                current
+            );
+
+        saveSelection();
+
+        applyVisibility();
+    }
 
     function updateView() {
         stage.style.transform =
@@ -2947,7 +2972,6 @@
                 zoom * 100
             )}%`;
     }
-
 
     function setZoom(
         value
@@ -2964,16 +2988,21 @@
         updateView();
     }
 
-
     function resetView() {
         zoom = 1;
+
+        const width =
+            5000;
+
+        const height =
+            5000;
 
         panX =
             Math.max(
                 0,
                 (
                     canvas.clientWidth -
-                    1900
+                    width
                 ) / 2
             );
 
@@ -2982,13 +3011,12 @@
                 0,
                 (
                     canvas.clientHeight -
-                    1300
+                    height
                 ) / 2
             );
 
         updateView();
     }
-
 
     canvas.addEventListener(
         'mousedown',
@@ -3004,23 +3032,13 @@
 
             if (
                 event.target.closest(
-                    '.erd-controls'
-                )
-            ) {
-                return;
-            }
-
-            if (
-                event.target.closest(
                     '.erd-view-selector'
-                )
-            ) {
-                return;
-            }
-
-            if (
+                ) ||
                 event.target.closest(
                     '.erd-table-selector'
+                ) ||
+                event.target.closest(
+                    '.erd-bottom'
                 )
             ) {
                 return;
@@ -3045,7 +3063,6 @@
             );
         }
     );
-
 
     document.addEventListener(
         'mousemove',
@@ -3073,7 +3090,6 @@
         }
     );
 
-
     document.addEventListener(
         'mouseup',
         () => {
@@ -3090,41 +3106,25 @@
         }
     );
 
-
     canvas.addEventListener(
         'wheel',
         event => {
 
             if (
-                event.target.closest(
-                    '.erd-table-selector'
-                )
+                !event.ctrlKey
             ) {
-                return;
-            }
-
-            if (
-                event.target.closest(
-                    '.erd-view-selector'
-                )
-            ) {
-                return;
-            }
-
-            if (!event.ctrlKey) {
                 return;
             }
 
             event.preventDefault();
 
-            const direction =
-                event.deltaY < 0
-                    ? .1
-                    : -.1;
-
             setZoom(
                 zoom +
-                direction
+                (
+                    event.deltaY < 0
+                        ? .1
+                        : -.1
+                )
             );
         },
         {
@@ -3132,150 +3132,123 @@
         }
     );
 
-
     zoomInButton.addEventListener(
         'click',
         () => {
             setZoom(
-                zoom +
-                .1
+                zoom + .1
             );
         }
     );
-
 
     zoomOutButton.addEventListener(
         'click',
         () => {
             setZoom(
-                zoom -
-                .1
+                zoom - .1
             );
         }
     );
-
 
     resetViewButton.addEventListener(
         'click',
         resetView
     );
 
-
-    viewModeButtons.forEach(
-        button => {
-
-            button.addEventListener(
-                'click',
-                event => {
-
-                    event.stopPropagation();
-
-                    viewMode =
-                        button.dataset.viewMode;
-
-                    applyViewMode();
-                }
-            );
-        }
+    searchInput.addEventListener(
+        'input',
+        applyVisibility
     );
-
-
-    navbarFilterButtons.forEach(
-        button => {
-
-            button.addEventListener(
-                'click',
-                event => {
-
-                    event.stopPropagation();
-
-                    tableFilter =
-                        button.dataset.tableFilter;
-
-                    navbarFilterButtons.forEach(
-                        item => {
-
-                            item.classList.toggle(
-                                'active',
-                                item === button
-                            );
-                        }
-                    );
-
-                    applySearch();
-                }
-            );
-        }
-    );
-
 
     tableSelectorSearch.addEventListener(
         'input',
-        applyTableSelectorSearch
+        applySelectorSearch
     );
 
-
-    selectAllTables.addEventListener(
+    document.getElementById(
+        'selectAllTables'
+    ).addEventListener(
         'click',
-        event => {
-
-            event.stopPropagation();
-
-            selectAll();
-        }
+        selectAllTables
     );
 
-
-    clearAllTables.addEventListener(
+    document.getElementById(
+        'clearAllTables'
+    ).addEventListener(
         'click',
-        event => {
-
-            event.stopPropagation();
-
-            clearAll();
-        }
-    );
-
-
-    [
-        tableSelector,
-        tableSelectorSearch,
-        selectAllTables,
         clearAllTables
-    ].forEach(
-        element => {
-
-            element.addEventListener(
-                'mousedown',
-                event => {
-                    event.stopPropagation();
-                }
-            );
-
-            element.addEventListener(
-                'wheel',
-                event => {
-                    event.stopPropagation();
-                },
-                {
-                    passive: true
-                }
-            );
-        }
     );
 
+    document
+        .querySelectorAll(
+            '[data-view-mode]'
+        )
+        .forEach(
+            button => {
 
-    searchInput.addEventListener(
-        'input',
-        applySearch
-    );
+                button.addEventListener(
+                    'click',
+                    () => {
 
+                        viewMode =
+                            button.dataset.viewMode;
+
+                        document
+                            .querySelectorAll(
+                                '[data-view-mode]'
+                            )
+                            .forEach(
+                                item => {
+                                    item.classList.toggle(
+                                        'active',
+                                        item === button
+                                    );
+                                }
+                            );
+
+                        applyViewMode();
+                    }
+                );
+            }
+        );
+
+    document
+        .querySelectorAll(
+            '[data-table-filter]'
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    'click',
+                    () => {
+
+                        tableFilter =
+                            button.dataset.tableFilter;
+
+                        document
+                            .querySelectorAll(
+                                '[data-table-filter]'
+                            )
+                            .forEach(
+                                item => {
+                                    item.classList.toggle(
+                                        'active',
+                                        item === button
+                                    );
+                                }
+                            );
+
+                        applyVisibility();
+                    }
+                );
+            }
+        );
 
     async function analyzeSchema() {
         setLoading(true);
 
         try {
-
             const response =
                 await fetch(
                     '{{ route('erd.refresh') }}',
@@ -3312,76 +3285,73 @@
             }
 
             showToast(
-                `Schema analyzed: ${data.migrations} migrations, ${data.models} models.`
+                `Schema analyzed: ${data.migrations} migrations, ${data.models} models, ${data.relations} relations.`
             );
 
             await reloadRegistry();
 
         } catch (error) {
-
             showToast(
                 error.message ||
                 'Schema analysis failed.'
             );
-
         } finally {
-
             setLoading(false);
         }
     }
 
-
     async function reloadRegistry() {
-        try {
-
-            const response =
-                await fetch(
-                    window.location.href,
-                    {
-                        headers: {
-                            'Accept':
-                                'text/html'
-                        }
+        const response =
+            await fetch(
+                window.location.href,
+                {
+                    headers: {
+                        'Accept':
+                            'text/html'
                     }
-                );
+                }
+            );
 
-            const html =
-                await response.text();
+        const html =
+            await response.text();
 
-            const parser =
-                new DOMParser();
+        const parser =
+            new DOMParser();
 
-            const documentObject =
-                parser.parseFromString(
-                    html,
-                    'text/html'
-                );
+        const documentObject =
+            parser.parseFromString(
+                html,
+                'text/html'
+            );
 
-            const script =
-                [
-                    ...documentObject.scripts
-                ].find(
-                    script =>
-                        script.textContent.includes(
-                            'window.ERD'
-                        )
-                );
+        const script =
+            [
+                ...documentObject.scripts
+            ].find(
+                script =>
+                    script.textContent.includes(
+                        'window.ERD'
+                    )
+            );
 
-            if (!script) {
-                window.location.reload();
-                return;
-            }
+        if (!script) {
+            window.location.reload();
 
-            const match =
-                script.textContent.match(
-                    /window\.ERD\s*=\s*(\{[\s\S]*?\});/
-                );
+            return;
+        }
 
-            if (!match) {
-                window.location.reload();
-                return;
-            }
+        const match =
+            script.textContent.match(
+                /window\.ERD\s*=\s*(\{[\s\S]*?\});/
+            );
 
+        if (!match) {
+            window.location.reload();
+
+            return;
+        }
+
+        try {
             window.ERD =
                 JSON.parse(
                     match[1]
@@ -3390,11 +3360,9 @@
             renderTables();
 
         } catch {
-
             window.location.reload();
         }
     }
-
 
     function setLoading(
         loading
@@ -3408,19 +3376,13 @@
         analyzeButton.innerHTML =
             loading
                 ? `
-                    <span class="erd-button-icon">
-                        <i class="fa-solid fa-spinner fa-spin"></i>
-                    </span>
-
+                    <i class="fa-solid fa-spinner fa-spin"></i>
                     <span class="erd-button-text">
                         Analyzing...
                     </span>
                 `
                 : `
-                    <span class="erd-button-icon">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i>
-                    </span>
-
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
                     <span class="erd-button-text">
                         Analyze Schema
                     </span>
@@ -3429,25 +3391,18 @@
         refreshButton.innerHTML =
             loading
                 ? `
-                    <span class="erd-button-icon">
-                        <i class="fa-solid fa-spinner fa-spin"></i>
-                    </span>
-
+                    <i class="fa-solid fa-spinner fa-spin"></i>
                     <span class="erd-button-text">
                         Working...
                     </span>
                 `
                 : `
-                    <span class="erd-button-icon">
-                        <i class="fa-solid fa-arrows-rotate"></i>
-                    </span>
-
+                    <i class="fa-solid fa-rotate"></i>
                     <span class="erd-button-text">
                         Refresh
                     </span>
                 `;
     }
-
 
     function showToast(
         message
@@ -3461,21 +3416,20 @@
 
         setTimeout(
             () => {
-
                 toast.classList.remove(
                     'show'
                 );
-
             },
             3000
         );
     }
 
-
     function escapeHtml(
         value
     ) {
-        return String(value)
+        return String(
+            value ?? ''
+        )
             .replace(
                 /&/g,
                 '&amp;'
@@ -3498,18 +3452,15 @@
             );
     }
 
-
     analyzeButton.addEventListener(
         'click',
         analyzeSchema
     );
 
-
     refreshButton.addEventListener(
         'click',
         analyzeSchema
     );
-
 
     renderTables();
 </script>

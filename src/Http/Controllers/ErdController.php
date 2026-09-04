@@ -31,7 +31,7 @@ class ErdController extends Controller
         if (!config('erd.enabled')) {
             return response()->json([
                 'success' => false,
-                'message' => 'Laravel ERD is disabled.'
+                'message' => 'Laravel ERD is disabled.',
             ], 403);
         }
 
@@ -53,7 +53,10 @@ class ErdController extends Controller
             'models' => $models,
         ]);
 
-        $relations = $relationScanner->scan($migrations);
+        $relations = $relationScanner->scan(
+            $migrations,
+            $models
+        );
 
         $registry->put('relations.json', [
             'version' => 1,
