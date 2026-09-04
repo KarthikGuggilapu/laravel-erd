@@ -3,9 +3,9 @@
 namespace YourVendor\LaravelErd\Http\Controllers;
 
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Artisan;
 use YourVendor\LaravelErd\Services\MigrationScanner;
 use YourVendor\LaravelErd\Services\ModelScanner;
+use YourVendor\LaravelErd\Services\RelationScanner;
 use YourVendor\LaravelErd\Services\RegistryManager;
 
 class ErdController extends Controller
@@ -25,7 +25,8 @@ class ErdController extends Controller
     public function refresh(
         RegistryManager $registry,
         MigrationScanner $migrationScanner,
-        ModelScanner $modelScanner
+        ModelScanner $modelScanner,
+        RelationScanner $relationScanner
     ) {
         if (!config('erd.enabled')) {
             return response()->json([
@@ -52,11 +53,20 @@ class ErdController extends Controller
             'models' => $models,
         ]);
 
+        $relations = $relationScanner->scan($migrations);
+
+        $registry->put('relations.json', [
+            'version' => 1,
+            'updated_at' => now()->toIso8601String(),
+            'relations' => $relations,
+        ]);
+
         return response()->json([
             'success' => true,
             'message' => 'Schema analyzed successfully.',
             'migrations' => count($migrations),
             'models' => count($models),
+            'relations' => count($relations),
         ]);
     }
 }
