@@ -839,18 +839,57 @@
             transform: translateY(0);
         }
 
-        .erd-relation-line {
-            fill: none;
-            stroke: #5f7fae;
-            stroke-width: 1.5;
-            opacity: .55;
-            marker-end: url(#erd-arrow);
-        }
+.erd-relation-line {
+    fill: none;
+    stroke: #5f7fae;
+    stroke-width: 1.5;
+    opacity: .55;
+    marker-end: url(#erd-arrow);
+}
 
-        .erd-relation-dot {
-            fill: #8fb8ff;
-            opacity: .9;
-        }
+.erd-relation-flow {
+    fill: none;
+    stroke: #8fb8ff;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-dasharray: 3 18;
+    opacity: .95;
+    filter: drop-shadow(0 0 4px rgba(143,184,255,.75));
+    animation: erdFlow 1.8s linear infinite;
+}
+
+@keyframes erdFlow {
+    from {
+        stroke-dashoffset: 0;
+    }
+
+    to {
+        stroke-dashoffset: -42;
+    }
+}
+
+.erd-relation-particle {
+    fill: #b8d4ff;
+    opacity: .95;
+    filter:
+        drop-shadow(0 0 4px rgba(143,184,255,.9))
+        drop-shadow(0 0 8px rgba(143,184,255,.45));
+}
+
+.erd-relation-particle.pulse {
+    animation: erdParticlePulse 1.4s ease-in-out infinite;
+}
+
+@keyframes erdParticlePulse {
+    0%,
+    100% {
+        opacity: .45;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
 
         @media (max-width: 900px) {
             .erd-brand-subtitle {
@@ -2271,109 +2310,198 @@
         );
     }
 
-    function drawRelations() {
-        relationLines.innerHTML = '';
+function drawRelations() {
+    relationLines.innerHTML = '';
 
-        const relations =
-            getRelations();
+    const relations =
+        getRelations();
 
-        relations.forEach(
-            (
-                relation,
-                index
-            ) => {
+    relations.forEach(
+        (
+            relation,
+            index
+        ) => {
 
-                const fromElement =
-                    getTableElement(
-                        relation.from_table ??
-                        relation.from ??
-                        relation.table
-                    );
-
-                const toElement =
-                    getTableElement(
-                        relation.to_table ??
-                        relation.to ??
-                        relation.referenced_table
-                    );
-
-                if (
-                    !fromElement ||
-                    !toElement
-                ) {
-                    return;
-                }
-
-                if (
-                    fromElement
-                        .classList
-                        .contains('hidden') ||
-                    toElement
-                        .classList
-                        .contains('hidden')
-                ) {
-                    return;
-                }
-
-                const from =
-                    getConnectionPoint(
-                        fromElement,
-                        relation.from_column,
-                        toElement
-                    );
-
-                const to =
-                    getConnectionPoint(
-                        toElement,
-                        relation.to_column,
-                        fromElement
-                    );
-
-                const path =
-                    document.createElementNS(
-                        SVG_NS,
-                        'path'
-                    );
-
-                path.setAttribute(
-                    'class',
-                    'erd-relation-line'
+            const fromElement =
+                getTableElement(
+                    relation.from_table ??
+                    relation.from ??
+                    relation.table
                 );
 
-                path.setAttribute(
-                    'd',
-                    createRelationPath(
-                        from,
-                        to
-                    )
+            const toElement =
+                getTableElement(
+                    relation.to_table ??
+                    relation.to ??
+                    relation.referenced_table
                 );
 
-                path.setAttribute(
-                    'data-from',
-                    `${relation.from_table ?? ''}.${relation.from_column ?? ''}`
-                );
-
-                path.setAttribute(
-                    'data-to',
-                    `${relation.to_table ?? ''}.${relation.to_column ?? ''}`
-                );
-
-                relationLines.appendChild(
-                    path
-                );
-
-                createRelationDot(
-                    from,
-                    index
-                );
-
-                createRelationDot(
-                    to,
-                    index
-                );
+            if (
+                !fromElement ||
+                !toElement
+            ) {
+                return;
             }
+
+            if (
+                fromElement.classList.contains('hidden') ||
+                toElement.classList.contains('hidden')
+            ) {
+                return;
+            }
+
+            const from =
+                getConnectionPoint(
+                    fromElement,
+                    relation.from_column,
+                    toElement
+                );
+
+            const to =
+                getConnectionPoint(
+                    toElement,
+                    relation.to_column,
+                    fromElement
+                );
+
+            const pathData =
+                createRelationPath(
+                    from,
+                    to
+                );
+
+            const pathId =
+                `erd-relation-${index}`;
+
+            const path =
+                document.createElementNS(
+                    SVG_NS,
+                    'path'
+                );
+
+            path.setAttribute(
+                'id',
+                pathId
+            );
+
+            path.setAttribute(
+                'class',
+                'erd-relation-line'
+            );
+
+            path.setAttribute(
+                'd',
+                pathData
+            );
+
+            path.setAttribute(
+                'data-from',
+                `${relation.from_table ?? ''}.${relation.from_column ?? ''}`
+            );
+
+            path.setAttribute(
+                'data-to',
+                `${relation.to_table ?? ''}.${relation.to_column ?? ''}`
+            );
+
+            relationLines.appendChild(
+                path
+            );
+
+            createFlowAnimation(
+                pathData,
+                pathId,
+                index
+            );
+        }
+    );
+}
+
+function createFlowAnimation(
+    pathData,
+    pathId,
+    index
+) {
+    const flow =
+        document.createElementNS(
+            SVG_NS,
+            'path'
+        );
+
+    flow.setAttribute(
+        'class',
+        'erd-relation-flow'
+    );
+
+    flow.setAttribute(
+        'd',
+        pathData
+    );
+
+    flow.style.animationDelay =
+        `${(index % 5) * -0.35}s`;
+
+    relationLines.appendChild(
+        flow
+    );
+
+    const particles = 2;
+
+    for (
+        let i = 0;
+        i < particles;
+        i++
+    ) {
+        createFlowParticle(
+            pathId,
+            i,
+            particles
         );
     }
+}
+
+function createFlowAnimation(
+    pathData,
+    pathId,
+    index
+) {
+    const flow =
+        document.createElementNS(
+            SVG_NS,
+            'path'
+        );
+
+    flow.setAttribute(
+        'class',
+        'erd-relation-flow'
+    );
+
+    flow.setAttribute(
+        'd',
+        pathData
+    );
+
+    flow.style.animationDelay =
+        `${(index % 5) * -0.35}s`;
+
+    relationLines.appendChild(
+        flow
+    );
+
+    const particles = 2;
+
+    for (
+        let i = 0;
+        i < particles;
+        i++
+    ) {
+        createFlowParticle(
+            pathId,
+            i,
+            particles
+        );
+    }
+}
 
     function getConnectionPoint(
         element,
@@ -2637,40 +2765,40 @@
         `;
     }
 
-    function createRelationDot(
-        point,
-        index
-    ) {
-        const circle =
-            document.createElementNS(
-                SVG_NS,
-                'circle'
-            );
+    // function createRelationDot(
+    //     point,
+    //     index
+    // ) {
+    //     const circle =
+    //         document.createElementNS(
+    //             SVG_NS,
+    //             'circle'
+    //         );
 
-        circle.setAttribute(
-            'class',
-            'erd-relation-dot'
-        );
+    //     circle.setAttribute(
+    //         'class',
+    //         'erd-relation-dot'
+    //     );
 
-        circle.setAttribute(
-            'r',
-            '2.5'
-        );
+    //     circle.setAttribute(
+    //         'r',
+    //         '2.5'
+    //     );
 
-        circle.setAttribute(
-            'cx',
-            point.x
-        );
+    //     circle.setAttribute(
+    //         'cx',
+    //         point.x
+    //     );
 
-        circle.setAttribute(
-            'cy',
-            point.y
-        );
+    //     circle.setAttribute(
+    //         'cy',
+    //         point.y
+    //     );
 
-        relationLines.appendChild(
-            circle
-        );
-    }
+    //     relationLines.appendChild(
+    //         circle
+    //     );
+    // }
 
     function makeDraggable(
         element
