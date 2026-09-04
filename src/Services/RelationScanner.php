@@ -11,25 +11,11 @@ class RelationScanner
         foreach ($migrations as $migration) {
             foreach ($migration['tables'] ?? [] as $table) {
                 $tableName = $table['name'] ?? null;
+                if (!$tableName) continue;
 
-                if (!$tableName) {
-                    continue;
-                }
-
-                foreach (
-                    $this->extractForeignKeys($table)
-                    as $foreignKey
-                ) {
-                    $relation = $this->normalizeRelation(
-                        $tableName,
-                        $foreignKey
-                    );
-
-                    if (!$relation) {
-                        continue;
-                    }
-
-                    $relations[] = $relation;
+                foreach ($this->extractForeignKeys($table) as $foreignKey) {
+                    $relation = $this->normalizeRelation($tableName, $foreignKey);
+                    if ($relation) $relations[] = $relation;
                 }
             }
         }
@@ -39,48 +25,40 @@ class RelationScanner
 
     protected function extractForeignKeys(array $table): array
     {
-        foreach ([
-            'foreign_keys',
-            'foreignKeys',
-            'foreign',
-            'constraints',
-        ] as $key) {
-            if (
-                isset($table[$key]) &&
-                is_array($table[$key])
-            ) {
-                return $table[$key];
+        $foreignKeys = [];
+
+        foreach (['foreign_keys', 'foreignKeys', 'foreign', 'constraints'] as $key) {
+            if (!isset($table[$key]) || !is_array($table[$key])) continue;
+            foreach ($table[$key] as $foreignKey) {
+                if (is_array($foreignKey)) $foreignKeys[] = $foreignKey;
             }
         }
 
-        $foreignKeys = [];
-
         foreach ($table['columns'] ?? [] as $column) {
-            if (!is_array($column)) {
-                continue;
+            if (!is_array($column)) continue;
+            $columnName = $column['name'] ?? $column['column'] ?? null;
+
+            foreach (['foreign', 'references', 'constrained'] as $key) {
+                if (!isset($column[$key])) continue;
+                $value = $column[$key];
+
+                if (is_array($value)) {
+                    $foreignKeys[] = array_merge($value, ['column' => $columnName]);
+                } elseif (is_string($value)) {
+                    $foreignKeys[] = [
+                        'column' => $columnName,
+                        $key => $value,
+                        'on' => $column['on'] ?? $column['table'] ?? null,
+                    ];
+                }
             }
 
-            if (
-                isset($column['foreign']) &&
-                is_array($column['foreign'])
-            ) {
-                $foreignKeys[] = array_merge(
-                    $column['foreign'],
-                    [
-                        'column' => $column['name'] ?? null,
-                    ]
-                );
-
-                continue;
-            }
-
-            if (
-                isset($column['references']) &&
-                is_array($column['references'])
-            ) {
+            $onTable = $column['on'] ?? $column['on_table'] ?? $column['constrained_table'] ?? null;
+            if ($columnName && $onTable) {
                 $foreignKeys[] = [
-                    'column' => $column['name'] ?? null,
-                    'references' => $column['references'],
+                    'column' => $columnName,
+                    'table' => $onTable,
+                    'references' => $column['references'] ?? $column['referenced_column'] ?? 'id',
                 ];
             }
         }
@@ -88,67 +66,31 @@ class RelationScanner
         return $foreignKeys;
     }
 
-    protected function normalizeRelation(
-        string $fromTable,
-        array $foreignKey
-    ): ?array {
-        $fromColumn =
-            $foreignKey['column'] ??
-            $foreignKey['from_column'] ??
-            $foreignKey['local_column'] ??
-            $foreignKey['local'] ??
-            null;
+    protected function normalizeRelation(string $fromTable, array $foreignKey): ?array
+    {
+        $fromColumn = $this->firstValue($foreignKey, ['column', 'from_column', 'local_column', 'local']);
+        $toTable = $this->firstValue($foreignKey, ['table', 'to_table', 'referenced_table', 'references_table', 'on', 'on_table', 'constrained_table']);
+        $toColumn = $this->firstValue($foreignKey, ['to_column', 'referenced_column', 'references_column']);
 
-        $toTable =
-            $foreignKey['table'] ??
-            $foreignKey['to_table'] ??
-            $foreignKey['referenced_table'] ??
-            $foreignKey['references_table'] ??
-            null;
-
-        $toColumn =
-            $foreignKey['references'] ??
-            $foreignKey['to_column'] ??
-            $foreignKey['referenced_column'] ??
-            $foreignKey['references_column'] ??
-            'id';
-
-        if (is_array($toColumn)) {
-            $toTable =
-                $toTable ??
-                $toColumn['table'] ??
-                $toColumn['to_table'] ??
-                $toColumn['referenced_table'] ??
-                null;
-
-            $toColumn =
-                $toColumn['column'] ??
-                $toColumn['to_column'] ??
-                $toColumn['referenced_column'] ??
-                'id';
+        $references = $foreignKey['references'] ?? null;
+        if (is_array($references)) {
+            $toTable = $toTable ?? $references['table'] ?? $references['to_table'] ?? $references['referenced_table'] ?? null;
+            $toColumn = $toColumn ?? $references['column'] ?? $references['to_column'] ?? $references['referenced_column'] ?? null;
+        } elseif (is_string($references) && $references !== '') {
+            $toColumn = $toColumn ?? $references;
         }
 
-        if (!$toTable) {
-            $references =
-                $foreignKey['references'] ?? null;
-
-            if (is_string($references)) {
-                $toColumn = $references;
-            }
-
-            $toTable =
-                $foreignKey['on'] ??
-                $foreignKey['on_table'] ??
-                null;
+        $constrained = $foreignKey['constrained'] ?? null;
+        if (is_array($constrained)) {
+            $toTable = $toTable ?? $constrained['table'] ?? $constrained['on'] ?? null;
+            $toColumn = $toColumn ?? $constrained['column'] ?? $constrained['references'] ?? null;
+        } elseif (is_string($constrained) && $constrained !== '') {
+            $toTable = $toTable ?? $constrained;
         }
 
-        if (
-            !$fromColumn ||
-            !$toTable ||
-            !$toColumn
-        ) {
-            return null;
-        }
+        $toColumn = $toColumn ?: 'id';
+
+        if (!$fromColumn || !$toTable || !$toColumn) return null;
 
         return [
             'from_table' => $fromTable,
@@ -159,22 +101,21 @@ class RelationScanner
         ];
     }
 
-    protected function uniqueRelations(
-        array $relations
-    ): array {
+    protected function firstValue(array $data, array $keys): mixed
+    {
+        foreach ($keys as $key) {
+            if (isset($data[$key]) && $data[$key] !== '') return $data[$key];
+        }
+        return null;
+    }
+
+    protected function uniqueRelations(array $relations): array
+    {
         $unique = [];
-
         foreach ($relations as $relation) {
-            $key = implode('|', [
-                $relation['from_table'],
-                $relation['from_column'],
-                $relation['to_table'],
-                $relation['to_column'],
-            ]);
-
+            $key = implode('|', [$relation['from_table'], $relation['from_column'], $relation['to_table'], $relation['to_column']]);
             $unique[$key] = $relation;
         }
-
         return array_values($unique);
     }
 }

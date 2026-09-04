@@ -1,0 +1,12 @@
+Update the existing boot() publishes array to include ERD CSS and JavaScript:
+
+$this->publishes([
+    __DIR__ . '/../config/erd.php' => config_path('erd.php'),
+], 'erd-config');
+
+$this->publishes([
+    __DIR__ . '/../resources/css/erd.css' => public_path('vendor/erd/erd.css'),
+    __DIR__ . '/../resources/js' => public_path('vendor/erd/js'),
+], 'erd-assets');
+
+Keep loadViewsFrom(), routes and command registration unchanged.
