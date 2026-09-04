@@ -5,6 +5,7 @@ namespace YourVendor\LaravelErd\Commands;
 use Illuminate\Console\Command;
 use YourVendor\LaravelErd\Services\MigrationScanner;
 use YourVendor\LaravelErd\Services\ModelScanner;
+use YourVendor\LaravelErd\Services\RelationScanner;
 use YourVendor\LaravelErd\Services\RegistryManager;
 
 class RefreshCommand extends Command
@@ -16,7 +17,8 @@ class RefreshCommand extends Command
     public function handle(
         RegistryManager $registry,
         MigrationScanner $migrationScanner,
-        ModelScanner $modelScanner
+        ModelScanner $modelScanner,
+        RelationScanner $relationScanner
     ): int {
         if (!config('erd.enabled')) {
             $this->error('Laravel ERD is disabled.');
@@ -54,8 +56,23 @@ class RefreshCommand extends Command
             'Models discovered: ' . count($models)
         );
 
+        $this->info('Scanning relations...');
+
+        $relations = $relationScanner->scan($migrations);
+
+        $registry->put('relations.json', [
+            'version' => 1,
+            'updated_at' => now()->toIso8601String(),
+            'relations' => $relations,
+        ]);
+
+        $this->info(
+            'Relations discovered: ' . count($relations)
+        );
+
         $this->info('Migration registry updated.');
         $this->info('Model registry updated.');
+        $this->info('Relation registry updated.');
 
         return self::SUCCESS;
     }
