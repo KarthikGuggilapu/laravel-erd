@@ -2,15 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <meta
-        name="csrf-token"
-        content="{{ csrf_token() }}"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name') }} ERD</title>
 
@@ -104,11 +97,7 @@
             align-items: center;
             justify-content: center;
             border-radius: 10px;
-            background: linear-gradient(
-                145deg,
-                #263b65,
-                #172746
-            );
+            background: linear-gradient(145deg, #263b65, #172746);
             border: 1px solid rgba(117,157,231,.18);
             color: #9fc0ff;
             font-size: 17px;
@@ -284,6 +273,7 @@
             top: 0;
             width: 5000px;
             height: 5000px;
+            z-index: 2;
         }
 
         .erd-relations {
@@ -295,10 +285,6 @@
             z-index: 1;
             pointer-events: none;
             overflow: visible;
-        }
-
-        .erd-workspace {
-            z-index: 2;
         }
 
         .erd-table {
@@ -648,6 +634,181 @@
             filter: url(#erd-particle-glow);
         }
 
+        .erd-table-selector {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            width: 280px;
+            max-height: calc(100% - 90px);
+            display: flex;
+            flex-direction: column;
+            background: rgba(14,22,39,.94);
+            border: 1px solid rgba(151,176,220,.16);
+            border-radius: 12px;
+            box-shadow:
+                0 20px 50px rgba(0,0,0,.35),
+                0 4px 14px rgba(0,0,0,.2);
+            backdrop-filter: blur(16px);
+            z-index: 70;
+            overflow: hidden;
+        }
+
+        .erd-selector-header {
+            padding: 13px 14px 10px;
+            border-bottom: 1px solid rgba(255,255,255,.06);
+        }
+
+        .erd-selector-title-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .erd-selector-title {
+            color: #edf3fc;
+            font-size: 11px;
+            font-weight: 750;
+        }
+
+        .erd-selector-count {
+            padding: 3px 7px;
+            border-radius: 5px;
+            background: rgba(77,131,232,.13);
+            color: #8fb5ff;
+            font-size: 8px;
+            font-weight: 700;
+        }
+
+        .erd-selector-search-wrap {
+            position: relative;
+            margin-top: 10px;
+        }
+
+        .erd-selector-search {
+            width: 100%;
+            height: 32px;
+            padding: 0 10px 0 30px;
+            border: 1px solid rgba(151,176,220,.12);
+            border-radius: 7px;
+            outline: none;
+            background: #09111f;
+            color: #dce7f8;
+            font-size: 10px;
+        }
+
+        .erd-selector-search:focus {
+            border-color: rgba(77,131,232,.5);
+        }
+
+        .erd-selector-search::placeholder {
+            color: #566681;
+        }
+
+        .erd-selector-search-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #61718b;
+            font-size: 11px;
+            pointer-events: none;
+        }
+
+        .erd-selector-actions {
+            display: flex;
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .erd-selector-action {
+            flex: 1;
+            height: 27px;
+            border: 1px solid rgba(151,176,220,.1);
+            border-radius: 6px;
+            background: rgba(255,255,255,.035);
+            color: #8090a9;
+            cursor: pointer;
+            font-size: 8px;
+            font-weight: 650;
+        }
+
+        .erd-selector-action:hover {
+            background: rgba(255,255,255,.07);
+            color: #dce7f8;
+        }
+
+        .erd-selector-list {
+            overflow-y: auto;
+            padding: 7px;
+        }
+
+        .erd-selector-list::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .erd-selector-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .erd-selector-list::-webkit-scrollbar-thumb {
+            background: rgba(151,176,220,.16);
+            border-radius: 10px;
+        }
+
+        .erd-selector-item {
+            min-height: 34px;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 0 8px;
+            border-radius: 7px;
+            cursor: pointer;
+            transition: background .15s ease;
+        }
+
+        .erd-selector-item:hover {
+            background: rgba(255,255,255,.05);
+        }
+
+        .erd-selector-checkbox {
+            width: 14px;
+            height: 14px;
+            margin: 0;
+            accent-color: #4d83e8;
+            cursor: pointer;
+        }
+
+        .erd-selector-name {
+            min-width: 0;
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: #cbd6e8;
+            font-size: 9px;
+        }
+
+        .erd-selector-item-count {
+            color: #526681;
+            font-size: 8px;
+        }
+
+        .erd-selector-empty {
+            padding: 18px 10px;
+            text-align: center;
+            color: #61718b;
+            font-size: 9px;
+        }
+
+        .erd-selector-footer {
+            padding: 8px 12px;
+            border-top: 1px solid rgba(255,255,255,.06);
+            color: #52627c;
+            font-size: 8px;
+            line-height: 1.5;
+        }
+
         @media (max-width: 900px) {
             .erd-brand-subtitle {
                 display: none;
@@ -659,6 +820,10 @@
 
             .erd-brand {
                 min-width: auto;
+            }
+
+            .erd-table-selector {
+                width: 240px;
             }
         }
 
@@ -681,6 +846,12 @@
 
             .erd-brand-title {
                 font-size: 13px;
+            }
+
+            .erd-table-selector {
+                top: 12px;
+                right: 12px;
+                width: 220px;
             }
         }
 
@@ -838,6 +1009,79 @@
 
         </div>
 
+        <div
+            class="erd-table-selector"
+            id="erdTableSelector"
+        >
+
+            <div class="erd-selector-header">
+
+                <div class="erd-selector-title-row">
+
+                    <div class="erd-selector-title">
+                        Tables
+                    </div>
+
+                    <div
+                        class="erd-selector-count"
+                        id="selectedTableCount"
+                    >
+                        0 / 0
+                    </div>
+
+                </div>
+
+                <div class="erd-selector-search-wrap">
+
+                    <span class="erd-selector-search-icon">
+                        ⌕
+                    </span>
+
+                    <input
+                        type="search"
+                        id="tableSelectorSearch"
+                        class="erd-selector-search"
+                        placeholder="Find table..."
+                        autocomplete="off"
+                    >
+
+                </div>
+
+                <div class="erd-selector-actions">
+
+                    <button
+                        type="button"
+                        class="erd-selector-action"
+                        id="selectAllTables"
+                    >
+                        Select All
+                    </button>
+
+                    <button
+                        type="button"
+                        class="erd-selector-action"
+                        id="clearAllTables"
+                    >
+                        Clear
+                    </button>
+
+                </div>
+
+            </div>
+
+            <div
+                class="erd-selector-list"
+                id="erdTableList"
+            ></div>
+
+            <div class="erd-selector-footer">
+                Select the tables you want to display.
+                Relations are shown only when both connected
+                tables are selected.
+            </div>
+
+        </div>
+
         <div class="erd-bottom">
 
             <div class="erd-info">
@@ -933,84 +1177,64 @@
     ]) !!};
 
     const canvas =
-        document.getElementById(
-            'erdCanvas'
-        );
+        document.getElementById('erdCanvas');
 
     const stage =
-        document.getElementById(
-            'erdStage'
-        );
+        document.getElementById('erdStage');
 
     const workspace =
-        document.getElementById(
-            'erdWorkspace'
-        );
-
-    const relationsSvg =
-        document.getElementById(
-            'erdRelations'
-        );
+        document.getElementById('erdWorkspace');
 
     const relationLines =
-        document.getElementById(
-            'erdRelationLines'
-        );
+        document.getElementById('erdRelationLines');
 
     const searchInput =
-        document.getElementById(
-            'tableSearch'
-        );
+        document.getElementById('tableSearch');
 
     const analyzeButton =
-        document.getElementById(
-            'analyzeButton'
-        );
+        document.getElementById('analyzeButton');
 
     const refreshButton =
-        document.getElementById(
-            'refreshButton'
-        );
+        document.getElementById('refreshButton');
 
     const tableCount =
-        document.getElementById(
-            'tableCount'
-        );
+        document.getElementById('tableCount');
 
     const modelCount =
-        document.getElementById(
-            'modelCount'
-        );
+        document.getElementById('modelCount');
 
     const relationCount =
-        document.getElementById(
-            'relationCount'
-        );
+        document.getElementById('relationCount');
 
     const zoomInButton =
-        document.getElementById(
-            'zoomIn'
-        );
+        document.getElementById('zoomIn');
 
     const zoomOutButton =
-        document.getElementById(
-            'zoomOut'
-        );
+        document.getElementById('zoomOut');
 
     const resetViewButton =
-        document.getElementById(
-            'resetView'
-        );
+        document.getElementById('resetView');
 
     const zoomValue =
-        document.getElementById(
-            'zoomValue'
-        );
+        document.getElementById('zoomValue');
 
     const toast =
-        document.getElementById(
-            'erdToast'
-        );
+        document.getElementById('erdToast');
+
+    const tableSelectorSearch =
+        document.getElementById('tableSelectorSearch');
+
+    const tableList =
+        document.getElementById('erdTableList');
+
+    const selectedTableCount =
+        document.getElementById('selectedTableCount');
+
+    const selectAllTablesButton =
+        document.getElementById('selectAllTables');
+
+    const clearAllTablesButton =
+        document.getElementById('clearAllTables');
 
     let tableElements = [];
 
@@ -1029,6 +1253,10 @@
     let initialPanX = 0;
 
     let initialPanY = 0;
+
+    let selectedTables = new Set();
+
+    let tableSelectionInitialized = false;
 
     const SVG_NS =
         'http://www.w3.org/2000/svg';
@@ -1058,16 +1286,9 @@
                             tables.set(
                                 table.name,
                                 {
-                                    name:
-                                        table.name,
-
-                                    columns:
-                                        table.columns ?? [],
-
-                                    operation:
-                                        table.operation ??
-                                        'table',
-
+                                    name: table.name,
+                                    columns: table.columns ?? [],
+                                    operation: table.operation ?? 'table',
                                     migration:
                                         migration.file ??
                                         migration.id ??
@@ -1079,22 +1300,17 @@
                         }
 
                         const existing =
-                            tables.get(
-                                table.name
-                            );
+                            tables.get(table.name);
 
                         if (
-                            table.operation ===
-                            'create'
+                            table.operation === 'create'
                         ) {
                             existing.columns =
                                 table.columns ??
                                 existing.columns;
                         }
 
-                        if (
-                            table.columns?.length
-                        ) {
+                        if (table.columns?.length) {
 
                             const existingNames =
                                 new Set(
@@ -1133,15 +1349,206 @@
             }
         );
 
-        return [
-            ...tables.values()
-        ];
+        return [...tables.values()];
     }
 
     function getRelations() {
         return (
             window.ERD.relations?.relations ??
             []
+        );
+    }
+
+    function normalizeTableName(name) {
+        return String(name ?? '')
+            .trim()
+            .toLowerCase();
+    }
+
+    function initializeTableSelection(tables) {
+        const currentNames =
+            new Set(
+                tables.map(
+                    table =>
+                        normalizeTableName(table.name)
+                )
+            );
+
+        if (!tableSelectionInitialized) {
+
+            selectedTables =
+                new Set(currentNames);
+
+            tableSelectionInitialized = true;
+
+            return;
+        }
+
+        selectedTables =
+            new Set(
+                [...selectedTables].filter(
+                    name =>
+                        currentNames.has(name)
+                )
+            );
+    }
+
+    function renderTableSelector(tables) {
+        initializeTableSelection(tables);
+
+        const selectorSearch =
+            tableSelectorSearch.value
+                .trim()
+                .toLowerCase();
+
+        const filteredTables =
+            tables.filter(
+                table =>
+                    !selectorSearch ||
+                    normalizeTableName(
+                        table.name
+                    ).includes(selectorSearch)
+            );
+
+        tableList.innerHTML = '';
+
+        if (!filteredTables.length) {
+
+            tableList.innerHTML = `
+                <div class="erd-selector-empty">
+                    No tables found
+                </div>
+            `;
+
+        } else {
+
+            filteredTables.forEach(
+                table => {
+
+                    const name =
+                        normalizeTableName(
+                            table.name
+                        );
+
+                    const item =
+                        document.createElement('label');
+
+                    item.className =
+                        'erd-selector-item';
+
+                    const checkbox =
+                        document.createElement('input');
+
+                    checkbox.type =
+                        'checkbox';
+
+                    checkbox.className =
+                        'erd-selector-checkbox';
+
+                    checkbox.checked =
+                        selectedTables.has(name);
+
+                    checkbox.dataset.table =
+                        name;
+
+                    const nameElement =
+                        document.createElement('span');
+
+                    nameElement.className =
+                        'erd-selector-name';
+
+                    nameElement.textContent =
+                        table.name;
+
+                    const columnCount =
+                        document.createElement('span');
+
+                    columnCount.className =
+                        'erd-selector-item-count';
+
+                    columnCount.textContent =
+                        table.columns.length;
+
+                    checkbox.addEventListener(
+                        'change',
+                        () => {
+
+                            if (checkbox.checked) {
+                                selectedTables.add(name);
+                            } else {
+                                selectedTables.delete(name);
+                            }
+
+                            updateTableSelection();
+                        }
+                    );
+
+                    item.appendChild(checkbox);
+                    item.appendChild(nameElement);
+                    item.appendChild(columnCount);
+
+                    tableList.appendChild(item);
+                }
+            );
+        }
+
+        updateSelectedTableCount(tables);
+    }
+
+    function updateSelectedTableCount(tables = getTables()) {
+        selectedTableCount.textContent =
+            `${selectedTables.size} / ${tables.length}`;
+    }
+
+    function updateTableSelection() {
+        tableElements.forEach(
+            item => {
+
+                const visible =
+                    selectedTables.has(
+                        item.name
+                    );
+
+                item.element.classList.toggle(
+                    'hidden',
+                    !visible
+                );
+            }
+        );
+
+        drawRelations();
+
+        const tables =
+            getTables();
+
+        const visibleRelations =
+            getVisibleRelations();
+
+        relationCount.textContent =
+            `${visibleRelations.length} relation${visibleRelations.length === 1 ? '' : 's'}`;
+
+        updateSelectedTableCount(tables);
+    }
+
+    function getVisibleRelations() {
+        return getRelations().filter(
+            relation => {
+
+                const from =
+                    normalizeTableName(
+                        relation.from_table
+                    );
+
+                const to =
+                    normalizeTableName(
+                        relation.to_table
+                    );
+
+                return (
+                    selectedTables.has(from) &&
+                    selectedTables.has(to)
+                );
+            }
         );
     }
 
@@ -1167,15 +1574,26 @@
         modelCount.textContent =
             `${models.length} model${models.length === 1 ? '' : 's'}`;
 
-        relationCount.textContent =
-            `${relations.length} relation${relations.length === 1 ? '' : 's'}`;
-
         if (!tables.length) {
 
             renderEmptyState();
 
+            tableList.innerHTML = `
+                <div class="erd-selector-empty">
+                    No tables available
+                </div>
+            `;
+
+            selectedTables.clear();
+
+            selectedTableCount.textContent =
+                '0 / 0';
+
             refreshButton.style.display =
                 'none';
+
+            relationCount.textContent =
+                '0 relations';
 
             return;
         }
@@ -1192,15 +1610,18 @@
                 tableElements.push({
                     element,
                     name:
-                        table.name
-                            .toLowerCase()
+                        normalizeTableName(
+                            table.name
+                        )
                 });
             }
         );
 
+        renderTableSelector(tables);
+
         layoutTables();
 
-        drawRelations();
+        updateTableSelection();
 
         applySearch();
 
@@ -1250,9 +1671,7 @@
         index
     ) {
         const element =
-            document.createElement(
-                'div'
-            );
+            document.createElement('div');
 
         element.className =
             'erd-table';
@@ -1267,16 +1686,14 @@
                         if (column.primary) {
                             badges.push({
                                 text: 'PK',
-                                className:
-                                    'primary'
+                                className: 'primary'
                             });
                         }
 
                         if (column.unique) {
                             badges.push({
                                 text: 'UQ',
-                                className:
-                                    'unique'
+                                className: 'unique'
                             });
                         }
 
@@ -1293,8 +1710,7 @@
                                 <div class="erd-column-name">
 
                                     ${escapeHtml(
-                                        column.name ??
-                                        ''
+                                        column.name ?? ''
                                     )}
 
                                     ${
@@ -1312,7 +1728,8 @@
                                                                 </span>
                                                             `
                                                         )
-                                                        .join('')}
+                                                        .join('')
+                                                    }
 
                                                 </span>
                                             `
@@ -1323,8 +1740,7 @@
 
                                 <div class="erd-column-type">
                                     ${escapeHtml(
-                                        column.type ??
-                                        ''
+                                        column.type ?? ''
                                     )}
                                 </div>
 
@@ -1347,8 +1763,7 @@
 
                     <div class="erd-table-operation">
                         ${escapeHtml(
-                            table.operation ??
-                            'table'
+                            table.operation ?? 'table'
                         )}
                     </div>
 
@@ -1356,8 +1771,7 @@
 
                 <div class="erd-table-meta">
                     ${escapeHtml(
-                        table.migration ??
-                        ''
+                        table.migration ?? ''
                     )}
                 </div>
 
@@ -1384,28 +1798,19 @@
             </div>
         `;
 
-        makeDraggable(
-            element
-        );
+        makeDraggable(element);
 
-        workspace.appendChild(
-            element
-        );
+        workspace.appendChild(element);
 
         return element;
     }
 
     function layoutTables() {
         const gapX = 80;
-
         const gapY = 70;
-
         const startX = 100;
-
         const startY = 100;
-
         const columns = 4;
-
         const columnWidth = 380;
 
         let columnHeights =
@@ -1442,24 +1847,17 @@
         );
     }
 
-    function getTableElement(
-        tableName
-    ) {
+    function getTableElement(tableName) {
         const normalized =
-            String(
-                tableName ??
-                ''
-            ).toLowerCase();
+            normalizeTableName(tableName);
 
         const item =
             tableElements.find(
                 table =>
-                    table.name ===
-                    normalized
+                    table.name === normalized
             );
 
-        return item?.element ??
-            null;
+        return item?.element ?? null;
     }
 
     function getConnectionPoint(
@@ -1525,56 +1923,32 @@
         if (Math.abs(dx) >= Math.abs(dy)) {
 
             if (dx >= 0) {
-
                 return {
-                    x:
-                        left +
-                        width,
-
-                    y:
-                        centerY,
-
-                    side:
-                        'right'
+                    x: left + width,
+                    y: centerY,
+                    side: 'right'
                 };
             }
 
             return {
-                x:
-                    left,
-
-                y:
-                    centerY,
-
-                side:
-                    'left'
+                x: left,
+                y: centerY,
+                side: 'left'
             };
         }
 
         if (dy >= 0) {
-
             return {
-                x:
-                    centerX,
-
-                y:
-                    top +
-                    height,
-
-                side:
-                    'bottom'
+                x: centerX,
+                y: top + height,
+                side: 'bottom'
             };
         }
 
         return {
-            x:
-                centerX,
-
-            y:
-                top,
-
-            side:
-                'top'
+            x: centerX,
+            y: top,
+            side: 'top'
         };
     }
 
@@ -1606,51 +1980,26 @@
                 )
             );
 
-        let c1x =
-            from.x;
+        let c1x = from.x;
+        let c1y = from.y;
+        let c2x = to.x;
+        let c2y = to.y;
 
-        let c1y =
-            from.y;
-
-        let c2x =
-            to.x;
-
-        let c2y =
-            to.y;
-
-        if (
-            from.side ===
-            'right'
-        ) {
+        if (from.side === 'right') {
             c1x += curve;
-        } else if (
-            from.side ===
-            'left'
-        ) {
+        } else if (from.side === 'left') {
             c1x -= curve;
-        } else if (
-            from.side ===
-            'bottom'
-        ) {
+        } else if (from.side === 'bottom') {
             c1y += curve;
         } else {
             c1y -= curve;
         }
 
-        if (
-            to.side ===
-            'right'
-        ) {
+        if (to.side === 'right') {
             c2x += curve;
-        } else if (
-            to.side ===
-            'left'
-        ) {
+        } else if (to.side === 'left') {
             c2x -= curve;
-        } else if (
-            to.side ===
-            'bottom'
-        ) {
+        } else if (to.side === 'bottom') {
             c2y += curve;
         } else {
             c2y -= curve;
@@ -1673,7 +2022,10 @@
         clearRelations();
 
         const relations =
-            getRelations();
+            getVisibleRelations();
+
+        relationCount.textContent =
+            `${relations.length} relation${relations.length === 1 ? '' : 's'}`;
 
         if (!relations.length) {
             return;
@@ -1700,12 +2052,8 @@
                 }
 
                 if (
-                    fromElement.classList.contains(
-                        'hidden'
-                    ) ||
-                    toElement.classList.contains(
-                        'hidden'
-                    )
+                    fromElement.classList.contains('hidden') ||
+                    toElement.classList.contains('hidden')
                 ) {
                     return;
                 }
@@ -1754,19 +2102,15 @@
 
                 path.setAttribute(
                     'data-from',
-                    relation.from_table ??
-                    ''
+                    relation.from_table ?? ''
                 );
 
                 path.setAttribute(
                     'data-to',
-                    relation.to_table ??
-                    ''
+                    relation.to_table ?? ''
                 );
 
-                relationLines.appendChild(
-                    path
-                );
+                relationLines.appendChild(path);
 
                 createFlowParticles(
                     path,
@@ -1847,17 +2191,9 @@
                 `#${path.id}`
             );
 
-            motion.appendChild(
-                mpath
-            );
-
-            halo.appendChild(
-                motion
-            );
-
-            relationLines.appendChild(
-                halo
-            );
+            motion.appendChild(mpath);
+            halo.appendChild(motion);
+            relationLines.appendChild(halo);
 
             const particle =
                 document.createElementNS(
@@ -2003,22 +2339,16 @@
         }
     }
 
-    function makeDraggable(
-        element
-    ) {
+    function makeDraggable(element) {
         const header =
             element.querySelector(
                 '.erd-table-header'
             );
 
         let dragging = false;
-
         let startX = 0;
-
         let startY = 0;
-
         let startLeft = 0;
-
         let startTop = 0;
 
         header.addEventListener(
@@ -2076,15 +2406,13 @@
                 element.style.left =
                     `${Math.max(
                         0,
-                        startLeft +
-                        deltaX
+                        startLeft + deltaX
                     )}px`;
 
                 element.style.top =
                     `${Math.max(
                         0,
-                        startTop +
-                        deltaY
+                        startTop + deltaY
                     )}px`;
 
                 drawRelations();
@@ -2119,7 +2447,12 @@
         tableElements.forEach(
             item => {
 
-                const visible =
+                const selected =
+                    selectedTables.has(
+                        item.name
+                    );
+
+                const matches =
                     !search ||
                     item.name.includes(
                         search
@@ -2127,7 +2460,8 @@
 
                 item.element.classList.toggle(
                     'hidden',
-                    !visible
+                    !selected ||
+                    !matches
                 );
             }
         );
@@ -2140,21 +2474,14 @@
             `translate(${panX}px, ${panY}px) scale(${zoom})`;
 
         zoomValue.textContent =
-            `${Math.round(
-                zoom * 100
-            )}%`;
+            `${Math.round(zoom * 100)}%`;
     }
 
-    function setZoom(
-        value
-    ) {
+    function setZoom(value) {
         zoom =
             Math.min(
                 1.8,
-                Math.max(
-                    .45,
-                    value
-                )
+                Math.max(.45, value)
             );
 
         updateView();
@@ -2199,6 +2526,14 @@
             if (
                 event.target.closest(
                     '.erd-controls'
+                )
+            ) {
+                return;
+            }
+
+            if (
+                event.target.closest(
+                    '.erd-table-selector'
                 )
             ) {
                 return;
@@ -2282,8 +2617,7 @@
                     : -.1;
 
             setZoom(
-                zoom +
-                direction
+                zoom + direction
             );
         },
         {
@@ -2295,8 +2629,7 @@
         'click',
         () => {
             setZoom(
-                zoom +
-                .1
+                zoom + .1
             );
         }
     );
@@ -2305,8 +2638,7 @@
         'click',
         () => {
             setZoom(
-                zoom -
-                .1
+                zoom - .1
             );
         }
     );
@@ -2319,6 +2651,55 @@
     searchInput.addEventListener(
         'input',
         applySearch
+    );
+
+    tableSelectorSearch.addEventListener(
+        'input',
+        () => {
+            renderTableSelector(
+                getTables()
+            );
+        }
+    );
+
+    selectAllTablesButton.addEventListener(
+        'click',
+        () => {
+
+            getTables().forEach(
+                table => {
+                    selectedTables.add(
+                        normalizeTableName(
+                            table.name
+                        )
+                    );
+                }
+            );
+
+            renderTableSelector(
+                getTables()
+            );
+
+            applySearch();
+
+            drawRelations();
+        }
+    );
+
+    clearAllTablesButton.addEventListener(
+        'click',
+        () => {
+
+            selectedTables.clear();
+
+            renderTableSelector(
+                getTables()
+            );
+
+            applySearch();
+
+            drawRelations();
+        }
     );
 
     async function analyzeSchema() {
@@ -2416,7 +2797,6 @@
 
         if (!script) {
             window.location.reload();
-
             return;
         }
 
@@ -2427,7 +2807,6 @@
 
         if (!match) {
             window.location.reload();
-
             return;
         }
 
@@ -2446,9 +2825,7 @@
         }
     }
 
-    function setLoading(
-        loading
-    ) {
+    function setLoading(loading) {
         analyzeButton.disabled =
             loading;
 
@@ -2488,9 +2865,7 @@
                 `;
     }
 
-    function showToast(
-        message
-    ) {
+    function showToast(message) {
         toast.textContent =
             message;
 
@@ -2508,30 +2883,13 @@
         );
     }
 
-    function escapeHtml(
-        value
-    ) {
+    function escapeHtml(value) {
         return String(value)
-            .replace(
-                /&/g,
-                '&amp;'
-            )
-            .replace(
-                /</g,
-                '&lt;'
-            )
-            .replace(
-                />/g,
-                '&gt;'
-            )
-            .replace(
-                /"/g,
-                '&quot;'
-            )
-            .replace(
-                /'/g,
-                '&#039;'
-            );
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
     }
 
     analyzeButton.addEventListener(
