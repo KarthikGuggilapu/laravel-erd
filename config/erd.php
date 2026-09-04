@@ -3,7 +3,7 @@
 return [
     'enabled' => env(
         'ERD_ENABLED',
-        !app()->environment('production')
+        env('APP_ENV', 'production') !== 'production'
     ),
 
     'route' => [
