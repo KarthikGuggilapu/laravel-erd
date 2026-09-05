@@ -38,6 +38,8 @@
             --accent: #315ea8;
             --accent-hover: #3b6fc0;
             --success: #55c98a;
+            --danger: #e87575;
+            --warning: #d8ae63;
         }
 
         * {
@@ -111,11 +113,7 @@
             align-items: center;
             justify-content: center;
             border-radius: 10px;
-            background: linear-gradient(
-                145deg,
-                #263b65,
-                #172746
-            );
+            background: linear-gradient(145deg,#263b65,#172746);
             border: 1px solid rgba(117,157,231,.18);
             color: #9fc0ff;
             font-size: 17px;
@@ -167,11 +165,7 @@
             background: transparent;
             color: #687995;
             cursor: pointer;
-            transition:
-                background .16s ease,
-                color .16s ease,
-                border-color .16s ease,
-                transform .16s ease;
+            transition: .16s ease;
         }
 
         .erd-navbar-filter i {
@@ -216,36 +210,13 @@
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
-            transition:
-                opacity .15s ease,
-                transform .15s ease;
+            transition: .15s ease;
             z-index: 500;
         }
 
-        .erd-navbar-filter[data-tooltip]::before {
-            content: "";
-            position: absolute;
-            left: 50%;
-            top: calc(100% + 5px);
-            width: 7px;
-            height: 7px;
-            border-left: 1px solid rgba(151,176,220,.12);
-            border-top: 1px solid rgba(151,176,220,.12);
-            background: #17233a;
-            transform: translateX(-50%) rotate(45deg);
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity .15s ease;
-            z-index: 501;
-        }
-
-        .erd-navbar-filter:hover[data-tooltip]::after,
-        .erd-navbar-filter:hover[data-tooltip]::before {
+        .erd-navbar-filter:hover[data-tooltip]::after {
             opacity: 1;
             visibility: visible;
-        }
-
-        .erd-navbar-filter:hover[data-tooltip]::after {
             transform: translateX(-50%) translateY(0);
         }
 
@@ -281,9 +252,6 @@
             background: #0a1222;
             color: #edf3fc;
             font-size: 11px;
-            transition:
-                border-color .16s ease,
-                background .16s ease;
         }
 
         .erd-search::placeholder {
@@ -309,10 +277,7 @@
             cursor: pointer;
             font-size: 11px;
             font-weight: 650;
-            transition:
-                background .18s ease,
-                border-color .18s ease,
-                transform .18s ease;
+            transition: .18s ease;
         }
 
         .erd-button:hover {
@@ -337,7 +302,6 @@
         .erd-button:disabled {
             opacity: .55;
             cursor: wait;
-            transform: none;
         }
 
         .erd-button-icon {
@@ -431,6 +395,13 @@
             box-shadow:
                 0 22px 55px rgba(0,0,0,.34),
                 0 0 0 1px rgba(77,131,232,.04);
+        }
+
+        .erd-table.selected-history {
+            border-color: rgba(120,165,245,.65);
+            box-shadow:
+                0 22px 55px rgba(0,0,0,.35),
+                0 0 0 2px rgba(77,131,232,.12);
         }
 
         .erd-table.hidden {
@@ -564,6 +535,243 @@
             display: none;
         }
 
+        .erd-table-history {
+            position: fixed;
+            left: 18px;
+            top: 88px;
+            width: 330px;
+            max-height: calc(100vh - 155px);
+            display: none;
+            flex-direction: column;
+            border: 1px solid rgba(151,176,220,.13);
+            border-radius: 11px;
+            background: rgba(14,22,39,.96);
+            box-shadow: 0 18px 45px rgba(0,0,0,.32);
+            backdrop-filter: blur(12px);
+            z-index: 45;
+            overflow: hidden;
+        }
+
+        .erd-table-history.open {
+            display: flex;
+        }
+
+        .erd-history-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 13px;
+            border-bottom: 1px solid rgba(151,176,220,.09);
+            background: rgba(24,38,64,.75);
+        }
+
+        .erd-history-heading {
+            min-width: 0;
+        }
+
+        .erd-history-title {
+            color: #edf3fc;
+            font-size: 12px;
+            font-weight: 750;
+        }
+
+        .erd-history-subtitle {
+            margin-top: 3px;
+            color: #697b97;
+            font-size: 9px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .erd-history-close {
+            width: 28px;
+            height: 28px;
+            flex: 0 0 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            background: rgba(255,255,255,.035);
+            color: #73849f;
+            cursor: pointer;
+        }
+
+        .erd-history-close:hover {
+            background: rgba(255,255,255,.07);
+            color: #e3ebf8;
+        }
+
+        .erd-history-body {
+            overflow-y: auto;
+            padding: 10px;
+            scrollbar-width: thin;
+            scrollbar-color: #273754 transparent;
+        }
+
+        .erd-history-body::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .erd-history-body::-webkit-scrollbar-thumb {
+            background: #273754;
+            border-radius: 10px;
+        }
+
+        .erd-history-section {
+            margin-bottom: 12px;
+            border: 1px solid rgba(151,176,220,.08);
+            border-radius: 8px;
+            background: rgba(255,255,255,.018);
+            overflow: hidden;
+        }
+
+        .erd-history-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .erd-history-section-title {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 9px 10px;
+            border-bottom: 1px solid rgba(151,176,220,.07);
+            color: #9cb1d2;
+            font-size: 9px;
+            font-weight: 750;
+            text-transform: uppercase;
+            letter-spacing: .45px;
+        }
+
+        .erd-history-section-title i {
+            color: #7298db;
+            font-size: 10px;
+        }
+
+        .erd-history-content {
+            padding: 9px 10px;
+        }
+
+        .erd-history-item {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,.045);
+        }
+
+        .erd-history-item:first-child {
+            padding-top: 0;
+        }
+
+        .erd-history-item:last-child {
+            padding-bottom: 0;
+            border-bottom: 0;
+        }
+
+        .erd-history-item-title {
+            color: #dce6f5;
+            font-size: 10px;
+            font-weight: 650;
+            line-height: 1.4;
+            word-break: break-word;
+        }
+
+        .erd-history-item-meta {
+            margin-top: 3px;
+            color: #667895;
+            font-size: 8px;
+            line-height: 1.5;
+            word-break: break-word;
+        }
+
+        .erd-history-empty {
+            color: #61728d;
+            font-size: 9px;
+            line-height: 1.5;
+        }
+
+        .erd-history-relation {
+            padding: 9px 0;
+            border-bottom: 1px solid rgba(255,255,255,.045);
+        }
+
+        .erd-history-relation:first-child {
+            padding-top: 0;
+        }
+
+        .erd-history-relation:last-child {
+            padding-bottom: 0;
+            border-bottom: 0;
+        }
+
+        .erd-history-relation-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .erd-history-relation-name {
+            color: #dce6f5;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .erd-history-status {
+            flex: 0 0 auto;
+            padding: 3px 5px;
+            border-radius: 4px;
+            font-size: 7px;
+            font-weight: 750;
+            text-transform: uppercase;
+        }
+
+        .erd-history-status.matched {
+            background: rgba(85,201,138,.11);
+            color: #79dda5;
+        }
+
+        .erd-history-status.database_only {
+            background: rgba(216,174,99,.11);
+            color: #d9b875;
+        }
+
+        .erd-history-status.model_only {
+            background: rgba(120,165,245,.11);
+            color: #9dbdff;
+        }
+
+        .erd-history-relation-path {
+            margin-top: 5px;
+            color: #8799b4;
+            font-size: 8px;
+            line-height: 1.5;
+            word-break: break-word;
+        }
+
+        .erd-history-relation-source {
+            margin-top: 5px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .erd-history-tag {
+            padding: 3px 5px;
+            border-radius: 4px;
+            background: rgba(255,255,255,.045);
+            color: #8092ae;
+            font-size: 7px;
+            font-weight: 650;
+        }
+
+        .erd-history-tag.source-model {
+            color: #9dbdff;
+        }
+
+        .erd-history-tag.source-migration {
+            color: #d9b875;
+        }
+
         .erd-view-selector {
             position: fixed;
             left: 18px;
@@ -576,6 +784,10 @@
             box-shadow: 0 14px 35px rgba(0,0,0,.25);
             backdrop-filter: blur(10px);
             z-index: 30;
+        }
+
+        .erd-table-history.open ~ .erd-view-selector {
+            left: 365px;
         }
 
         .erd-selector-title {
@@ -725,10 +937,6 @@
             width: 5px;
         }
 
-        .erd-table-list::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
         .erd-table-list::-webkit-scrollbar-thumb {
             background: #273754;
             border-radius: 10px;
@@ -738,7 +946,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 7px 7px;
+            padding: 7px;
             border-radius: 6px;
             color: #9baac0;
             cursor: pointer;
@@ -930,9 +1138,7 @@
             stroke-width: 1.5;
             opacity: .55;
             marker-end: url(#erd-arrow);
-            transition:
-                opacity .15s ease,
-                stroke-width .15s ease;
+            transition: .15s ease;
         }
 
         .erd-relation-line:hover {
@@ -944,10 +1150,6 @@
             fill: #8fb8ff;
             opacity: .95;
             filter: url(#erd-particle-glow);
-        }
-
-        .erd-flow-particle-core {
-            fill: #dceaff;
         }
 
         .erd-flow-particle-halo {
@@ -967,6 +1169,10 @@
 
             .erd-search {
                 width: 180px;
+            }
+
+            .erd-table-history {
+                width: 300px;
             }
         }
 
@@ -997,6 +1203,17 @@
 
             .erd-search {
                 width: 150px;
+            }
+
+            .erd-table-history {
+                left: 10px;
+                width: min(320px, calc(100vw - 20px));
+            }
+
+            .erd-table-history.open ~ .erd-view-selector {
+                left: 10px;
+                top: auto;
+                bottom: 80px;
             }
         }
 
@@ -1036,7 +1253,6 @@
 
         @media (prefers-reduced-motion: reduce) {
             .erd-flow-particle,
-            .erd-flow-particle-core,
             .erd-flow-particle-halo {
                 display: none;
             }
@@ -1209,6 +1425,49 @@
             <div
                 class="erd-workspace"
                 id="erdWorkspace"
+            ></div>
+
+        </div>
+
+        <div
+            class="erd-table-history"
+            id="erdTableHistory"
+        >
+
+            <div class="erd-history-header">
+
+                <div class="erd-history-heading">
+
+                    <div
+                        class="erd-history-title"
+                        id="erdHistoryTitle"
+                    >
+                        Table History
+                    </div>
+
+                    <div
+                        class="erd-history-subtitle"
+                        id="erdHistorySubtitle"
+                    >
+                        Select a table to inspect its history.
+                    </div>
+
+                </div>
+
+                <button
+                    type="button"
+                    class="erd-history-close"
+                    id="erdHistoryClose"
+                    title="Close history"
+                >
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+
+            </div>
+
+            <div
+                class="erd-history-body"
+                id="erdHistoryBody"
             ></div>
 
         </div>
@@ -1462,6 +1721,21 @@
     const clearAllTables =
         document.getElementById('clearAllTables');
 
+    const historyPanel =
+        document.getElementById('erdTableHistory');
+
+    const historyTitle =
+        document.getElementById('erdHistoryTitle');
+
+    const historySubtitle =
+        document.getElementById('erdHistorySubtitle');
+
+    const historyBody =
+        document.getElementById('erdHistoryBody');
+
+    const historyClose =
+        document.getElementById('erdHistoryClose');
+
     const viewModeButtons =
         document.querySelectorAll(
             '[data-view-mode]'
@@ -1475,6 +1749,8 @@
     let tableElements = [];
 
     let selectedTables = new Set();
+
+    let selectedHistoryTable = null;
 
     let viewMode = 'simple';
 
@@ -1636,6 +1912,14 @@
     }
 
 
+    function getHistory() {
+        return (
+            window.ERD.history?.tables ??
+            []
+        );
+    }
+
+
     function getRelationEndpoint(
         relation,
         side
@@ -1761,6 +2045,8 @@
 
             renderTableSelector();
 
+            closeHistory();
+
             return;
         }
 
@@ -1828,6 +2114,23 @@
 
         refreshButton.style.display =
             'inline-flex';
+
+        if (
+            selectedHistoryTable
+        ) {
+            const exists =
+                currentNames.has(
+                    selectedHistoryTable
+                );
+
+            if (exists) {
+                renderHistory(
+                    selectedHistoryTable
+                );
+            } else {
+                closeHistory();
+            }
+        }
 
         resetView();
     }
@@ -2012,6 +2315,19 @@
             </div>
         `;
 
+        element.addEventListener(
+            'dblclick',
+            event => {
+                event.stopPropagation();
+
+                openHistory(
+                    normalizeTableName(
+                        table.name
+                    )
+                );
+            }
+        );
+
         makeDraggable(
             element
         );
@@ -2025,50 +2341,361 @@
 
 
     function layoutTables() {
-        const gapX = 80;
+        const relations =
+            getRelations();
 
-        const gapY = 70;
+        const visibleItems =
+            tableElements.filter(
+                item =>
+                    selectedTables.has(
+                        item.name
+                    )
+            );
+
+        if (!visibleItems.length) {
+            return;
+        }
+
+        const graph =
+            buildRelationGraph(
+                visibleItems,
+                relations
+            );
+
+        const components =
+            getConnectedComponents(
+                visibleItems,
+                graph
+            );
+
+        const positioned =
+            new Set();
 
         const startX = 100;
 
         const startY = 100;
 
-        const columns = 4;
+        const groupGapX = 180;
 
-        const columnWidth = 380;
+        const groupGapY = 160;
 
-        let columnHeights =
-            Array(columns)
-                .fill(startY);
+        let groupX =
+            startX;
 
-        tableElements.forEach(
-            (item, index) => {
+        let groupY =
+            startY;
 
-                const element =
-                    item.element;
+        const maxGroupWidth =
+            1800;
 
-                const column =
-                    index % columns;
+        components.forEach(
+            component => {
 
-                const x =
-                    startX +
-                    column * columnWidth;
+                const rows = [];
 
-                const y =
-                    columnHeights[column];
+                const columnGap = 90;
 
-                element.style.left =
-                    `${x}px`;
+                const rowGap = 90;
 
-                element.style.top =
-                    `${y}px`;
+                const componentWidth =
+                    component.length > 4
+                        ? 4
+                        : Math.max(
+                            1,
+                            component.length
+                        );
 
-                columnHeights[column] =
-                    y +
-                    element.offsetHeight +
-                    gapY;
+                component.forEach(
+                    (name, index) => {
+
+                        const item =
+                            tableElements.find(
+                                candidate =>
+                                    candidate.name ===
+                                    name
+                            );
+
+                        if (!item) {
+                            return;
+                        }
+
+                        const column =
+                            index %
+                            componentWidth;
+
+                        const row =
+                            Math.floor(
+                                index /
+                                componentWidth
+                            );
+
+                        if (!rows[row]) {
+                            rows[row] = [];
+                        }
+
+                        rows[row].push(
+                            item
+                        );
+
+                        positioned.add(
+                            name
+                        );
+                    }
+                );
+
+                let componentHeight = 0;
+
+                rows.forEach(
+                    row => {
+
+                        let rowWidth = 0;
+
+                        let rowHeight = 0;
+
+                        row.forEach(
+                            item => {
+
+                                rowWidth +=
+                                    item.element.offsetWidth +
+                                    columnGap;
+
+                                rowHeight =
+                                    Math.max(
+                                        rowHeight,
+                                        item.element.offsetHeight
+                                    );
+
+                            }
+                        );
+
+                        componentHeight +=
+                            rowHeight +
+                            rowGap;
+
+                        if (
+                            groupX +
+                            rowWidth >
+                            maxGroupWidth
+                        ) {
+                            groupX =
+                                startX;
+                            groupY +=
+                                componentHeight +
+                                groupGapY;
+                        }
+
+                        let currentX =
+                            groupX;
+
+                        row.forEach(
+                            item => {
+
+                                item.element.style.left =
+                                    `${currentX}px`;
+
+                                item.element.style.top =
+                                    `${groupY + componentHeight - rowHeight - rowGap}px`;
+
+                                currentX +=
+                                    item.element.offsetWidth +
+                                    columnGap;
+
+                            }
+                        );
+                    }
+                );
+
+                groupX +=
+                    600;
+
+                if (
+                    groupX >
+                    maxGroupWidth
+                ) {
+                    groupX =
+                        startX;
+
+                    groupY +=
+                        650;
+                }
             }
         );
+
+        visibleItems.forEach(
+            item => {
+
+                if (
+                    positioned.has(
+                        item.name
+                    )
+                ) {
+                    return;
+                }
+
+                item.element.style.left =
+                    `${groupX}px`;
+
+                item.element.style.top =
+                    `${groupY}px`;
+
+                groupX += 420;
+
+                if (
+                    groupX >
+                    maxGroupWidth
+                ) {
+                    groupX =
+                        startX;
+
+                    groupY += 300;
+                }
+            }
+        );
+    }
+
+
+    function buildRelationGraph(
+        items,
+        relations
+    ) {
+        const allowed =
+            new Set(
+                items.map(
+                    item =>
+                        item.name
+                )
+            );
+
+        const graph =
+            new Map();
+
+        allowed.forEach(
+            name => {
+                graph.set(
+                    name,
+                    new Set()
+                );
+            }
+        );
+
+        relations.forEach(
+            relation => {
+
+                const from =
+                    getRelationEndpoint(
+                        relation,
+                        'from'
+                    );
+
+                const to =
+                    getRelationEndpoint(
+                        relation,
+                        'to'
+                    );
+
+                if (
+                    !from ||
+                    !to ||
+                    !allowed.has(from) ||
+                    !allowed.has(to)
+                ) {
+                    return;
+                }
+
+                graph
+                    .get(from)
+                    .add(to);
+
+                graph
+                    .get(to)
+                    .add(from);
+            }
+        );
+
+        return graph;
+    }
+
+
+    function getConnectedComponents(
+        items,
+        graph
+    ) {
+        const visited =
+            new Set();
+
+        const components = [];
+
+        items.forEach(
+            item => {
+
+                if (
+                    visited.has(
+                        item.name
+                    )
+                ) {
+                    return;
+                }
+
+                const component = [];
+
+                const queue = [
+                    item.name
+                ];
+
+                visited.add(
+                    item.name
+                );
+
+                while (
+                    queue.length
+                ) {
+                    const current =
+                        queue.shift();
+
+                    component.push(
+                        current
+                    );
+
+                    const neighbors =
+                        graph.get(
+                            current
+                        ) ?? new Set();
+
+                    neighbors.forEach(
+                        neighbor => {
+
+                            if (
+                                visited.has(
+                                    neighbor
+                                )
+                            ) {
+                                return;
+                            }
+
+                            visited.add(
+                                neighbor
+                            );
+
+                            queue.push(
+                                neighbor
+                            );
+                        }
+                    );
+                }
+
+                components.push(
+                    component
+                );
+            }
+        );
+
+        components.sort(
+            (a, b) =>
+                b.length -
+                a.length
+        );
+
+        return components;
     }
 
 
@@ -2157,6 +2784,13 @@
                             selectedTables.delete(
                                 name
                             );
+
+                            if (
+                                selectedHistoryTable ===
+                                name
+                            ) {
+                                closeHistory();
+                            }
                         }
 
                         updateTableSelectorCount();
@@ -2182,6 +2816,18 @@
 
                 item.appendChild(
                     label
+                );
+
+                item.addEventListener(
+                    'dblclick',
+                    event => {
+
+                        event.preventDefault();
+
+                        openHistory(
+                            name
+                        );
+                    }
                 );
 
                 tableList.appendChild(
@@ -2275,6 +2921,8 @@
             );
 
         updateTableSelectorCount();
+
+        closeHistory();
 
         applySearch();
     }
@@ -2433,7 +3081,7 @@
 
                 side:
                     'left'
-            };
+                };
         }
 
         if (deltaY >= 0) {
@@ -2938,6 +3586,570 @@
     }
 
 
+    function openHistory(
+        tableName
+    ) {
+        const normalized =
+            normalizeTableName(
+                tableName
+            );
+
+        selectedHistoryTable =
+            normalized;
+
+        historyPanel.classList.add(
+            'open'
+        );
+
+        renderHistory(
+            normalized
+        );
+
+        highlightHistoryTable(
+            normalized
+        );
+    }
+
+
+    function closeHistory() {
+        selectedHistoryTable =
+            null;
+
+        historyPanel.classList.remove(
+            'open'
+        );
+
+        historyBody.innerHTML = '';
+
+        historyTitle.textContent =
+            'Table History';
+
+        historySubtitle.textContent =
+            'Select a table to inspect its history.';
+
+        tableElements.forEach(
+            item => {
+                item.element.classList.remove(
+                    'selected-history'
+                );
+            }
+        );
+    }
+
+
+    function highlightHistoryTable(
+        tableName
+    ) {
+        tableElements.forEach(
+            item => {
+
+                item.element.classList.toggle(
+                    'selected-history',
+                    item.name ===
+                    tableName
+                );
+            }
+        );
+    }
+
+
+    function getTableHistory(
+        tableName
+    ) {
+        const normalized =
+            normalizeTableName(
+                tableName
+            );
+
+        return getHistory().find(
+            item =>
+                normalizeTableName(
+                    item.table
+                ) ===
+                normalized
+        ) ?? null;
+    }
+
+
+    function renderHistory(
+        tableName
+    ) {
+        const history =
+            getTableHistory(
+                tableName
+            );
+
+        const table =
+            getTables().find(
+                item =>
+                    normalizeTableName(
+                        item.name
+                    ) ===
+                    normalizeTableName(
+                        tableName
+                    )
+            );
+
+        historyTitle.textContent =
+            table?.name ??
+            tableName;
+
+        historySubtitle.textContent =
+            'Schema history and relationship details';
+
+        if (!history) {
+
+            historyBody.innerHTML = `
+                <div class="erd-history-section">
+
+                    <div class="erd-history-section-title">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                        History
+                    </div>
+
+                    <div class="erd-history-content">
+
+                        <div class="erd-history-empty">
+                            No recorded history was found for this table.
+                        </div>
+
+                    </div>
+
+                </div>
+            `;
+
+            highlightHistoryTable(
+                tableName
+            );
+
+            return;
+        }
+
+        historyBody.innerHTML = `
+            ${renderMigrationHistory(
+                history.migrations ?? []
+            )}
+
+            ${renderModelHistory(
+                history.models ?? []
+            )}
+
+            ${renderRelationHistory(
+                history.relations ?? []
+            )}
+        `;
+
+        highlightHistoryTable(
+            tableName
+        );
+    }
+
+
+    function renderMigrationHistory(
+        migrations
+    ) {
+        if (!migrations.length) {
+            return `
+                <div class="erd-history-section">
+
+                    <div class="erd-history-section-title">
+                        <i class="fa-solid fa-database"></i>
+                        Migration History
+                    </div>
+
+                    <div class="erd-history-content">
+
+                        <div class="erd-history-empty">
+                            No migration history recorded.
+                        </div>
+
+                    </div>
+
+                </div>
+            `;
+        }
+
+        return `
+            <div class="erd-history-section">
+
+                <div class="erd-history-section-title">
+                    <i class="fa-solid fa-database"></i>
+                    Migration History
+                </div>
+
+                <div class="erd-history-content">
+
+                    ${migrations
+                        .map(
+                            migration => `
+                                <div class="erd-history-item">
+
+                                    <div class="erd-history-item-title">
+                                        ${escapeHtml(
+                                            migration.file ??
+                                            'Migration'
+                                        )}
+                                    </div>
+
+                                    <div class="erd-history-item-meta">
+
+                                        Operation:
+                                        ${escapeHtml(
+                                            migration.operation ??
+                                            'table'
+                                        )}
+
+                                        ${
+                                            migration.columns?.length
+                                                ? `
+                                                    ·
+                                                    ${migration.columns.length}
+                                                    column${migration.columns.length === 1 ? '' : 's'}
+                                                `
+                                                : ''
+                                        }
+
+                                    </div>
+
+                                </div>
+                            `
+                        )
+                        .join('')
+                    }
+
+                </div>
+
+            </div>
+        `;
+    }
+
+
+    function renderModelHistory(
+        models
+    ) {
+        if (!models.length) {
+            return `
+                <div class="erd-history-section">
+
+                    <div class="erd-history-section-title">
+                        <i class="fa-solid fa-cube"></i>
+                        Model
+                    </div>
+
+                    <div class="erd-history-content">
+
+                        <div class="erd-history-empty">
+                            No Eloquent model was detected for this table.
+                        </div>
+
+                    </div>
+
+                </div>
+            `;
+        }
+
+        return `
+            <div class="erd-history-section">
+
+                <div class="erd-history-section-title">
+                    <i class="fa-solid fa-cube"></i>
+                    Model
+                </div>
+
+                <div class="erd-history-content">
+
+                    ${models
+                        .map(
+                            model => {
+
+                                const modelRelations =
+                                    model.relations ?? [];
+
+                                return `
+                                    <div class="erd-history-item">
+
+                                        <div class="erd-history-item-title">
+                                            ${escapeHtml(
+                                                model.name ??
+                                                model.class ??
+                                                'Model'
+                                            )}
+                                        </div>
+
+                                        <div class="erd-history-item-meta">
+
+                                            ${escapeHtml(
+                                                model.file ??
+                                                ''
+                                            )}
+
+                                            ${
+                                                modelRelations.length
+                                                    ? `
+                                                        <br>
+                                                        ${modelRelations.length}
+                                                        Eloquent relation${modelRelations.length === 1 ? '' : 's'}
+                                                    `
+                                                    : ''
+                                            }
+
+                                        </div>
+
+                                        ${
+                                            modelRelations.length
+                                                ? `
+                                                    <div
+                                                        class="erd-history-item-meta"
+                                                        style="margin-top:6px;"
+                                                    >
+                                                        ${modelRelations
+                                                            .map(
+                                                                relation => `
+                                                                    <div style="margin-bottom:3px;">
+                                                                        ${escapeHtml(
+                                                                            relation.name ??
+                                                                            'relation'
+                                                                        )}
+                                                                        ·
+                                                                        ${escapeHtml(
+                                                                            relation.type ??
+                                                                            ''
+                                                                        )}
+                                                                        ${
+                                                                            relation.related_table
+                                                                                ? `→ ${escapeHtml(relation.related_table)}`
+                                                                                : ''
+                                                                        }
+                                                                    </div>
+                                                                `
+                                                            )
+                                                            .join('')
+                                                        }
+                                                    </div>
+                                                `
+                                                : ''
+                                        }
+
+                                    </div>
+                                `;
+                            }
+                        )
+                        .join('')
+                    }
+
+                </div>
+
+            </div>
+        `;
+    }
+
+
+    function renderRelationHistory(
+        relations
+    ) {
+        if (!relations.length) {
+            return `
+                <div class="erd-history-section">
+
+                    <div class="erd-history-section-title">
+                        <i class="fa-solid fa-code-branch"></i>
+                        Relations
+                    </div>
+
+                    <div class="erd-history-content">
+
+                        <div class="erd-history-empty">
+                            This table has no detected relationships.
+                        </div>
+
+                    </div>
+
+                </div>
+            `;
+        }
+
+        return `
+            <div class="erd-history-section">
+
+                <div class="erd-history-section-title">
+                    <i class="fa-solid fa-code-branch"></i>
+                    Relations
+                </div>
+
+                <div class="erd-history-content">
+
+                    ${relations
+                        .map(
+                            relation => {
+
+                                const from =
+                                    relation.from_table ??
+                                    relation.from ??
+                                    relation.table ??
+                                    '';
+
+                                const to =
+                                    relation.to_table ??
+                                    relation.to ??
+                                    relation.referenced_table ??
+                                    '';
+
+                                const status =
+                                    String(
+                                        relation.status ??
+                                        'matched'
+                                    )
+                                        .toLowerCase()
+                                        .replace(
+                                            /\s+/g,
+                                            '_'
+                                        );
+
+                                const source =
+                                    relation.source ??
+                                    '';
+
+                                const sourceFile =
+                                    relation.source_file ??
+                                    relation.migration ??
+                                    relation.model_file ??
+                                    '';
+
+                                const relationName =
+                                    relation.relation ??
+                                    relation.eloquent_relation ??
+                                    relation.type ??
+                                    'relationship';
+
+                                return `
+                                    <div class="erd-history-relation">
+
+                                        <div class="erd-history-relation-top">
+
+                                            <div class="erd-history-relation-name">
+                                                ${escapeHtml(
+                                                    relationName
+                                                )}
+                                            </div>
+
+                                            <span
+                                                class="erd-history-status ${escapeHtml(status)}"
+                                            >
+                                                ${escapeHtml(
+                                                    status.replace(
+                                                        /_/g,
+                                                        ' '
+                                                    )
+                                                )}
+                                            </span>
+
+                                        </div>
+
+                                        <div class="erd-history-relation-path">
+
+                                            ${escapeHtml(
+                                                from
+                                            )}
+
+                                            <i
+                                                class="fa-solid fa-arrow-right"
+                                                style="font-size:7px;margin:0 4px;"
+                                            ></i>
+
+                                            ${escapeHtml(
+                                                to
+                                            )}
+
+                                            ${
+                                                relation.foreign_key ||
+                                                relation.local_key
+                                                    ? `
+                                                        <br>
+                                                        ${
+                                                            relation.foreign_key
+                                                                ? `foreign: ${escapeHtml(relation.foreign_key)}`
+                                                                : ''
+                                                        }
+
+                                                        ${
+                                                            relation.local_key
+                                                                ? ` · local: ${escapeHtml(relation.local_key)}`
+                                                                : ''
+                                                        }
+                                                    `
+                                                    : ''
+                                            }
+
+                                        </div>
+
+                                        <div class="erd-history-relation-source">
+
+                                            ${
+                                                source
+                                                    ? `
+                                                        <span
+                                                            class="erd-history-tag ${
+                                                                source === 'model'
+                                                                    ? 'source-model'
+                                                                    : 'source-migration'
+                                                            }"
+                                                        >
+                                                            ${escapeHtml(
+                                                                source
+                                                            )}
+                                                        </span>
+                                                    `
+                                                    : ''
+                                            }
+
+                                            ${
+                                                relation.database_constraint
+                                                    ? `
+                                                        <span class="erd-history-tag">
+                                                            DB constraint
+                                                        </span>
+                                                    `
+                                                    : ''
+                                            }
+
+                                            ${
+                                                relation.eloquent_relation
+                                                    ? `
+                                                        <span class="erd-history-tag">
+                                                            Eloquent
+                                                        </span>
+                                                    `
+                                                    : ''
+                                            }
+
+                                            ${
+                                                sourceFile
+                                                    ? `
+                                                        <span class="erd-history-tag">
+                                                            ${escapeHtml(
+                                                                sourceFile
+                                                            )}
+                                                        </span>
+                                                    `
+                                                    : ''
+                                            }
+
+                                        </div>
+
+                                    </div>
+                                `;
+                            }
+                        )
+                        .join('')
+                    }
+
+                </div>
+
+            </div>
+        `;
+    }
+
+
     function updateView() {
         stage.style.transform =
             `translate(${panX}px, ${panY}px) scale(${zoom})`;
@@ -3021,6 +4233,14 @@
             if (
                 event.target.closest(
                     '.erd-table-selector'
+                )
+            ) {
+                return;
+            }
+
+            if (
+                event.target.closest(
+                    '.erd-table-history'
                 )
             ) {
                 return;
@@ -3111,6 +4331,14 @@
                 return;
             }
 
+            if (
+                event.target.closest(
+                    '.erd-table-history'
+                )
+            ) {
+                return;
+            }
+
             if (!event.ctrlKey) {
                 return;
             }
@@ -3158,6 +4386,17 @@
     resetViewButton.addEventListener(
         'click',
         resetView
+    );
+
+
+    historyClose.addEventListener(
+        'click',
+        event => {
+
+            event.stopPropagation();
+
+            closeHistory();
+        }
     );
 
 
@@ -3241,7 +4480,8 @@
         tableSelector,
         tableSelectorSearch,
         selectAllTables,
-        clearAllTables
+        clearAllTables,
+        historyPanel
     ].forEach(
         element => {
 

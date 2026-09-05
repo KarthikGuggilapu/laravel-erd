@@ -354,43 +354,161 @@ class ModelScanner
         );
     }
 
-    protected function extractRelations(
-        string $content,
-        ?string $namespace,
-        string $class,
-        array $uses
-    ): array {
-        $methods =
-            $this->extractMethods(
-                $content
-            );
+    // protected function extractRelations(
+    //     string $content,
+    //     ?string $namespace,
+    //     string $class,
+    //     array $uses
+    // ): array {
+    //     $methods =
+    //         $this->extractMethods(
+    //             $content
+    //         );
 
-        $relationMethods = [
-            'belongsTo',
-            'hasOne',
-            'hasMany',
-            'belongsToMany',
-            'hasOneThrough',
-            'hasManyThrough',
-            'morphOne',
-            'morphMany',
-            'morphTo',
-            'morphToMany',
-            'morphedByMany',
-        ];
+    //     $relationMethods = [
+    //         'belongsTo',
+    //         'hasOne',
+    //         'hasMany',
+    //         'belongsToMany',
+    //         'hasOneThrough',
+    //         'hasManyThrough',
+    //         'morphOne',
+    //         'morphMany',
+    //         'morphTo',
+    //         'morphToMany',
+    //         'morphedByMany',
+    //     ];
 
-        $relations = [];
+    //     $relations = [];
 
-        foreach ($methods as $method) {
-            $body = $method['body'];
+    //     foreach ($methods as $method) {
+    //         $body = $method['body'];
 
+    //         if (!preg_match(
+    //             '/\$this\s*->\s*(' .
+    //             implode(
+    //                 '|',
+    //                 $relationMethods
+    //             ) .
+    //             ')\s*\(/',
+    //             $body,
+    //             $match,
+    //             PREG_OFFSET_CAPTURE
+    //         )) {
+    //             continue;
+    //         }
+
+    //         $relationType =
+    //             $match[1][0];
+
+    //         $methodOffset =
+    //             $match[0][1];
+
+    //         $openPosition =
+    //             strpos(
+    //                 $body,
+    //                 '(',
+    //                 $methodOffset
+    //             );
+
+    //         if (
+    //             $openPosition === false
+    //         ) {
+    //             continue;
+    //         }
+
+    //         $argumentString =
+    //             $this->extractBalanced(
+    //                 $body,
+    //                 $openPosition,
+    //                 '(',
+    //                 ')'
+    //             );
+
+    //         if (
+    //             $argumentString === null
+    //         ) {
+    //             continue;
+    //         }
+
+    //         $arguments =
+    //             $this->splitArguments(
+    //                 $argumentString
+    //             );
+
+    //         $relatedClass =
+    //             $this->resolveClass(
+    //                 $arguments[0] ?? null,
+    //                 $namespace,
+    //                 $uses,
+    //                 $class
+    //             );
+
+    //         if (!$relatedClass) {
+    //             continue;
+    //         }
+
+    //         $relatedTable =
+    //             $this->resolveModelTable(
+    //                 $relatedClass
+    //             );
+
+    //         $relation =
+    //             $this->buildRelation(
+    //                 $method['name'],
+    //                 $relationType,
+    //                 $arguments,
+    //                 $class,
+    //                 $relatedClass,
+    //                 $relatedTable
+    //             );
+
+    //         if ($relation) {
+    //             $relations[] =
+    //                 $relation;
+    //         }
+    //     }
+
+    //     return $relations;
+    // }
+
+protected function extractRelations(
+    string $content
+): array {
+    $namespace = $this->extractNamespace($content);
+    $class = $this->extractClass($content);
+    $uses = $this->extractUses($content);
+
+    if (!$class) {
+        return [];
+    }
+
+    $methods = $this->extractMethods($content);
+
+    $relationMethods = [
+        'hasOne',
+        'hasMany',
+        'hasOneThrough',
+        'hasManyThrough',
+        'belongsTo',
+        'belongsToMany',
+        'morphOne',
+        'morphMany',
+        'morphTo',
+        'morphToMany',
+        'morphedByMany',
+    ];
+
+    $relations = [];
+
+    foreach ($methods as $method) {
+        $body = $method['body'];
+
+        foreach ($relationMethods as $relationMethod) {
             if (!preg_match(
-                '/\$this\s*->\s*(' .
-                implode(
-                    '|',
-                    $relationMethods
-                ) .
-                ')\s*\(/',
+                '/\$this\s*->\s*' .
+                preg_quote($relationMethod, '/') .
+                '\s*\(/',
                 $body,
                 $match,
                 PREG_OFFSET_CAPTURE
@@ -398,79 +516,236 @@ class ModelScanner
                 continue;
             }
 
-            $relationType =
-                $match[1][0];
+            $methodOffset = $match[0][1];
 
-            $methodOffset =
-                $match[0][1];
+            $openPosition = strpos(
+                $body,
+                '(',
+                $methodOffset
+            );
 
-            $openPosition =
-                strpos(
-                    $body,
-                    '(',
-                    $methodOffset
-                );
-
-            if (
-                $openPosition === false
-            ) {
+            if ($openPosition === false) {
                 continue;
             }
 
-            $argumentString =
-                $this->extractBalanced(
-                    $body,
-                    $openPosition,
-                    '(',
-                    ')'
-                );
+            $argumentString = $this->extractBalanced(
+                $body,
+                $openPosition,
+                '(',
+                ')'
+            );
 
-            if (
-                $argumentString === null
-            ) {
+            if ($argumentString === null) {
                 continue;
             }
 
-            $arguments =
-                $this->splitArguments(
-                    $argumentString
-                );
+            $arguments = $this->splitArguments(
+                $argumentString
+            );
 
-            $relatedClass =
-                $this->resolveClass(
-                    $arguments[0] ?? null,
-                    $namespace,
-                    $uses,
-                    $class
-                );
+            $relatedClass = $this->resolveClass(
+                $arguments[0] ?? null,
+                $namespace,
+                $uses,
+                $class
+            );
 
             if (!$relatedClass) {
                 continue;
             }
 
-            $relatedTable =
-                $this->resolveModelTable(
-                    $relatedClass
-                );
+            $relatedTable = $this->resolveModelTable(
+                $relatedClass
+            );
 
-            $relation =
-                $this->buildRelation(
-                    $method['name'],
-                    $relationType,
-                    $arguments,
-                    $class,
-                    $relatedClass,
-                    $relatedTable
-                );
+            $foreignKey = null;
+            $localKey = null;
 
-            if ($relation) {
-                $relations[] =
-                    $relation;
+            if ($relationMethod === 'belongsTo') {
+                $foreignKey =
+                    $this->argumentString(
+                        $arguments[1] ?? null
+                    ) ??
+                    Str::snake($method['name']) . '_id';
+
+                $localKey =
+                    $this->argumentString(
+                        $arguments[2] ?? null
+                    ) ??
+                    'id';
+            } elseif (
+                in_array(
+                    $relationMethod,
+                    [
+                        'hasOne',
+                        'hasMany',
+                    ],
+                    true
+                )
+            ) {
+                $foreignKey =
+                    $this->argumentString(
+                        $arguments[1] ?? null
+                    ) ??
+                    Str::snake($class) . '_id';
+
+                $localKey =
+                    $this->argumentString(
+                        $arguments[2] ?? null
+                    ) ??
+                    'id';
+            } elseif (
+                $relationMethod === 'belongsToMany'
+            ) {
+                $foreignKey =
+                    $this->argumentString(
+                        $arguments[2] ?? null
+                    ) ??
+                    Str::snake($class) . '_id';
+
+                $localKey =
+                    $this->argumentString(
+                        $arguments[3] ?? null
+                    ) ??
+                    Str::snake($relatedClass) . '_id';
+            }
+
+            $relations[] = [
+                'name' => $method['name'],
+                'type' => $relationMethod,
+                'related_class' => $relatedClass,
+                'related_table' => $relatedTable,
+                'foreign_key' => $foreignKey,
+                'local_key' => $localKey,
+            ];
+
+            break;
+        }
+    }
+
+    return $relations;
+}
+
+protected function parseRelationArguments(
+    string $arguments
+): array {
+    $parts = [];
+    $current = '';
+    $quote = null;
+    $depth = 0;
+
+    for ($i = 0; $i < strlen($arguments); $i++) {
+        $char = $arguments[$i];
+
+        if (
+            ($char === "'" || $char === '"') &&
+            (
+                $i === 0 ||
+                $arguments[$i - 1] !== '\\'
+            )
+        ) {
+            if ($quote === null) {
+                $quote = $char;
+            } elseif ($quote === $char) {
+                $quote = null;
             }
         }
 
-        return $relations;
+        if ($quote === null) {
+            if ($char === '(') {
+                $depth++;
+            }
+
+            if ($char === ')') {
+                $depth--;
+            }
+
+            if ($char === ',' && $depth === 0) {
+                $parts[] = trim($current);
+                $current = '';
+
+                continue;
+            }
+        }
+
+        $current .= $char;
     }
+
+    if (trim($current) !== '') {
+        $parts[] = trim($current);
+    }
+
+    return array_map(
+        function ($value) {
+            $value = trim($value);
+
+            $value = trim(
+                $value,
+                "'\" "
+            );
+
+            $value = preg_replace(
+                '/::class$/',
+                '',
+                $value
+            );
+
+            return trim($value, '\\ ');
+        },
+        $parts
+    );
+}
+
+protected function resolveRelatedClass(
+    string $content,
+    string $class
+): string {
+    $class = trim($class, '\\');
+
+    if (str_contains($class, '\\')) {
+        return $class;
+    }
+
+    preg_match_all(
+        '/^use\s+([^;]+);/m',
+        $content,
+        $uses
+    );
+
+    foreach ($uses[1] ?? [] as $use) {
+        $use = trim($use);
+
+        $alias = null;
+
+        if (preg_match(
+            '/^(.+)\s+as\s+([A-Za-z_][A-Za-z0-9_]*)$/',
+            $use,
+            $match
+        )) {
+            $use = trim($match[1]);
+            $alias = $match[2];
+        }
+
+        $importedClass =
+            class_basename($use);
+
+        if (
+            $class === $importedClass ||
+            $class === $alias
+        ) {
+            return trim($use, '\\');
+        }
+    }
+
+    $namespace =
+        $this->extractNamespace(
+            $content
+        );
+
+    return $namespace
+        ? $namespace . '\\' . $class
+        : $class;
+}
 
     protected function buildRelation(
         string $method,

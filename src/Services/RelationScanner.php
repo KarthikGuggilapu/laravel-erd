@@ -20,16 +20,19 @@ class RelationScanner
                     continue;
                 }
 
-                foreach (
-                    $this->extractForeignKeys($table)
-                    as $foreignKey
-                ) {
+                foreach ($this->extractForeignKeys($table) as $foreignKey) {
                     $relation = $this->normalizeMigrationRelation(
                         $tableName,
                         $foreignKey
                     );
 
                     if ($relation) {
+                        $relation['source'] = 'migration';
+                        $relation['source_file'] =
+                            $migration['file'] ??
+                            $migration['id'] ??
+                            null;
+
                         $relations[] = $relation;
                     }
                 }
@@ -37,14 +40,21 @@ class RelationScanner
         }
 
         foreach ($models as $model) {
-            foreach ($model['relations'] ?? [] as $relation) {
-                $normalized = $this->normalizeModelRelation(
+            $modelTable = $model['table'] ?? null;
+
+            if (!$modelTable) {
+                continue;
+            }
+
+            foreach ($model['relations'] ?? [] as $modelRelation) {
+                $relation = $this->normalizeModelRelation(
                     $model,
-                    $relation
+                    $modelRelation,
+                    $models
                 );
 
-                if ($normalized) {
-                    $relations[] = $normalized;
+                if ($relation) {
+                    $relations[] = $relation;
                 }
             }
         }
@@ -120,12 +130,7 @@ class RelationScanner
                     'constrained',
                 ] as $key
             ) {
-                if (
-                    !array_key_exists(
-                        $key,
-                        $column
-                    )
-                ) {
+                if (!array_key_exists($key, $column)) {
                     continue;
                 }
 
@@ -149,46 +154,42 @@ class RelationScanner
         string $fromTable,
         array $foreignKey
     ): ?array {
-        $fromColumn =
-            $this->firstValue(
-                $foreignKey,
-                [
-                    'column',
-                    'from_column',
-                    'local_column',
-                ]
-            );
+        $fromColumn = $this->firstValue(
+            $foreignKey,
+            [
+                'column',
+                'from_column',
+                'local_column',
+            ]
+        );
 
-        $toTable =
-            $this->firstValue(
-                $foreignKey,
-                [
-                    'table',
-                    'to_table',
-                    'referenced_table',
-                    'references_table',
-                    'on',
-                    'on_table',
-                    'constrained_table',
-                ]
-            );
+        $toTable = $this->firstValue(
+            $foreignKey,
+            [
+                'table',
+                'to_table',
+                'referenced_table',
+                'references_table',
+                'on',
+                'on_table',
+                'constrained_table',
+            ]
+        );
 
-        $toColumn =
-            $this->firstValue(
-                $foreignKey,
-                [
-                    'to_column',
-                    'referenced_column',
-                    'references_column',
-                ]
-            );
+        $toColumn = $this->firstValue(
+            $foreignKey,
+            [
+                'to_column',
+                'referenced_column',
+                'references_column',
+            ]
+        );
 
         if (
             isset($foreignKey['references']) &&
             is_array($foreignKey['references'])
         ) {
-            $references =
-                $foreignKey['references'];
+            $references = $foreignKey['references'];
 
             $toTable =
                 $toTable ??
@@ -205,29 +206,165 @@ class RelationScanner
                 null;
         } elseif (
             isset($foreignKey['references']) &&
-            is_string(
-                $foreignKey['references']
-            )
+            is_string($foreignKey['references'])
         ) {
             $toColumn =
                 $toColumn ??
                 $foreignKey['references'];
         }
 
+        $constrained = $foreignKey['constrained'] ?? null;
+
+        if (is_array($constrained)) {
+            $toTable =
+                $toTable ??
+                $constrained['table'] ??
+                $constrained['on'] ??
+                null;
+
+            $toColumn =
+                $toColumn ??
+                $constrained['column'] ??
+                $constrained['references'] ??
+                null;
+        } elseif (
+            is_string($constrained) &&
+            $constrained !== ''
+        ) {
+            $toTable =
+                $toTable ??
+                $constrained;
+        }
+
         if (!$toTable && $fromColumn) {
-            $candidate =
-                Str::beforeLast(
-                    $fromColumn,
-                    '_id'
-                );
+            $candidate = Str::beforeLast(
+                $fromColumn,
+                '_id'
+            );
 
             if ($candidate !== $fromColumn) {
-                $toTable =
-                    Str::plural($candidate);
+                $toTable = Str::plural($candidate);
             }
         }
 
         if (!$fromColumn || !$toTable) {
+            return null;
+        }
+
+        return [
+            'from_table' => $this->normalizeName($fromTable),
+            'from_column' => $this->normalizeName($fromColumn),
+            'to_table' => $this->normalizeName($toTable),
+            'to_column' => $this->normalizeName(
+                $toColumn ?: 'id'
+            ),
+            'type' => 'belongsTo',
+            'source' => 'migration',
+            'source_file' => null,
+            'model' => null,
+            'model_file' => null,
+            'relation' => null,
+            'database_constraint' => true,
+            'eloquent_relation' => false,
+            'status' => 'database_only',
+        ];
+    }
+
+    protected function normalizeModelRelation(
+        array $model,
+        array $relation,
+        array $models
+    ): ?array {
+        $fromTable = $model['table'] ?? null;
+
+        if (!$fromTable) {
+            return null;
+        }
+
+        $relatedClass =
+            $relation['related_class'] ??
+            $relation['related'] ??
+            null;
+
+        if (!$relatedClass) {
+            return null;
+        }
+
+        $relatedModel = null;
+
+        foreach ($models as $candidate) {
+            if (
+                ($candidate['class'] ?? null) ===
+                $relatedClass
+            ) {
+                $relatedModel = $candidate;
+                break;
+            }
+        }
+
+        $toTable =
+            $relatedModel['table'] ??
+            $relation['related_table'] ??
+            $relation['table'] ??
+            $this->classToTable($relatedClass);
+
+        if (!$toTable) {
+            return null;
+        }
+
+        $type = $relation['type'] ?? 'belongsTo';
+
+        $foreignKey =
+            $relation['foreign_key'] ??
+            null;
+
+        $localKey =
+            $relation['local_key'] ??
+            $relation['owner_key'] ??
+            null;
+
+        $method =
+            $relation['name'] ??
+            $relation['method'] ??
+            null;
+
+        if ($type === 'belongsTo') {
+            $fromColumn =
+                $foreignKey ??
+                (
+                    $method
+                        ? $this->snakeCase($method) . '_id'
+                        : null
+                );
+
+            $toColumn = $localKey ?? 'id';
+        } elseif (
+            in_array(
+                $type,
+                [
+                    'hasOne',
+                    'hasMany',
+                ],
+                true
+            )
+        ) {
+            $fromColumn = $localKey ?? 'id';
+
+            $toColumn =
+                $foreignKey ??
+                (
+                    $model['name']
+                        ? $this->snakeCase(
+                            $model['name']
+                        ) . '_id'
+                        : null
+                );
+        } else {
+            $fromColumn = $foreignKey ?? 'id';
+            $toColumn = $localKey ?? 'id';
+        }
+
+        if (!$fromColumn || !$toColumn) {
             return null;
         }
 
@@ -242,155 +379,30 @@ class RelationScanner
                 $this->normalizeName($toTable),
 
             'to_column' =>
-                $this->normalizeName(
-                    $toColumn ?: 'id'
-                ),
+                $this->normalizeName($toColumn),
 
-            'type' =>
-                'belongsTo',
+            'type' => $type,
 
-            'sources' =>
-                ['migration'],
+            'source' => 'model',
 
-            'database_constraint' =>
-                true,
-
-            'eloquent_relation' =>
-                false,
-
-            'status' =>
-                'database_only',
-        ];
-    }
-
-    protected function normalizeModelRelation(
-        array $model,
-        array $relation
-    ): ?array {
-        $fromTable =
-            $model['table'] ??
-            null;
-
-        $type =
-            strtolower(
-                $relation['type'] ?? ''
-            );
-
-        $toTable =
-            $relation['related_table'] ??
-            $relation['table'] ??
-            null;
-
-        if (!$toTable && isset($relation['related'])) {
-            $toTable =
-                $this->classToTable(
-                    $relation['related']
-                );
-        }
-
-        if (!$fromTable || !$toTable) {
-            return null;
-        }
-
-        $fromColumn =
-            $relation['foreign_key'] ??
-            null;
-
-        $toColumn =
-            $relation['owner_key'] ??
-            'id';
-
-        if (
-            in_array(
-                $type,
-                [
-                    'hasmany',
-                    'hasone',
-                    'hasmanythrough',
-                    'hasonethrough',
-                ],
-                true
-            )
-        ) {
-            $fromColumn =
-                $toColumn;
-
-            $toColumn =
-                $relation['foreign_key'] ??
-                Str::snake(
-                    class_basename(
-                        $model['class'] ??
-                        $model['name'] ??
-                        ''
-                    )
-                ) . '_id';
-        }
-
-        if (
-            !$fromColumn &&
-            in_array(
-                $type,
-                [
-                    'belongsto',
-                    'morphto',
-                ],
-                true
-            )
-        ) {
-            $fromColumn =
-                Str::snake(
-                    $relation['name'] ?? ''
-                ) . '_id';
-        }
-
-        if (!$fromColumn) {
-            return null;
-        }
-
-        return [
-            'from_table' =>
-                $this->normalizeName(
-                    $fromTable
-                ),
-
-            'from_column' =>
-                $this->normalizeName(
-                    $fromColumn
-                ),
-
-            'to_table' =>
-                $this->normalizeName(
-                    $toTable
-                ),
-
-            'to_column' =>
-                $this->normalizeName(
-                    $toColumn
-                ),
-
-            'type' =>
-                $type ?: 'belongsTo',
-
-            'sources' =>
-                ['model'],
-
-            'database_constraint' =>
-                false,
-
-            'eloquent_relation' =>
-                true,
+            'source_file' =>
+                $model['file'] ?? null,
 
             'model' =>
-                $model['class'] ??
                 $model['name'] ??
+                $model['class'] ??
                 null,
 
-            'method' =>
-                $relation['name'] ??
-                null,
+            'model_file' =>
+                $model['file'] ?? null,
 
-            'status' =>
-                'model_only',
+            'relation' => $method,
+
+            'database_constraint' => false,
+
+            'eloquent_relation' => true,
+
+            'status' => 'model_only',
         ];
     }
 
@@ -404,40 +416,43 @@ class RelationScanner
                 '|',
                 [
                     $this->normalizeName(
-                        $relation['from_table']
+                        $relation['from_table'] ?? ''
                     ),
                     $this->normalizeName(
                         $relation['from_column'] ?? ''
                     ),
                     $this->normalizeName(
-                        $relation['to_table']
+                        $relation['to_table'] ?? ''
                     ),
                     $this->normalizeName(
-                        $relation['to_column'] ?? 'id'
+                        $relation['to_column'] ?? ''
                     ),
                 ]
             );
 
             if (!isset($merged[$key])) {
                 $merged[$key] = $relation;
-
                 continue;
             }
 
-            $existing =
-                $merged[$key];
+            $existing = $merged[$key];
 
             $sources = array_values(
                 array_unique(
                     array_merge(
                         $existing['sources'] ?? [],
-                        $relation['sources'] ?? []
+                        $relation['sources'] ?? [],
+                        !empty($existing['source'])
+                            ? [$existing['source']]
+                            : [],
+                        !empty($relation['source'])
+                            ? [$relation['source']]
+                            : []
                     )
                 )
             );
 
-            $existing['sources'] =
-                $sources;
+            $existing['sources'] = $sources;
 
             $existing['database_constraint'] =
                 (
@@ -460,66 +475,69 @@ class RelationScanner
                 );
 
             if (
-                in_array(
-                    'migration',
-                    $sources,
-                    true
-                ) &&
-                in_array(
-                    'model',
-                    $sources,
-                    true
-                )
+                in_array('migration', $sources, true) &&
+                in_array('model', $sources, true)
             ) {
-                $existing['status'] =
-                    'matched';
+                $existing['status'] = 'matched';
+            } elseif (
+                in_array('migration', $sources, true)
+            ) {
+                $existing['status'] = 'database_only';
+            } elseif (
+                in_array('model', $sources, true)
+            ) {
+                $existing['status'] = 'model_only';
             }
 
             if (
-                !empty(
-                    $relation['model']
-                )
+                !empty($relation['source_file']) &&
+                ($relation['source'] ?? null) === 'migration'
+            ) {
+                $existing['migration'] =
+                    $relation['source_file'];
+            }
+
+            if (
+                !empty($relation['model'])
             ) {
                 $existing['model'] =
                     $relation['model'];
             }
 
             if (
-                !empty(
-                    $relation['method']
-                )
+                !empty($relation['model_file'])
             ) {
-                $existing['method'] =
-                    $relation['method'];
+                $existing['model_file'] =
+                    $relation['model_file'];
             }
 
-            $merged[$key] =
-                $existing;
+            if (
+                !empty($relation['relation'])
+            ) {
+                $existing['relation'] =
+                    $relation['relation'];
+            }
+
+            $merged[$key] = $existing;
         }
 
-        return array_values(
-            $merged
-        );
+        return array_values($merged);
     }
 
     protected function classToTable(
         string $class
-    ): ?string {
-        $class =
-            trim(
-                $class,
-                '\\'
-            );
-
-        if (!$class) {
-            return null;
-        }
-
+    ): string {
         return Str::snake(
-            Str::plural(
+            Str::pluralStudly(
                 class_basename($class)
             )
         );
+    }
+
+    protected function snakeCase(
+        string $value
+    ): string {
+        return Str::snake($value);
     }
 
     protected function firstValue(
