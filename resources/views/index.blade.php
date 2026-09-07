@@ -1257,6 +1257,301 @@
                 display: none;
             }
         }
+
+
+        /* =====================================================
+           REFINED RELATION COLORS
+           ===================================================== */
+
+        :root {
+            --relation-belongsTo: #78a5f5;
+            --relation-hasOne: #55c98a;
+            --relation-hasMany: #a78bfa;
+            --relation-belongsToMany: #f2b35d;
+            --relation-hasOneThrough: #4dd0e1;
+            --relation-hasManyThrough: #2dd4bf;
+            --relation-morphOne: #f472b6;
+            --relation-morphMany: #fb7185;
+            --relation-morphTo: #fb923c;
+            --relation-morphToMany: #e879f9;
+            --relation-morphedByMany: #c084fc;
+            --relation-unknown: #667995;
+        }
+
+        .erd-relation-line {
+            stroke: var(--relation-color, #667995) !important;
+            stroke-width: 1.7;
+            opacity: .66;
+            marker-end: url(#erd-arrow);
+            vector-effect: non-scaling-stroke;
+        }
+
+        .erd-relation-line:hover {
+            opacity: .96;
+            stroke-width: 2.6;
+        }
+
+        .erd-flow-particle {
+            fill: var(--relation-color, #78a5f5) !important;
+            opacity: .98;
+            filter: url(#erd-particle-glow);
+        }
+
+        .erd-flow-particle-halo {
+            fill: var(--relation-color, #78a5f5) !important;
+            opacity: .25;
+            filter: url(#erd-particle-glow);
+        }
+
+        /* =====================================================
+           TABLE DRAWER REFINEMENT
+           ===================================================== */
+
+        .erd-table-drawer-toggle {
+            position: fixed;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 38px;
+            height: 104px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(151,176,220,.14);
+            border-right: 0;
+            border-radius: 10px 0 0 10px;
+            background: rgba(14,22,39,.96);
+            color: #8da6ca;
+            box-shadow: -10px 14px 34px rgba(0,0,0,.30);
+            backdrop-filter: blur(12px);
+            cursor: pointer;
+            z-index: 90;
+            transition: width .18s ease, background .18s ease, color .18s ease;
+        }
+
+        .erd-table-drawer-toggle:hover {
+            width: 44px;
+            background: #172640;
+            color: #e1ebfb;
+        }
+
+        .erd-table-drawer-toggle-inner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+            font-size: 8px;
+            font-weight: 750;
+            letter-spacing: .6px;
+            text-transform: uppercase;
+        }
+
+        .erd-table-drawer-toggle i {
+            font-size: 11px;
+        }
+
+        .erd-table-drawer-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(3,7,15,.34);
+            backdrop-filter: blur(1px);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 95;
+            transition: opacity .2s ease;
+        }
+
+        .erd-table-drawer-backdrop.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .erd-table-selector {
+            top: 82px !important;
+            right: 13px !important;
+            bottom: 48px;
+            width: 282px !important;
+            max-height: none !important;
+            z-index: 100 !important;
+            transform: translateX(calc(100% + 28px));
+            opacity: 0;
+            pointer-events: none;
+            transition: transform .24s cubic-bezier(.22,.61,.36,1), opacity .20s ease;
+        }
+
+        .erd-table-selector.open {
+            transform: translateX(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .erd-table-selector-title-row {
+            align-items: center;
+        }
+
+        .erd-table-selector-title-wrap {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .erd-table-selector-title-icon {
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            background: rgba(77,131,232,.12);
+            color: #8fb5ff;
+            font-size: 10px;
+        }
+
+        .erd-table-drawer-close {
+            width: 27px;
+            height: 27px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            background: rgba(255,255,255,.035);
+            color: #7386a4;
+            cursor: pointer;
+        }
+
+        .erd-table-drawer-close:hover {
+            background: rgba(255,255,255,.08);
+            color: #edf3fc;
+        }
+
+        .erd-table-item-dot {
+            width: 5px;
+            height: 5px;
+            flex: 0 0 5px;
+            border-radius: 50%;
+            background: #596b88;
+        }
+
+        .erd-table-item-dot.relational {
+            background: #78a5f5;
+            box-shadow: 0 0 7px rgba(120,165,245,.50);
+        }
+
+        .erd-table-item-history {
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+            background: transparent;
+            color: #586b87;
+            cursor: pointer;
+            opacity: 0;
+        }
+
+        .erd-table-item:hover .erd-table-item-history {
+            opacity: 1;
+        }
+
+        .erd-table-item-history:hover {
+            background: rgba(255,255,255,.06);
+            color: #a9c4f7;
+        }
+
+        /* =====================================================
+           RELATION LEGEND
+           ===================================================== */
+
+        .erd-relation-legend {
+            position: fixed;
+            left: 16px;
+            bottom: 74px;
+            width: 225px;
+            padding: 10px 11px;
+            border: 1px solid rgba(151,176,220,.10);
+            border-radius: 9px;
+            background: rgba(9,15,28,.91);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 12px 30px rgba(0,0,0,.24);
+            z-index: 30;
+        }
+
+        .erd-relation-legend-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 7px;
+            border-bottom: 1px solid rgba(255,255,255,.05);
+        }
+
+        .erd-relation-legend-title {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #a9b9d0;
+            font-size: 8px;
+            font-weight: 750;
+            text-transform: uppercase;
+            letter-spacing: .55px;
+        }
+
+        .erd-relation-legend-title i {
+            color: #82a9e8;
+        }
+
+        .erd-relation-legend-count {
+            color: #596b87;
+            font-size: 7px;
+        }
+
+        .erd-relation-legend-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px 10px;
+            padding-top: 8px;
+            max-height: 86px;
+            overflow-y: auto;
+        }
+
+        .erd-relation-legend-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            color: #7587a2;
+            font-size: 7px;
+        }
+
+        .erd-relation-legend-dot {
+            width: 7px;
+            height: 7px;
+            flex: 0 0 7px;
+            border-radius: 50%;
+            box-shadow: 0 0 7px currentColor;
+        }
+
+        .erd-relation-legend-item strong {
+            color: #a4b3c9;
+            font-weight: 650;
+        }
+
+        @media (max-width: 800px) {
+            .erd-table-selector {
+                top: 76px !important;
+                right: 8px !important;
+                bottom: 45px;
+                width: min(300px,calc(100vw - 16px)) !important;
+            }
+
+            .erd-relation-legend {
+                left: 10px;
+                bottom: 73px;
+                width: 190px;
+            }
+        }
+
     </style>
 </head>
 
@@ -1393,7 +1688,7 @@
                     >
                         <path
                             d="M0,0 L8,4 L0,8 Z"
-                            fill="#5f7fae"
+                            fill="context-stroke"
                         />
                     </marker>
 
@@ -1514,8 +1809,18 @@
 
                 <div class="erd-table-selector-title-row">
 
-                    <div class="erd-table-selector-title">
-                        Tables
+                    <div class="erd-table-selector-title-wrap">
+
+                        <div class="erd-table-selector-title-icon">
+                            <i class="fa-solid fa-table-list"></i>
+                        </div>
+
+                        <div>
+                            <div class="erd-table-selector-title">
+                                Tables
+                            </div>
+                        </div>
+
                     </div>
 
                     <div
@@ -1524,6 +1829,16 @@
                     >
                         0 / 0
                     </div>
+
+                    <button
+                        type="button"
+                        class="erd-table-drawer-close"
+                        id="erdTableDrawerClose"
+                        title="Close tables"
+                        aria-label="Close tables"
+                    >
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
 
                 </div>
 
@@ -1563,6 +1878,49 @@
             ></div>
 
         </aside>
+
+
+
+        <!-- Refined tables drawer -->
+        <button
+            type="button"
+            class="erd-table-drawer-toggle"
+            id="erdTableDrawerToggle"
+            aria-expanded="false"
+            aria-label="Open tables"
+            title="Tables"
+        >
+            <span class="erd-table-drawer-toggle-inner">
+                <i class="fa-solid fa-table-list"></i>
+                <span>Tables</span>
+            </span>
+        </button>
+
+        <div
+            class="erd-table-drawer-backdrop"
+            id="erdTableDrawerBackdrop"
+        ></div>
+
+        <!-- Relation type legend -->
+        <div
+            class="erd-relation-legend"
+            id="erdRelationLegend"
+        >
+            <div class="erd-relation-legend-header">
+                <div class="erd-relation-legend-title">
+                    <i class="fa-solid fa-code-branch"></i>
+                    Relation Types
+                </div>
+                <div
+                    class="erd-relation-legend-count"
+                    id="relationLegendCount"
+                >0</div>
+            </div>
+            <div
+                class="erd-relation-legend-list"
+                id="erdRelationLegendList"
+            ></div>
+        </div>
 
         <div class="erd-bottom">
 
@@ -4750,6 +5108,629 @@
         analyzeSchema
     );
 
+
+
+    /* =========================================================
+       REFINED RELATION TYPE COLORS + DRAWER + LAYOUT
+       ========================================================= */
+
+    const ERD_RELATION_TYPES = {
+        belongsTo: { label: 'belongsTo', color: '#78a5f5' },
+        hasOne: { label: 'hasOne', color: '#55c98a' },
+        hasMany: { label: 'hasMany', color: '#a78bfa' },
+        belongsToMany: { label: 'belongsToMany', color: '#f2b35d' },
+        hasOneThrough: { label: 'hasOneThrough', color: '#4dd0e1' },
+        hasManyThrough: { label: 'hasManyThrough', color: '#2dd4bf' },
+        morphOne: { label: 'morphOne', color: '#f472b6' },
+        morphMany: { label: 'morphMany', color: '#fb7185' },
+        morphTo: { label: 'morphTo', color: '#fb923c' },
+        morphToMany: { label: 'morphToMany', color: '#e879f9' },
+        morphedByMany: { label: 'morphedByMany', color: '#c084fc' },
+        unknown: { label: 'relation', color: '#667995' }
+    };
+
+    function getRelationTypeInfoRefined(relation) {
+        const raw =
+            relation?.type ??
+            (typeof relation?.eloquent_relation === 'string'
+                ? relation.eloquent_relation
+                : 'unknown');
+
+        const type = String(raw).trim();
+
+        return ERD_RELATION_TYPES[type] ?? ERD_RELATION_TYPES.unknown;
+    }
+
+    /* Resolve singular/plural scanner differences such as
+       category -> categories, user -> users, order -> orders. */
+    function resolveExistingRelationTable(value) {
+        const name = normalizeTableName(value);
+
+        if (!name) {
+            return '';
+        }
+
+        const available = new Set(
+            getTables().map(table => normalizeTableName(table.name))
+        );
+
+        if (available.has(name)) {
+            return name;
+        }
+
+        if (name.endsWith('ies')) {
+            const singular = name.slice(0, -3) + 'y';
+            if (available.has(singular)) {
+                return singular;
+            }
+        }
+
+        if (name.endsWith('s') && !name.endsWith('ss')) {
+            const singular = name.slice(0, -1);
+            if (available.has(singular)) {
+                return singular;
+            }
+        }
+
+        const plural = name.endsWith('y')
+            ? name.slice(0, -1) + 'ies'
+            : name + 's';
+
+        if (available.has(plural)) {
+            return plural;
+        }
+
+        return name;
+    }
+
+    /* Replace endpoint resolver so relation lines still work when
+       the registry contains singular model table names. */
+    getRelationEndpoint = function(relation, side) {
+        if (side === 'from') {
+            return resolveExistingRelationTable(
+                relation.from_table ??
+                relation.from ??
+                relation.table
+            );
+        }
+
+        return resolveExistingRelationTable(
+            relation.to_table ??
+            relation.to ??
+            relation.referenced_table
+        );
+    };
+
+    function renderRefinedRelationLegend() {
+        const list = document.getElementById('erdRelationLegendList');
+        const count = document.getElementById('relationLegendCount');
+
+        if (!list || !count) {
+            return;
+        }
+
+        const types = new Map();
+
+        getRelations().forEach(relation => {
+            const info = getRelationTypeInfoRefined(relation);
+            types.set(info.label, info);
+        });
+
+        count.textContent = types.size;
+
+        list.innerHTML = [...types.values()]
+            .sort((a, b) => a.label.localeCompare(b.label))
+            .map(info => `
+                <div
+                    class="erd-relation-legend-item"
+                    title="${escapeHtml(info.label)}"
+                >
+                    <span
+                        class="erd-relation-legend-dot"
+                        style="background:${info.color};color:${info.color};"
+                    ></span>
+                    <strong>${escapeHtml(info.label)}</strong>
+                </div>
+            `)
+            .join('');
+    }
+
+    const refinedDrawerToggle =
+        document.getElementById('erdTableDrawerToggle');
+
+    const refinedDrawerClose =
+        document.getElementById('erdTableDrawerClose');
+
+    const refinedDrawerBackdrop =
+        document.getElementById('erdTableDrawerBackdrop');
+
+    function openRefinedTableDrawer() {
+        tableSelector.classList.add('open');
+        refinedDrawerBackdrop?.classList.add('open');
+        refinedDrawerToggle?.setAttribute('aria-expanded', 'true');
+    }
+
+    function closeRefinedTableDrawer() {
+        tableSelector.classList.remove('open');
+        refinedDrawerBackdrop?.classList.remove('open');
+        refinedDrawerToggle?.setAttribute('aria-expanded', 'false');
+    }
+
+    refinedDrawerToggle?.addEventListener('click', event => {
+        event.stopPropagation();
+
+        if (tableSelector.classList.contains('open')) {
+            closeRefinedTableDrawer();
+        } else {
+            openRefinedTableDrawer();
+        }
+    });
+
+    refinedDrawerClose?.addEventListener('click', event => {
+        event.stopPropagation();
+        closeRefinedTableDrawer();
+    });
+
+    refinedDrawerBackdrop?.addEventListener('click', closeRefinedTableDrawer);
+
+    /* Add a history shortcut to the table drawer without changing
+       the checkbox behaviour. */
+    const originalRenderTableSelector = renderTableSelector;
+
+    renderTableSelector = function() {
+        originalRenderTableSelector();
+
+        tableList
+            .querySelectorAll('.erd-table-item')
+            .forEach(item => {
+                if (item.querySelector('.erd-table-item-history')) {
+                    return;
+                }
+
+                const name = item.dataset.name;
+
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'erd-table-item-history';
+                button.title = 'Open table history';
+                button.innerHTML = '<i class="fa-solid fa-clock-rotate-left"></i>';
+
+                button.addEventListener('click', event => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    openHistory(name);
+                });
+
+                item.appendChild(button);
+            });
+
+        /* Add relational indicator when the base renderer doesn't have one. */
+        const relationshipTables = getRelationshipTables();
+
+        tableList
+            .querySelectorAll('.erd-table-item')
+            .forEach(item => {
+                if (item.querySelector('.erd-table-item-dot')) {
+                    return;
+                }
+
+                const dot = document.createElement('span');
+                dot.className = 'erd-table-item-dot';
+
+                if (relationshipTables.has(item.dataset.name)) {
+                    dot.classList.add('relational');
+                }
+
+                item.insertBefore(dot, item.firstChild.nextSibling);
+            });
+    };
+
+    /* Relation-aware layered layout. Connected tables are grouped,
+       the highest-degree table becomes the root, and related tables
+       are placed by graph depth instead of a fixed grid. */
+    layoutTables = function() {
+        const visible = tableElements.filter(item =>
+            !item.element.classList.contains('hidden')
+        );
+
+        if (!visible.length) {
+            return;
+        }
+
+        const visibleNames = new Set(
+            visible.map(item => item.name)
+        );
+
+        const graph = new Map();
+
+        visible.forEach(item => {
+            graph.set(item.name, new Set());
+        });
+
+        getRelations().forEach(relation => {
+            const from = getRelationEndpoint(relation, 'from');
+            const to = getRelationEndpoint(relation, 'to');
+
+            if (!from || !to || from === to) {
+                return;
+            }
+
+            if (!visibleNames.has(from) || !visibleNames.has(to)) {
+                return;
+            }
+
+            graph.get(from).add(to);
+            graph.get(to).add(from);
+        });
+
+        const components = [];
+        const visited = new Set();
+
+        visible.forEach(item => {
+            if (visited.has(item.name)) {
+                return;
+            }
+
+            const component = [];
+            const queue = [item.name];
+            visited.add(item.name);
+
+            while (queue.length) {
+                const current = queue.shift();
+                component.push(current);
+
+                [...(graph.get(current) ?? [])]
+                    .sort((a, b) => a.localeCompare(b))
+                    .forEach(neighbor => {
+                        if (visited.has(neighbor)) {
+                            return;
+                        }
+
+                        visited.add(neighbor);
+                        queue.push(neighbor);
+                    });
+            }
+
+            components.push(component);
+        });
+
+        components.sort((a, b) => {
+            if (a.length !== b.length) {
+                return b.length - a.length;
+            }
+
+            return a[0].localeCompare(b[0]);
+        });
+
+        const itemByName = new Map(
+            visible.map(item => [item.name, item])
+        );
+
+        const padding = 120;
+        const nodeGapX = 70;
+        const levelGapY = 95;
+        const componentGapX = 180;
+        const componentGapY = 150;
+        const maxLevelWidth = 1750;
+        const maxCanvasX = 4650;
+
+        let cursorX = padding;
+        let cursorY = padding;
+        let currentRowHeight = 0;
+
+        components.forEach(component => {
+            let root = component[0];
+
+            component.forEach(name => {
+                const currentDegree = graph.get(name)?.size ?? 0;
+                const rootDegree = graph.get(root)?.size ?? 0;
+
+                if (
+                    currentDegree > rootDegree ||
+                    (currentDegree === rootDegree && name.localeCompare(root) < 0)
+                ) {
+                    root = name;
+                }
+            });
+
+            const levels = new Map();
+            const depths = new Map([[root, 0]]);
+            const queue = [root];
+
+            while (queue.length) {
+                const current = queue.shift();
+                const depth = depths.get(current);
+
+                if (!levels.has(depth)) {
+                    levels.set(depth, []);
+                }
+
+                levels.get(depth).push(current);
+
+                [...(graph.get(current) ?? [])]
+                    .filter(name => !depths.has(name))
+                    .sort((a, b) => {
+                        const da = graph.get(a)?.size ?? 0;
+                        const db = graph.get(b)?.size ?? 0;
+                        return db - da || a.localeCompare(b);
+                    })
+                    .forEach(neighbor => {
+                        depths.set(neighbor, depth + 1);
+                        queue.push(neighbor);
+                    });
+            }
+
+            /* Any isolated leftover in a malformed graph gets a new level. */
+            component.forEach(name => {
+                if (!depths.has(name)) {
+                    const last = Math.max(...levels.keys());
+                    depths.set(name, last + 1);
+
+                    if (!levels.has(last + 1)) {
+                        levels.set(last + 1, []);
+                    }
+
+                    levels.get(last + 1).push(name);
+                }
+            });
+
+            let componentWidth = 0;
+            let componentHeight = 0;
+            const packedLevels = [];
+
+            [...levels.entries()]
+                .sort((a, b) => a[0] - b[0])
+                .forEach(([depth, names]) => {
+                    names.sort((a, b) => {
+                        if (a === root) return -1;
+                        if (b === root) return 1;
+                        return a.localeCompare(b);
+                    });
+
+                    const rows = [];
+                    let row = [];
+                    let rowWidth = 0;
+
+                    names.forEach(name => {
+                        const item = itemByName.get(name);
+                        if (!item) return;
+
+                        const width = item.element.offsetWidth || 292;
+                        const needed = row.length
+                            ? rowWidth + nodeGapX + width
+                            : width;
+
+                        if (row.length && needed > maxLevelWidth) {
+                            rows.push({ items: row, width: rowWidth });
+                            row = [];
+                            rowWidth = 0;
+                        }
+
+                        row.push(item);
+                        rowWidth += row.length === 1 ? width : nodeGapX + width;
+                    });
+
+                    if (row.length) {
+                        rows.push({ items: row, width: rowWidth });
+                    }
+
+                    let levelHeight = 0;
+
+                    rows.forEach(rowData => {
+                        rowData.height = Math.max(
+                            ...rowData.items.map(
+                                item => item.element.offsetHeight || 48
+                            )
+                        );
+
+                        levelHeight += rowData.height + 55;
+                        componentWidth = Math.max(
+                            componentWidth,
+                            rowData.width
+                        );
+                    });
+
+                    componentHeight += levelHeight;
+                    packedLevels.push({ depth, rows });
+                });
+
+            componentHeight = Math.max(48, componentHeight - 55);
+            componentWidth = Math.max(292, componentWidth);
+
+            if (
+                cursorX !== padding &&
+                cursorX + componentWidth > maxCanvasX
+            ) {
+                cursorX = padding;
+                cursorY += currentRowHeight + componentGapY;
+                currentRowHeight = 0;
+            }
+
+            let levelY = cursorY;
+
+            packedLevels.forEach(level => {
+                level.rows.forEach(rowData => {
+                    let x = cursorX + (componentWidth - rowData.width) / 2;
+
+                    rowData.items.forEach(item => {
+                        item.element.style.left = `${Math.round(x)}px`;
+                        item.element.style.top = `${Math.round(levelY)}px`;
+                        x += item.element.offsetWidth + nodeGapX;
+                    });
+
+                    levelY += rowData.height + 55;
+                });
+            });
+
+            currentRowHeight = Math.max(
+                currentRowHeight,
+                componentHeight
+            );
+
+            cursorX += componentWidth + componentGapX;
+        });
+    };
+
+    /* Color every relation path and its animated particles. */
+    drawRelations = function() {
+        clearRelations();
+
+        getRelations().forEach((relation, relationIndex) => {
+            const fromName = getRelationEndpoint(relation, 'from');
+            const toName = getRelationEndpoint(relation, 'to');
+
+            if (!fromName || !toName || fromName === toName) {
+                return;
+            }
+
+            if (
+                !selectedTables.has(fromName) ||
+                !selectedTables.has(toName)
+            ) {
+                return;
+            }
+
+            const fromElement = getTableElement(fromName);
+            const toElement = getTableElement(toName);
+
+            if (!fromElement || !toElement) {
+                return;
+            }
+
+            if (
+                fromElement.classList.contains('hidden') ||
+                toElement.classList.contains('hidden')
+            ) {
+                return;
+            }
+
+            const from = getConnectionPoint(fromElement, toElement);
+            const to = getConnectionPoint(toElement, fromElement);
+            const info = getRelationTypeInfoRefined(relation);
+
+            const path = document.createElementNS(SVG_NS, 'path');
+            const pathId = `erd-relation-${relationIndex}-${Date.now()}`;
+
+            path.setAttribute('id', pathId);
+            path.setAttribute('class', 'erd-relation-line');
+            path.setAttribute('d', createRelationPath(from, to));
+            path.setAttribute('data-from', fromName);
+            path.setAttribute('data-to', toName);
+            path.setAttribute('data-relation-type', info.label);
+            path.style.setProperty('--relation-color', info.color);
+
+            relationLines.appendChild(path);
+
+            createFlowParticlesRefined(
+                path,
+                relationIndex,
+                info.color
+            );
+        });
+    };
+
+    function createFlowParticlesRefined(path, relationIndex, color) {
+        const particleCount = 3;
+        const duration = 2.8 + (relationIndex % 4) * .30;
+
+        for (let index = 0; index < particleCount; index++) {
+            const halo = document.createElementNS(SVG_NS, 'circle');
+            halo.setAttribute('r', '5');
+            halo.setAttribute('class', 'erd-flow-particle-halo');
+            halo.style.setProperty('--relation-color', color);
+
+            const haloMotion = document.createElementNS(
+                SVG_NS,
+                'animateMotion'
+            );
+
+            haloMotion.setAttribute('dur', `${duration}s`);
+            haloMotion.setAttribute('begin', `${index * .85}s`);
+            haloMotion.setAttribute('repeatCount', 'indefinite');
+            haloMotion.setAttribute('rotate', 'auto');
+
+            const haloPath = document.createElementNS(SVG_NS, 'mpath');
+            haloPath.setAttribute('href', `#${path.id}`);
+            haloPath.setAttributeNS(
+                'http://www.w3.org/1999/xlink',
+                'xlink:href',
+                `#${path.id}`
+            );
+
+            haloMotion.appendChild(haloPath);
+            halo.appendChild(haloMotion);
+            relationLines.appendChild(halo);
+
+            const particle = document.createElementNS(SVG_NS, 'circle');
+            particle.setAttribute('r', '2.8');
+            particle.setAttribute('class', 'erd-flow-particle');
+            particle.style.setProperty('--relation-color', color);
+
+            const motion = document.createElementNS(
+                SVG_NS,
+                'animateMotion'
+            );
+
+            motion.setAttribute('dur', `${duration}s`);
+            motion.setAttribute('begin', `${index * .85}s`);
+            motion.setAttribute('repeatCount', 'indefinite');
+            motion.setAttribute('rotate', 'auto');
+
+            const particlePath = document.createElementNS(
+                SVG_NS,
+                'mpath'
+            );
+
+            particlePath.setAttribute('href', `#${path.id}`);
+            particlePath.setAttributeNS(
+                'http://www.w3.org/1999/xlink',
+                'xlink:href',
+                `#${path.id}`
+            );
+
+            motion.appendChild(particlePath);
+            particle.appendChild(motion);
+            relationLines.appendChild(particle);
+        }
+    }
+
+    /* Keep layout synchronized with filtering, selection and view mode. */
+    searchInput.addEventListener('input', () => {
+        requestAnimationFrame(() => {
+            layoutTables();
+            drawRelations();
+        });
+    });
+
+    tableList.addEventListener('change', event => {
+        if (event.target.matches('input[type="checkbox"]')) {
+            requestAnimationFrame(() => {
+                layoutTables();
+                drawRelations();
+            });
+        }
+    });
+
+    navbarFilterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            requestAnimationFrame(() => {
+                layoutTables();
+                drawRelations();
+            });
+        });
+    });
+
+    viewModeButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            requestAnimationFrame(() => {
+                layoutTables();
+                drawRelations();
+            });
+        });
+    });
+
+    /* Initial legend before the final render. */
+    renderRefinedRelationLegend();
 
     renderTables();
 </script>
