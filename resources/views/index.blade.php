@@ -1021,6 +1021,7 @@
             background: rgba(11,18,33,.9);
             pointer-events: auto;
             backdrop-filter: blur(8px);
+            margin-bottom: 10px; 
         }
 
         .erd-control {
