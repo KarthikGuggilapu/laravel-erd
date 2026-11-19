@@ -1,38 +1,39 @@
-# Laravel ERD
+Laravel ERD
 
 Interactive database schema visualization and developer tooling for Laravel applications.
 
 Laravel ERD scans Laravel migrations and Eloquent models, builds a structured schema registry, and provides an interactive ERD interface for understanding tables, columns, indexes, foreign keys, models, and relationships.
 
-> **Status:** Early development / Git installation
-> Laravel ERD is currently distributed directly through Git and is not yet published on Packagist.
+Status: Early development / Git installation
 
----
+Laravel ERD is currently distributed directly through GitHub and is not yet published on Packagist.
 
-## Requirements
+Requirements
 
-* PHP 8.2+
-* Laravel 11, 12, or 13
-* Composer
-* Git
+PHP 8.2+
 
----
+Laravel 11, 12, or 13
 
-# Installation
+Composer
 
-Currently, Laravel ERD is installed directly from its Git repository.
+Git
 
-## 1. Add the Git Repository
+Installation
 
-From your Laravel application's root directory, open:
+Laravel ERD is currently installed directly from its GitHub repository.
 
-```text
+For Laravel application developers: Use the Git/VCS installation below.
+
+Do not add a Composer path repository unless you are developing Laravel ERD itself.
+
+1. Add the Git Repository
+
+From the root directory of your Laravel application, open:
+
 composer.json
-```
 
-Add the package repository:
+Add the repository:
 
-```json
 {
     "repositories": [
         {
@@ -41,128 +42,35 @@ Add the package repository:
         }
     ]
 }
-```
 
-Replace:
+If your composer.json already contains a repositories section, add Laravel ERD to the existing array.
 
-```text
-https://github.com/YOUR_USERNAME/laravel-erd
-```
+2. Require the Package
 
-with the actual Git repository URL.
+Run:
 
-For example:
-
-```json
-{
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/example/laravel-erd"
-        }
-    ]
-}
-```
-
----
-
-## 2. Require the Package
-
-Once the repository has been added:
-
-```bash
 composer require karthikguggilapu/laravel-erd:dev-main
-```
 
-If your repository uses another branch, replace `dev-main` accordingly.
+Composer installs the package into:
 
-For example:
-
-```bash
-composer require karthikguggilapu/laravel-erd:dev-develop
-```
-
-Composer will clone the package from Git and install it into:
-
-```text
 vendor/karthikguggilapu/laravel-erd
-```
 
----
+Important: The Composer path repository shown later is only for Laravel ERD package development. External developers should use the GitHub/VCS installation.
 
-# Local Package Development
+3. Install Laravel ERD
 
-If you are developing Laravel ERD itself and want to test it against a Laravel application on the same computer, a Composer path repository is recommended.
-
-Suppose your folders look like:
-
-```text
-Projects/
-├── laravel-erd/
-└── test-laravel-app/
-```
-
-Inside `test-laravel-app/composer.json`:
-
-```json
-{
-    "repositories": [
-        {
-            "type": "path",
-            "url": "../laravel-erd"
-        }
-    ]
-}
-```
-
-Then run:
-
-```bash
-composer require karthikguggilapu/laravel-erd:@dev
-```
-
-Composer will use your local package directory instead of downloading it from Git.
-
-This is the recommended setup while developing the package.
-
----
-
-# Install the Package
-
-After Composer has installed the package:
-
-```bash
 php artisan erd:install
-```
 
-You should see:
+4. Publish Configuration
 
-```text
-Laravel ERD installed successfully.
-
-ERD URL: /erd
-Storage: storage/erd
-```
-
----
-
-# Configuration
-
-Publish the configuration file:
-
-```bash
 php artisan vendor:publish --tag=erd-config
-```
 
 This creates:
 
-```text
 config/erd.php
-```
 
-The default configuration is:
+Default configuration:
 
-```php
 <?php
 
 return [
@@ -180,250 +88,519 @@ return [
         'path' => storage_path('erd'),
     ],
 ];
-```
 
----
-
-# Enable / Disable Laravel ERD
+5. Enable Laravel ERD
 
 For local development:
 
-```env
 ERD_ENABLED=true
-```
 
 For production:
 
-```env
 ERD_ENABLED=false
-```
 
-If `ERD_ENABLED` is not specified, Laravel ERD automatically enables itself outside the production environment.
+If ERD_ENABLED is not specified, Laravel ERD automatically enables itself outside production.
 
----
+6. Analyze Your Laravel Application
 
-# Refresh the Schema
-
-After installation:
-
-```bash
 php artisan erd:refresh
-```
 
-This scans the Laravel application's migrations and updates the ERD registry.
+Laravel ERD scans:
 
-The registry is stored in:
+database/migrations
+app/Models
 
-```text
-storage/erd/
-├── metadata.json
-├── migrations.json
-├── models.json
-├── relations.json
-├── history.json
-└── layout.json
-```
+and builds the ERD registry.
 
----
+7. Open the ERD
 
-# Open the ERD
+Start Laravel:
 
-Start the Laravel application:
-
-```bash
 php artisan serve
-```
 
-Then open:
+Open:
 
-```text
 http://127.0.0.1:8000/erd
-```
 
-Or simply:
+Installation Flow
 
-```text
-/erd
-```
+For a normal Laravel application developer:
 
----
-
-# Current Development Workflow
-
-While developing Laravel ERD:
-
-```text
-laravel-erd/
-        │
-        │ Git
-        ▼
-GitHub Repository
-        │
-        │ Composer VCS
-        ▼
-Laravel Test Application
-        │
-        ├── php artisan erd:install
-        │
-        ├── php artisan erd:refresh
-        │
-        └── /erd
-```
-
-For rapid local development, use a Composer path repository:
-
-```text
-laravel-erd/
-      ▲
-      │
-      │ local path
-      │
-test-laravel-app/
-```
-
-This means you can modify the package source and immediately test the changes in the Laravel application.
-
----
-
-# Updating the Git Version
-
-When using the Git repository:
-
-```bash
-composer update karthikguggilapu/laravel-erd
-```
-
-Or reinstall the latest development branch:
-
-```bash
+Laravel Application
+        |
+        v
+Add GitHub VCS repository
+        |
+        v
 composer require karthikguggilapu/laravel-erd:dev-main
-```
+        |
+        v
+vendor/karthikguggilapu/laravel-erd
+        |
+        v
+php artisan erd:install
+        |
+        v
+php artisan vendor:publish --tag=erd-config
+        |
+        v
+Configure ERD_ENABLED
+        |
+        v
+php artisan erd:refresh
+        |
+        v
+/erd
 
----
+GitHub Installation vs Local Development
 
-# Package Structure
+These are two different workflows.
 
-```text
+
+
+GitHub Installation
+
+Local Development
+
+Intended for
+
+Laravel application developers
+
+Laravel ERD contributors
+
+Composer type
+
+vcs
+
+path
+
+Source
+
+GitHub
+
+Local directory
+
+Downloads package
+
+Yes
+
+No
+
+Uses local package source
+
+No
+
+Yes
+
+Immediate source changes
+
+No
+
+Yes
+
+Recommended for external developers
+
+Yes
+
+No
+
+GitHub installation
+
+{
+    "type": "vcs",
+    "url": "https://github.com/KarthikGuggilapu/laravel-erd"
+}
+
+Local development
+
+{
+    "type": "path",
+    "url": "../laravel-erd"
+}
+
+External Laravel developers should use the GitHub/VCS installation.
+
+Local Package Development
+
+For Laravel ERD contributors and package developers only.
+
+Normal Laravel application developers should skip this section.
+
+If you are developing Laravel ERD itself and want to test local changes against a Laravel application, use a Composer path repository.
+
+Example:
+
+Projects/
+|
+|-- laravel-erd/
+|
+`-- test-laravel-app/
+
+1. Configure the Local Path Repository
+
+Open:
+
+test-laravel-app/composer.json
+
+Add:
+
+{
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../laravel-erd"
+        }
+    ]
+}
+
+Then run from the test application:
+
+composer require karthikguggilapu/laravel-erd:@dev
+
+Composer uses the local package directory instead of downloading it from GitHub.
+
+2. Develop and Test
+
 laravel-erd/
-├── config/
-│   └── erd.php
-│
-├── resources/
-│   └── views/
-│       └── erd.blade.php
-│
-├── routes/
-│   └── web.php
-│
-├── src/
-│   ├── Commands/
-│   │   ├── InstallCommand.php
-│   │   └── RefreshCommand.php
-│   │
-│   ├── Http/
-│   │   ├── Controllers/
-│   │   │   └── ErdController.php
-│   │   └── Middleware/
-│   │       └── EnsureErdEnabled.php
-│   │
-│   ├── Services/
-│   │   ├── RegistryManager.php
-│   │   └── MigrationScanner.php
-│   │
-│   └── ErdServiceProvider.php
-│
-├── composer.json
-└── README.md
-```
+      |
+      | Composer path repository
+      v
+test-laravel-app/
+      |
+      v
+php artisan erd:install
+      |
+      v
+php artisan erd:refresh
+      |
+      v
+/erd
 
----
+When you modify the package source, you can immediately test the changes in the Laravel test application.
 
-# Registry
+Updating Laravel ERD
+
+When using the GitHub repository:
+
+composer update karthikguggilapu/laravel-erd
+
+Then refresh the registry:
+
+php artisan erd:refresh
+
+Registry
 
 Laravel ERD uses JSON files as a registry for the visualization layer.
 
-```text
-database/migrations
-        │
-app/Models
-        │
-        ▼
-   ERD Scanners
-        │
-        ▼
- JSON Registry
-        │
-        ▼
- Interactive ERD
-```
+Laravel Migrations
+        |
+        +----------------+
+        |                |
+        v                v
+Migration Scanner   Model Scanner
+        |                |
+        +-------+--------+
+                |
+                v
+       Relationship Scanner
+                |
+                v
+          JSON Registry
+                |
+                v
+        Interactive ERD
+
+Registry location:
+
+storage/erd/
+
+Typical files:
+
+storage/erd/
+|
+|-- metadata.json
+|-- migrations.json
+|-- models.json
+|-- relations.json
+|-- history.json
+`-- layout.json
 
 The JSON registry is not the source of truth.
 
-Laravel migration and model files remain the source of truth.
+Laravel migrations and Eloquent models remain the source of truth.
 
----
+Refreshing the Registry
 
-# Current Features
+Whenever migrations or models change:
 
-* Package service provider
-* Configuration
-* Local-development protection
-* `erd:install`
-* `erd:refresh`
-* JSON registry
-* Migration scanning foundation
-* Initial ERD interface
-* `/erd` route
+php artisan erd:refresh
 
----
+Then reload:
 
-# Roadmap
+/erd
 
-## Schema Intelligence
+Route
 
-* [x] Package foundation
-* [x] Registry manager
-* [x] Initial migration scanner
-* [ ] Robust migration parser
-* [ ] Migration execution status
-* [ ] Migration batch detection
-* [ ] Deleted migration detection
-* [ ] Migration change detection
-* [ ] Model scanner
-* [ ] Relationship scanner
+Default route:
 
-## ERD Interface
+/erd
 
-* [ ] Interactive table cards
-* [ ] Drag and drop
-* [ ] Zoom
-* [ ] Pan
-* [ ] SVG relationship lines
-* [ ] Relationship animations
-* [ ] Search
-* [ ] Table inspector
-* [ ] Relationship highlighting
+Example:
 
-## Developer Commands
+http://127.0.0.1:8000/erd
 
-* [ ] `php artisan erd make:model Product -m`
-* [ ] `php artisan erd make:controller ProductController`
-* [ ] `php artisan erd migrate`
-* [ ] Automatic registry updates
+The route prefix can be configured in:
 
-## Advanced
+config/erd.php
 
-* [ ] Schema history
-* [ ] Schema snapshots
-* [ ] Database/schema comparison
-* [ ] Migration drift detection
-* [ ] Manual relationship overrides
-* [ ] Registry versioning
-* [ ] Automated tests
-* [ ] Packagist release
+Security
 
----
+Laravel ERD is primarily intended as a development and debugging tool.
 
-# License
+For production environments, keep ERD disabled unless you explicitly need it.
 
-MIT License.
+Recommended:
+
+ERD_ENABLED=false
+
+Current Features
+
+Composer package foundation
+
+Laravel service provider
+
+Configuration support
+
+Local-development protection
+
+erd:install
+
+erd:refresh
+
+JSON registry
+
+Migration scanning foundation
+
+Eloquent model scanning foundation
+
+Relationship scanning foundation
+
+Interactive ERD interface
+
+Table filtering
+
+Table search
+
+Relationship visualization
+
+Zoom and pan
+
+Table history
+
+Schema analysis
+
+Roadmap
+
+Schema Intelligence
+
+Package foundation
+
+Registry manager
+
+Initial migration scanner
+
+Model scanner foundation
+
+Relationship scanner foundation
+
+Robust migration parser
+
+Migration execution status
+
+Migration batch detection
+
+Deleted migration detection
+
+Migration change detection
+
+Advanced relationship detection
+
+Polymorphic relationship detection
+
+Dynamic relationship resolution
+
+Manual relationship overrides
+
+Migration drift detection
+
+ERD Interface
+
+Interactive table cards
+
+Drag and drop
+
+Zoom
+
+Pan
+
+SVG relationship lines
+
+Relationship animations
+
+Search
+
+Table filtering
+
+Relationship highlighting
+
+Table history
+
+Advanced table inspector
+
+Improved automatic layout
+
+Export functionality
+
+Developer Commands
+
+php artisan erd make:model Product -m
+
+php artisan erd make:controller ProductController
+
+php artisan erd migrate
+
+Automatic registry updates
+
+Advanced
+
+Schema history improvements
+
+Schema snapshots
+
+Database/schema comparison
+
+Migration drift detection
+
+Manual relationship overrides
+
+Registry versioning
+
+Automated tests
+
+Laravel version compatibility testing
+
+Packagist release
+
+Stable release
+
+Package Structure
+
+laravel-erd/
+|
+|-- config/
+|   `-- erd.php
+|
+|-- resources/
+|   `-- views/
+|       `-- index.blade.php
+|
+|-- routes/
+|   `-- web.php
+|
+|-- src/
+|   |-- Commands/
+|   |   |-- InstallCommand.php
+|   |   |-- RefreshCommand.php
+|   |   `-- UninstallCommand.php
+|   |
+|   |-- Http/
+|   |   |-- Controllers/
+|   |   |   `-- ErdController.php
+|   |   `-- Middleware/
+|   |       `-- EnsureErdEnabled.php
+|   |
+|   |-- Services/
+|   |   |-- RegistryManager.php
+|   |   |-- MigrationScanner.php
+|   |   |-- ModelScanner.php
+|   |   `-- RelationScanner.php
+|   |
+|   `-- ErdServiceProvider.php
+|
+|-- composer.json
+|-- README.md
+|-- LICENSE
+`-- CHANGELOG.md
+
+Troubleshooting
+
+Composer cannot find the package
+
+Make sure the GitHub repository is added to composer.json:
+
+{
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/KarthikGuggilapu/laravel-erd"
+        }
+    ]
+}
+
+Then:
+
+composer clear-cache
+composer require karthikguggilapu/laravel-erd:dev-main
+
+ERD route is not available
+
+Check:
+
+ERD_ENABLED=true
+
+Then:
+
+php artisan optimize:clear
+php artisan erd:refresh
+
+Open:
+
+/erd
+
+Schema is not updated
+
+Run:
+
+php artisan erd:refresh
+
+Laravel ERD generates its registry from the application's migrations and models.
+
+Contributing
+
+Contributions, bug reports, feature requests, and improvements are welcome.
+
+Recommended contributor workflow:
+
+Clone Laravel ERD
+        |
+        v
+Create / use a Laravel test application
+        |
+        v
+Configure Composer path repository
+        |
+        v
+Develop locally
+        |
+        v
+Test with Laravel application
+        |
+        v
+Commit changes
+        |
+        v
+Push to GitHub
+
+License
+
+Laravel ERD is open-sourced software licensed under the MIT license.
